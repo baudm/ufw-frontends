@@ -19,7 +19,8 @@
 import gtk
 
 from ufw.frontend import UFWFrontend
-from ufw.common import UFWRule
+from ufw.common import UFWRule, UFWError
+import ufw.util
 
 from i18n import _
 
@@ -189,7 +190,7 @@ class GtkFrontend(UFWFrontend):
             response = self.rule_dialog.run()
             if response:
                 rule = self.create_rule_from_ui()
-                ip_version = 'v4' # FIXME
+                ip_version = self.get_ip_version(rule)
                 self.set_rule(rule, ip_version)
                 self.refresh_rules_model()
             self.rule_dialog.hide()
@@ -307,6 +308,30 @@ class GtkFrontend(UFWFrontend):
         self.about_dialog.run()
         self.about_dialog.hide()
 
+    def get_ip_version(self, rule):
+        """algo extracted from ufw.parser.UFWCommandRule.parse"""
+        if rule.src == '0.0.0.0/0':
+            from_type = 'any'
+        else:
+            from_type = ('v6' if ufw.util.valid_address(rule.src, '6') else 'v4')
+
+        if rule.dst == '0.0.0.0/0':
+            to_type = 'any'
+        else:
+            to_type = ('v6' if ufw.util.valid_address(rule.dst, '6') else 'v4')
+
+        # Figure out the type of rule (IPv4, IPv6, or both) this is
+        if from_type == 'any' and to_type == 'any':
+            ip_version = 'both'
+        elif from_type != 'any' and to_type != 'any' and from_type != to_type:
+            err_msg = _("Mixed IP versions for 'from' and 'to'")
+            raise UFWError(err_msg)
+        elif from_type != 'any':
+            ip_version = from_type
+        elif to_type != 'any':
+            ip_version = to_type
+        return ip_version
+
     def on_rules_view_row_activated(self, widget, itr, path):
         rules = self.backend.get_rules()
         i = self.rules_model[itr[0]][8]
@@ -314,11 +339,16 @@ class GtkFrontend(UFWFrontend):
         response = self.rule_dialog.run()
         if response:
             pos = itr[0] + 1
+            self.delete_rule(pos, True)
+            if pos > len(self.rules_model) - 1:
+                pos -= 1
             rule = self.create_rule_from_ui()
-            rule.position = pos
-            ip_version = 'v4' # FIXME
+            rule.set_position(pos)
+            ip_version = self.get_ip_version(rule)
             self.set_rule(rule, ip_version)
-            self.delete_rule(pos + 1, True)
+            # need to do this manually since the position data persists
+            rule = self.backend.get_rule_by_number(pos)
+            rule.set_position(0)
             self.refresh_rules_model()
         self.rule_dialog.hide()
 
