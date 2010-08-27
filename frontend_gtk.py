@@ -112,8 +112,7 @@ class GtkFrontend(UFWFrontend):
         self.rules_model.clear()
         app_rules = []
         i = 1
-        rules = self.backend.get_rules()
-        for r in rules:
+        for idx, r in enumerate(self.backend.get_rules()):
             if r.dapp or r.sapp:
                 t = r.get_app_tuple()
                 if t in app_rules:
@@ -128,7 +127,7 @@ class GtkFrontend(UFWFrontend):
             dport = (r.dapp if r.dapp else r.dport)
             src = ('any' if r.src == '0.0.0.0/0' else r.src)
             dst = ('any' if r.dst == '0.0.0.0/0' else r.dst)
-            row = [i, r.action.upper(), r.direction.upper(), protocol, src, sport, dst, dport, rules.index(r)]
+            row = [i, r.action.upper(), r.direction.upper(), protocol, src, sport, dst, dport, idx]
             self.rules_model.append(row)
             i += 1
 
