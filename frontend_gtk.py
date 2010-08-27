@@ -1,5 +1,5 @@
 #
-# frontend_gtk.py: GTK frontend for ufw
+# frontend_gtk.py: PyGTK frontend for ufw
 #
 # Copyright (C) 2010  Darwin M. Bautista <djclue917@gmail.com>
 #
@@ -278,9 +278,9 @@ class GtkFrontend(UFWFrontend):
 
 
 def main():
-    GtkFrontend()
+    ui = GtkFrontend()
     gtk.main()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
