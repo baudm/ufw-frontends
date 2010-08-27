@@ -111,7 +111,8 @@ class GtkFrontend(UFWFrontend):
         self.rules_model.clear()
         app_rules = []
         i = 1
-        for r in self.backend.get_rules():
+        rules = self.backend.get_rules()
+        for r in rules:
             if r.dapp or r.sapp:
                 t = r.get_app_tuple()
                 if t in app_rules:
@@ -126,7 +127,7 @@ class GtkFrontend(UFWFrontend):
             dport = (r.dapp if r.dapp else r.dport)
             src = ('any' if r.src == '0.0.0.0/0' else r.src)
             dst = ('any' if r.dst == '0.0.0.0/0' else r.dst)
-            row = [i, r.action.upper(), r.direction.upper(), protocol, src, sport, dst, dport]
+            row = [i, r.action.upper(), r.direction.upper(), protocol, src, sport, dst, dport, rules.index(r)]
             self.rules_model.append(row)
             i += 1
 
@@ -186,15 +187,22 @@ class GtkFrontend(UFWFrontend):
     def on_insert_rule_clicked(self, widget):
         if self.backend._is_enabled():
             response = self.rule_dialog.run()
+            if response:
+                rule = self.create_rule_from_ui()
+                ip_version = 'v4' # FIXME
+                self.set_rule(rule, ip_version)
+                self.refresh_rules_model()
             self.rule_dialog.hide()
 
     def on_delete_rule_clicked(self, widget):
         if self.backend._is_enabled():
-            for i in self.selection.get_selected_rows()[1]:
+            rows = self.selection.get_selected_rows()[1]
+            rows.reverse()
+            for i in rows:
                 self.delete_rule(i[0] + 1, True)
             self.refresh_rules_model()
 
-    def on_rule_ok_clicked(self, widget):
+    def create_rule_from_ui(self):
         action = self._get_combobox_value('action_cbox').lower()
         protocol = self._get_combobox_value('protocol_cbox').lower()
 
@@ -235,14 +243,84 @@ class GtkFrontend(UFWFrontend):
             port = self._get_combobox_value('dst_app_cbox')
             rule.dapp = port
         rule.set_port(port, 'dst')
+        return rule
 
-        ip_version = 'v4' # FIXME
-        self.set_rule(rule, ip_version)
-        self.refresh_rules_model()
+    def select_item_from_combobox(self, name, item):
+        values = map(str.lower, self.get_cbox_values(name))
+        i = values.index(item.lower())
+        cbox = self.ui.get_object(name)
+        cbox.set_active(i)
+
+    def load_rule_to_ui(self, rule):
+        # action
+        self.select_item_from_combobox('action_cbox', rule.action)
+
+        # direction
+        in_rbutton = self.ui.get_object('in_rbutton')
+        in_rbutton.set_active(rule.direction == 'in')
+
+        # protocol
+        self.select_item_from_combobox('protocol_cbox', rule.protocol)
+
+        # logging
+        log_rmap = {'': 'Off', 'log': 'New Connections', 'log-all': 'Packets'}
+        logtype = log_rmap[rule.logtype]
+        self.select_item_from_combobox('rule_logging_cbox', logtype)
+
+        # src
+        if rule.src == '0.0.0.0/0':
+            self.ui.get_object('src_addr_any_rbutton').set_active(True)
+            addr = ''
+        else:
+            self.ui.get_object('src_addr_custom_rbutton').set_active(True)
+            addr = rule.src
+        self.ui.get_object('src_addr_custom_entry').set_text(addr)
+        # src port
+        if rule.sapp:
+            self.ui.get_object('src_app_rbutton').set_active(True)
+            self.select_item_from_combobox('src_app_cbox', rule.sapp)
+        elif rule.sport == 'any':
+            self.ui.get_object('src_port_any_rbutton').set_active(True)
+        else:
+            self.ui.get_object('src_port_custom_rbutton').set_active(True)
+            self.ui.get_object('src_port_custom_entry').set_text(rule.sport)
+
+        # dst
+        if rule.dst == '0.0.0.0/0':
+            self.ui.get_object('dst_addr_any_rbutton').set_active(True)
+            addr = ''
+        else:
+            self.ui.get_object('dst_addr_custom_rbutton').set_active(True)
+            addr = rule.dst
+        self.ui.get_object('dst_addr_custom_entry').set_text(addr)
+        # src port
+        if rule.dapp:
+            self.ui.get_object('dst_app_rbutton').set_active(True)
+            self.select_item_from_combobox('dst_app_cbox', rule.dapp)
+        elif rule.dport == 'any':
+            self.ui.get_object('dst_port_any_rbutton').set_active(True)
+        else:
+            self.ui.get_object('dst_port_custom_rbutton').set_active(True)
+            self.ui.get_object('dst_port_custom_entry').set_text(rule.dport)
 
     def on_help_menu_activate(self, widget):
         self.about_dialog.run()
         self.about_dialog.hide()
+
+    def on_rules_view_row_activated(self, widget, itr, path):
+        rules = self.backend.get_rules()
+        i = self.rules_model[itr[0]][8]
+        self.load_rule_to_ui(rules[i])
+        response = self.rule_dialog.run()
+        if response:
+            pos = itr[0] + 1
+            rule = self.create_rule_from_ui()
+            rule.position = pos
+            ip_version = 'v4' # FIXME
+            self.set_rule(rule, ip_version)
+            self.delete_rule(pos + 1, True)
+            self.refresh_rules_model()
+        self.rule_dialog.hide()
 
     def _process_prefs(self):
         # loglevel
