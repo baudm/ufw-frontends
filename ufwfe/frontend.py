@@ -9,6 +9,10 @@ class Frontend(UFWFrontend):
     def __init__(self):
         UFWFrontend.__init__(self, False)
 
+    def enable_ipv6(self, use=True):
+        conf = ('yes' if use else 'no')
+        self.backend.set_default(self.backend.files['defaults'], 'IPV6', conf)
+
     def reload(self):
         """Reload firewall"""
         if self.backend._is_enabled():

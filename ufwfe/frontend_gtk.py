@@ -313,8 +313,7 @@ class GtkFrontend(Frontend):
         self.backend.set_default_policy(policy, 'outgoing')
         # enable IPv6?
         cb = self.ui.get_object('enable_ipv6')
-        conf = ('yes' if cb.get_active() else 'no')
-        self.backend.set_default(self.backend.files['defaults'], 'IPV6', conf)
+        self.enable_ipv6(cb.get_active())
         # reload firewall
         self.reload()
 
