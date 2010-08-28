@@ -184,14 +184,41 @@ class GtkFrontend(Frontend):
         rule.set_port(port, 'dst')
         return rule
 
+    def _restore_rule_dialog_defaults(self):
+        # active radio buttons
+        active = [
+            'in_rbutton', 'src_addr_custom_rbutton', 'src_port_any_rbutton',
+            'dst_addr_any_rbutton', 'dst_port_custom_rbutton'
+        ]
+        for k in active:
+            self.ui.get_object(k).set_active(True)
+        # blank text boxes
+        blank = [
+            'src_addr_custom_entry', 'src_port_custom_entry',
+            'dst_addr_custom_entry', 'dst_port_custom_entry'
+        ]
+        for k in blank:
+            self.ui.get_object(k).set_text('')
+        # set combobox defaults
+        cboxes = {
+            'action_cbox': 0, 'protocol_cbox': 0, 'rule_logging_cbox': 0,
+            'src_app_cbox': -1, 'dst_app_cbox': -1
+        }
+        for k, v in cboxes.iteritems():
+            self.ui.get_object(k).set_active(v)
+
     def _load_rule_to_dialog(self, rule):
+        self._restore_rule_dialog_defaults()
         # action
         self._set_combobox_value('action_cbox', rule.action)
         # direction
         in_rbutton = self.ui.get_object('in_rbutton')
         in_rbutton.set_active(rule.direction == 'in')
         # protocol
-        self._set_combobox_value('protocol_cbox', rule.protocol)
+        if rule.sapp or rule.dapp:
+            self._set_combobox_value('protocol_cbox', 'any')
+        else:
+            self._set_combobox_value('protocol_cbox', rule.protocol)
         # logging
         log_rmap = {'': 'Off', 'log': 'New Connections', 'log-all': 'Packets'}
         logtype = log_rmap[rule.logtype]
@@ -277,6 +304,7 @@ class GtkFrontend(Frontend):
 
     def on_insert_rule_clicked(self, widget):
         if self.backend._is_enabled():
+            self._restore_rule_dialog_defaults()
             while True:
                 if self.rule_dialog.run():
                     try:
