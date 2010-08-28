@@ -18,7 +18,7 @@
 
 import gtk
 
-from ufw.common import UFWRule
+from ufw.common import UFWRule, UFWError
 
 from ufwfe.frontend import Frontend
 from ufwfe.i18n import _
@@ -112,6 +112,19 @@ class GtkFrontend(Frontend):
         cbox = self.ui.get_object(name)
         cbox.set_active(i)
 
+    def _set_statusbar_text(self, text):
+        sb = self.ui.get_object('statusbar')
+        cid = sb.get_context_id('default context')
+        sb.push(cid, text)
+
+    def _show_error_dialog(self, msg):
+        main_window = self.ui.get_object('main_window')
+        md = gtk.MessageDialog(main_window,
+            gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_ERROR,
+            gtk.BUTTONS_CLOSE, msg)
+        md.run()
+        md.destroy()
+
     def _update_rules_model(self):
         rules_model = self.ui.get_object('rules_model')
         rules_model.clear()
@@ -167,7 +180,7 @@ class GtkFrontend(Frontend):
         rule.set_port(port, 'dst')
         return rule
 
-    def _set_rule_to_dialog(self, rule):
+    def _load_rule_to_dialog(self, rule):
         # action
         self._set_combobox_value('action_cbox', rule.action)
         # direction
@@ -262,10 +275,21 @@ class GtkFrontend(Frontend):
 
     def on_insert_rule_clicked(self, widget):
         if self.backend._is_enabled():
-            if self.rule_dialog.run():
-                rule = self._get_rule_from_dialog()
-                self.set_rule(rule)
-                self._update_rules_model()
+            while True:
+                if self.rule_dialog.run():
+                    try:
+                        rule = self._get_rule_from_dialog()
+                    except UFWError, e:
+                        self._show_error_dialog(e.value)
+                        continue
+                    try:
+                        res = self.set_rule(rule)
+                    except UFWError, e:
+                        self._show_error_dialog(e.value)
+                        continue
+                    self._set_statusbar_text(res)
+                    self._update_rules_model()
+                break
             self.rule_dialog.hide()
 
     def on_delete_rule_clicked(self, widget):
@@ -273,7 +297,12 @@ class GtkFrontend(Frontend):
             rows = self.selection.get_selected_rows()[1]
             rows.reverse()
             for i in rows:
-                self.delete_rule(i[0] + 1, True)
+                try:
+                    res = self.delete_rule(i[0] + 1, True)
+                except UFWError, e:
+                    res = e.value
+                    continue
+            self._set_statusbar_text(res)
             self._update_rules_model()
 
     def on_help_menu_activate(self, widget):
@@ -283,17 +312,32 @@ class GtkFrontend(Frontend):
     def on_rules_view_row_activated(self, widget, itr, path):
         rules = self.backend.get_rules()
         i = self.rules_model[itr[0]][8]
-        self._set_rule_to_dialog(rules[i])
-        if self.rule_dialog.run():
-            pos = itr[0] + 1
-            self.delete_rule(pos, True)
-            # If inserting at the end, position should be 0
-            if pos > len(self.rules_model) - 1:
-                pos = 0
-            rule = self._get_rule_from_dialog()
-            rule.set_position(pos)
-            self.set_rule(rule)
-            self._update_rules_model()
+        self._load_rule_to_dialog(rules[i])
+        while True:
+            if self.rule_dialog.run():
+                try:
+                    rule = self._get_rule_from_dialog()
+                except UFWError, e:
+                    self._show_error_dialog(e.value)
+                    continue
+                pos = itr[0] + 1
+                try:
+                    self.delete_rule(pos, True)
+                except UFWError, e:
+                    self._show_error_dialog(e.value)
+                    continue
+                # If inserting at the end, position should be 0
+                if pos > len(self.rules_model) - 1:
+                    pos = 0
+                rule.set_position(pos)
+                try:
+                    self.set_rule(rule)
+                except UFWError, e:
+                    self._show_error_dialog(e.value)
+                    continue
+                self._set_statusbar_text(_('Rule updated'))
+                self._update_rules_model()
+            break
         self.rule_dialog.hide()
 
     def on_reset_fw_menu_activate(self, widget):
