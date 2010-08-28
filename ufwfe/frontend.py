@@ -43,6 +43,7 @@ class Frontend(UFWFrontend):
         """
         if ip_version is None:
             ip_version = get_ip_version(rule)
+        rule = rule.dup_rule()
         # Fix any inconsistency
         if rule.sapp or rule.dapp:
             rule.set_protocol('any')
@@ -70,8 +71,7 @@ class Frontend(UFWFrontend):
     def move_rule(self, old, new):
         if old == new:
             return
-        rule = self.backend.get_rule_by_number(old)
-        rule = rule.dup_rule()
+        rule = self.backend.get_rule_by_number(old).dup_rule()
         self.delete_rule(old, True)
         rule.set_position(new)
         self.set_rule(rule)

@@ -301,9 +301,10 @@ class GtkFrontend(Frontend):
             try:
                 res = self.delete_rule(pos, True)
             except UFWError, e:
-                res = e.value
-            self._set_statusbar_text(res)
-            self._update_rules_model()
+                self._show_dialog(e.value)
+            else:
+                self._set_statusbar_text(res)
+                self._update_rules_model()
 
     def on_rule_up_clicked(self, widget):
         if self.backend._is_enabled():
