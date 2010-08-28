@@ -1,3 +1,20 @@
+#
+# frontend.py: Base frontend for ufw
+#
+# Copyright (C) 2010  Darwin M. Bautista <djclue917@gmail.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from ufw.frontend import UFWFrontend
 
@@ -9,8 +26,8 @@ class Frontend(UFWFrontend):
     def __init__(self):
         UFWFrontend.__init__(self, False)
 
-    def enable_ipv6(self, use=True):
-        conf = ('yes' if use else 'no')
+    def enable_ipv6(self, enable=True):
+        conf = ('yes' if enable else 'no')
         self.backend.set_default(self.backend.files['defaults'], 'IPV6', conf)
 
     def reload(self):
@@ -57,7 +74,7 @@ class Frontend(UFWFrontend):
         res = UFWFrontend.set_rule(self, rule, ip_version)
         # Reset the positions of the recently inserted rule and adjacent rules
         if rule.position:
-            s = rule.position - 2
+            s = (rule.position - 2 if rule.position > 1 else 0)
             e = rule.position + 1
             for r in self.backend.get_rules()[s:e]:
                 r.set_position(0)
