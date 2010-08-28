@@ -297,6 +297,8 @@ class GtkFrontend(Frontend):
     def on_delete_rule_clicked(self, widget):
         if self.backend._is_enabled():
             model, itr = self.selection.get_selected()
+            if not itr:
+                return
             pos = model.get_path(itr)[0] + 1
             try:
                 res = self.delete_rule(pos, True)
@@ -309,6 +311,8 @@ class GtkFrontend(Frontend):
     def on_rule_up_clicked(self, widget):
         if self.backend._is_enabled():
             model, itr = self.selection.get_selected()
+            if not itr:
+                return
             pos = model.get_path(itr)[0] + 1
             new = pos - 1
             if new < 1:
@@ -320,6 +324,8 @@ class GtkFrontend(Frontend):
     def on_rule_down_clicked(self, widget):
         if self.backend._is_enabled():
             model, itr = self.selection.get_selected()
+            if not itr:
+                return
             pos = model.get_path(itr)[0] + 1
             new = pos + 1
             if new > len(self.rules_model):
