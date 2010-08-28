@@ -75,13 +75,13 @@
     </columns>
     <data>
       <row>
+        <col id="0" translatable="yes">Any</col>
+      </row>
+      <row>
         <col id="0" translatable="yes">TCP</col>
       </row>
       <row>
         <col id="0" translatable="yes">UDP</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Any</col>
       </row>
     </data>
   </object>
@@ -125,8 +125,8 @@
     </columns>
   </object>
   <object class="GtkWindow" id="main_window">
-    <property name="width_request">420</property>
-    <property name="height_request">500</property>
+    <property name="width_request">500</property>
+    <property name="height_request">400</property>
     <property name="title" translatable="yes">Firewall</property>
     <property name="window_position">center</property>
     <signal name="destroy" handler="on_main_window_destroy"/>
@@ -535,7 +535,7 @@
               <object class="GtkComboBox" id="protocol_cbox">
                 <property name="visible">True</property>
                 <property name="model">protocols_model</property>
-                <property name="active">2</property>
+                <property name="active">0</property>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext14"/>
                   <attributes>
