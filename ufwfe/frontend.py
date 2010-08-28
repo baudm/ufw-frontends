@@ -45,8 +45,9 @@ class Frontend(UFWFrontend):
         """
         if ip_version is None:
             ip_version = get_ip_version(rule)
-        UFWFrontend.set_rule(self, rule, ip_version)
+        res = UFWFrontend.set_rule(self, rule, ip_version)
         # If a rule is inserted, reset its position to 0
         if rule.position:
             rule = self.backend.get_rule_by_number(rule.position)
             rule.set_position(0)
+        return res
