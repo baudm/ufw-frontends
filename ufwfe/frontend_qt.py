@@ -25,14 +25,14 @@ from ufw.common import UFWRule
 
 from i18n import _
 
-UI_FILE = 'ufw-qt.ui'
-
 
 class QtFrontend(UFWFrontend):
 
+    UI_FILE = 'ufw-qt.ui'
+
     def __init__(self):
         UFWFrontend.__init__(self, False)
-        self.ui = uic.loadUi(UI_FILE)
+        self.ui = uic.loadUi(self.UI_FILE)
         self.ui.show()
 
 

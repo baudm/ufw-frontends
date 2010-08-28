@@ -22,17 +22,17 @@ from ufw.frontend import UFWFrontend
 from ufw.common import UFWRule, UFWError
 import ufw.util
 
-from i18n import _
-
-UI_FILE = 'ufw-gtk.glade'
+from ufwfe.i18n import _
 
 
 class GtkFrontend(UFWFrontend):
 
+    UI_FILE = 'ufw-gtk.glade'
+
     def __init__(self):
         UFWFrontend.__init__(self, False)
         self.ui = gtk.Builder()
-        self.ui.add_from_file(UI_FILE)
+        self.ui.add_from_file(self.UI_FILE)
         # set initial state of toggle button
         toggle = self.ui.get_object('toggle_firewall')
         if not self.backend._is_enabled():
