@@ -166,8 +166,7 @@ class GtkFrontend(Frontend):
 
     def on_insert_rule_clicked(self, widget):
         if self.backend._is_enabled():
-            response = self.rule_dialog.run()
-            if response:
+            if self.rule_dialog.run():
                 rule = self.create_rule_from_ui()
                 self.set_rule(rule)
                 self.refresh_rules_model()
@@ -290,12 +289,12 @@ class GtkFrontend(Frontend):
         rules = self.backend.get_rules()
         i = self.rules_model[itr[0]][8]
         self.load_rule_to_ui(rules[i])
-        response = self.rule_dialog.run()
-        if response:
+        if self.rule_dialog.run():
             pos = itr[0] + 1
             self.delete_rule(pos, True)
+            # If inserting at the end, position should be 0
             if pos > len(self.rules_model) - 1:
-                pos -= 1
+                pos = 0
             rule = self.create_rule_from_ui()
             rule.set_position(pos)
             self.set_rule(rule)
@@ -326,8 +325,7 @@ class GtkFrontend(Frontend):
         print self.application_update('all')
 
     def on_prefs_menu_activate(self, widget):
-        res = self.prefs_dialog.run()
-        if res:
+        if self.prefs_dialog.run():
             self._process_prefs()
         self.prefs_dialog.hide()
 
