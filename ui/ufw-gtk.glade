@@ -125,9 +125,9 @@
     </columns>
   </object>
   <object class="GtkWindow" id="main_window">
-    <property name="width_request">500</property>
-    <property name="height_request">400</property>
-    <property name="title" translatable="yes">Firewall</property>
+    <property name="width_request">650</property>
+    <property name="height_request">500</property>
+    <property name="title" translatable="yes">Uncomplicated Firewall</property>
     <property name="window_position">center</property>
     <signal name="destroy" handler="on_main_window_destroy"/>
     <child>
@@ -509,6 +509,10 @@
   </object>
   <object class="GtkDialog" id="rule_dialog">
     <property name="border_width">5</property>
+    <property name="title" translatable="yes">Firewall Rule</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="window_position">center-on-parent</property>
     <property name="type_hint">normal</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
@@ -516,148 +520,242 @@
         <property name="visible">True</property>
         <property name="spacing">5</property>
         <child>
-          <object class="GtkTable" id="table4">
+          <object class="GtkHBox" id="hbox5">
             <property name="visible">True</property>
-            <property name="n_rows">3</property>
-            <property name="n_columns">5</property>
-            <property name="row_spacing">5</property>
             <child>
-              <object class="GtkLabel" id="label12">
+              <object class="GtkAlignment" id="alignment7">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Protocol:</property>
-              </object>
-              <packing>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBox" id="protocol_cbox">
-                <property name="visible">True</property>
-                <property name="model">protocols_model</property>
-                <property name="active">0</property>
                 <child>
-                  <object class="GtkCellRendererText" id="cellrenderertext14"/>
-                  <attributes>
-                    <attribute name="text">0</attribute>
-                  </attributes>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label6">
+              <object class="GtkFrame" id="frame7">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Action:</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkComboBox" id="action_cbox">
-                <property name="visible">True</property>
-                <property name="model">actions_model</property>
-                <property name="active">0</property>
+                <property name="label_xalign">0</property>
                 <child>
-                  <object class="GtkCellRendererText" id="cellrenderertext8"/>
-                  <attributes>
-                    <attribute name="text">0</attribute>
-                  </attributes>
+                  <object class="GtkAlignment" id="alignment9">
+                    <property name="visible">True</property>
+                    <property name="top_padding">10</property>
+                    <property name="bottom_padding">5</property>
+                    <property name="left_padding">12</property>
+                    <property name="right_padding">5</property>
+                    <child>
+                      <object class="GtkHBox" id="hbox6">
+                        <property name="visible">True</property>
+                        <property name="spacing">50</property>
+                        <child>
+                          <object class="GtkTable" id="table4">
+                            <property name="visible">True</property>
+                            <property name="n_rows">2</property>
+                            <property name="n_columns">2</property>
+                            <property name="column_spacing">10</property>
+                            <property name="row_spacing">5</property>
+                            <child>
+                              <object class="GtkLabel" id="label6">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Action:</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label7">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Direction:</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="x_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="action_cbox">
+                                <property name="visible">True</property>
+                                <property name="model">actions_model</property>
+                                <property name="active">0</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext8"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkHBox" id="hbox4">
+                                <property name="visible">True</property>
+                                <property name="spacing">5</property>
+                                <property name="homogeneous">True</property>
+                                <child>
+                                  <object class="GtkRadioButton" id="in_rbutton">
+                                    <property name="label" translatable="yes">In</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkRadioButton" id="out_rbutton">
+                                    <property name="label" translatable="yes">Out</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="draw_indicator">True</property>
+                                    <property name="group">in_rbutton</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkTable" id="table2">
+                            <property name="visible">True</property>
+                            <property name="n_rows">2</property>
+                            <property name="n_columns">2</property>
+                            <property name="column_spacing">10</property>
+                            <property name="row_spacing">5</property>
+                            <child>
+                              <object class="GtkLabel" id="label12">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Protocol:</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="x_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label15">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Per rule logging:</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="protocol_cbox">
+                                <property name="visible">True</property>
+                                <property name="model">protocols_model</property>
+                                <property name="active">0</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext14"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="rule_logging_cbox">
+                                <property name="visible">True</property>
+                                <property name="model">rule_loglevels_model</property>
+                                <property name="active">0</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext11"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="label8">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">&lt;b&gt;General&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                    <attributes>
+                      <attribute name="scale" value="1.250000"/>
+                    </attributes>
+                  </object>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
+                <property name="expand">False</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label7">
+              <object class="GtkAlignment" id="alignment8">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Direction:</property>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="right_attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioButton" id="in_rbutton">
-                <property name="label" translatable="yes">In</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="active">True</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">3</property>
-                <property name="right_attach">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioButton" id="out_rbutton">
-                <property name="label" translatable="yes">Out</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="active">True</property>
-                <property name="draw_indicator">True</property>
-                <property name="group">in_rbutton</property>
-              </object>
-              <packing>
-                <property name="left_attach">4</property>
-                <property name="right_attach">5</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label15">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Per rule logging:</property>
-              </object>
-              <packing>
-                <property name="top_attach">2</property>
-                <property name="bottom_attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBox" id="rule_logging_cbox">
-                <property name="visible">True</property>
-                <property name="model">rule_loglevels_model</property>
-                <property name="active">0</property>
                 <child>
-                  <object class="GtkCellRendererText" id="cellrenderertext11"/>
-                  <attributes>
-                    <attribute name="text">0</attribute>
-                  </attributes>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">2</property>
-                <property name="bottom_attach">3</property>
+                <property name="position">2</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
           <packing>
@@ -666,412 +764,451 @@
           </packing>
         </child>
         <child>
-          <object class="GtkHSeparator" id="hseparator1">
+          <object class="GtkHBox" id="hbox1">
             <property name="visible">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkHBox" id="hbox4">
-            <property name="visible">True</property>
+            <property name="spacing">10</property>
+            <property name="homogeneous">True</property>
             <child>
-              <object class="GtkLabel" id="label8">
+              <object class="GtkFrame" id="frame3">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Source:</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkTable" id="table2">
-            <property name="visible">True</property>
-            <property name="n_rows">2</property>
-            <property name="n_columns">6</property>
-            <property name="row_spacing">5</property>
-            <child>
-              <object class="GtkLabel" id="label11">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Address:</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkRadioButton" id="src_addr_any_rbutton">
-                <property name="label" translatable="yes">Any</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="draw_indicator">True</property>
-                <property name="group">src_addr_custom_rbutton</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBox" id="src_app_cbox">
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="model">apps_model</property>
+                <property name="label_xalign">0</property>
                 <child>
-                  <object class="GtkCellRendererText" id="cellrenderertext10"/>
-                  <attributes>
-                    <attribute name="text">0</attribute>
-                  </attributes>
+                  <object class="GtkAlignment" id="alignment3">
+                    <property name="visible">True</property>
+                    <property name="top_padding">10</property>
+                    <property name="bottom_padding">5</property>
+                    <property name="left_padding">12</property>
+                    <property name="right_padding">5</property>
+                    <child>
+                      <object class="GtkVBox" id="vbox2">
+                        <property name="visible">True</property>
+                        <child>
+                          <object class="GtkFrame" id="frame1">
+                            <property name="visible">True</property>
+                            <property name="label_xalign">0</property>
+                            <property name="shadow_type">none</property>
+                            <child>
+                              <object class="GtkAlignment" id="alignment1">
+                                <property name="visible">True</property>
+                                <property name="bottom_padding">5</property>
+                                <property name="left_padding">12</property>
+                                <child>
+                                  <object class="GtkTable" id="table5">
+                                    <property name="visible">True</property>
+                                    <property name="n_rows">2</property>
+                                    <property name="n_columns">2</property>
+                                    <property name="row_spacing">5</property>
+                                    <child>
+                                      <object class="GtkRadioButton" id="src_addr_any_rbutton">
+                                        <property name="label" translatable="yes">Any</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="draw_indicator">True</property>
+                                        <property name="group">src_addr_custom_rbutton</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkRadioButton" id="src_addr_custom_rbutton">
+                                        <property name="label" translatable="yes">Custom</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="active">True</property>
+                                        <property name="draw_indicator">True</property>
+                                        <signal name="toggled" handler="on_src_addr_custom_rbutton_toggled"/>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="src_addr_custom_entry">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="invisible_char">&#x2022;</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                        <property name="x_options">GTK_SHRINK | GTK_FILL</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child type="label">
+                              <object class="GtkLabel" id="label16">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Address:&lt;/b&gt;</property>
+                                <property name="use_markup">True</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkFrame" id="frame2">
+                            <property name="visible">True</property>
+                            <property name="label_xalign">0</property>
+                            <property name="shadow_type">none</property>
+                            <child>
+                              <object class="GtkAlignment" id="alignment2">
+                                <property name="visible">True</property>
+                                <property name="left_padding">12</property>
+                                <child>
+                                  <object class="GtkTable" id="table6">
+                                    <property name="visible">True</property>
+                                    <property name="n_rows">3</property>
+                                    <property name="n_columns">2</property>
+                                    <property name="column_spacing">5</property>
+                                    <property name="row_spacing">5</property>
+                                    <child>
+                                      <object class="GtkRadioButton" id="src_port_any_rbutton">
+                                        <property name="label" translatable="yes">Any</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="active">True</property>
+                                        <property name="draw_indicator">True</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkRadioButton" id="src_port_custom_rbutton">
+                                        <property name="label" translatable="yes">Custom</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="active">True</property>
+                                        <property name="draw_indicator">True</property>
+                                        <property name="group">src_port_any_rbutton</property>
+                                        <signal name="toggled" handler="on_src_port_custom_rbutton_toggled"/>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="src_port_custom_entry">
+                                        <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="invisible_char">&#x2022;</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                        <property name="x_options">GTK_SHRINK | GTK_FILL</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkRadioButton" id="src_app_rbutton">
+                                        <property name="label" translatable="yes">Application</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="active">True</property>
+                                        <property name="draw_indicator">True</property>
+                                        <property name="group">src_port_any_rbutton</property>
+                                        <signal name="toggled" handler="on_src_app_rbutton_toggled"/>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">2</property>
+                                        <property name="bottom_attach">3</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBox" id="src_app_cbox">
+                                        <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
+                                        <property name="model">apps_model</property>
+                                        <child>
+                                          <object class="GtkCellRendererText" id="cellrenderertext10"/>
+                                          <attributes>
+                                            <attribute name="text">0</attribute>
+                                          </attributes>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                        <property name="top_attach">2</property>
+                                        <property name="bottom_attach">3</property>
+                                        <property name="x_options">GTK_SHRINK | GTK_FILL</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child type="label">
+                              <object class="GtkLabel" id="label17">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Ports:&lt;/b&gt;</property>
+                                <property name="use_markup">True</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="label18">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">Source</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                      <attribute name="scale" value="1.250000"/>
+                    </attributes>
+                  </object>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">5</property>
-                <property name="right_attach">6</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioButton" id="src_app_rbutton">
-                <property name="label" translatable="yes">Application</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="draw_indicator">True</property>
-                <property name="group">src_port_any_rbutton</property>
-                <signal name="toggled" handler="on_src_app_rbutton_toggled"/>
-              </object>
-              <packing>
-                <property name="left_attach">4</property>
-                <property name="right_attach">5</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="src_addr_custom_entry">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="invisible_char">&#x2022;</property>
-              </object>
-              <packing>
-                <property name="left_attach">3</property>
-                <property name="right_attach">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioButton" id="src_addr_custom_rbutton">
-                <property name="label" translatable="yes">Custom</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="active">True</property>
-                <property name="draw_indicator">True</property>
-                <signal name="toggled" handler="on_src_addr_custom_rbutton_toggled"/>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="right_attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="src_port_custom_entry">
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can_focus">True</property>
-                <property name="invisible_char">&#x2022;</property>
-              </object>
-              <packing>
-                <property name="left_attach">3</property>
-                <property name="right_attach">4</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioButton" id="src_port_custom_rbutton">
-                <property name="label" translatable="yes">Custom</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="draw_indicator">True</property>
-                <property name="group">src_port_any_rbutton</property>
-                <signal name="toggled" handler="on_src_port_custom_rbutton_toggled"/>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="right_attach">3</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioButton" id="src_port_any_rbutton">
-                <property name="label" translatable="yes">Any</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="active">True</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label13">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Ports:</property>
-              </object>
-              <packing>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="position">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkHSeparator" id="hseparator2">
-            <property name="visible">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="position">5</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkHBox" id="hbox7">
-            <property name="visible">True</property>
-            <child>
-              <object class="GtkHSeparator" id="hseparator4">
-                <property name="visible">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkHSeparator" id="hseparator3">
+              <object class="GtkFrame" id="frame4">
                 <property name="visible">True</property>
+                <property name="label_xalign">0</property>
+                <child>
+                  <object class="GtkAlignment" id="alignment4">
+                    <property name="visible">True</property>
+                    <property name="top_padding">10</property>
+                    <property name="bottom_padding">5</property>
+                    <property name="left_padding">12</property>
+                    <property name="right_padding">5</property>
+                    <child>
+                      <object class="GtkVBox" id="vbox3">
+                        <property name="visible">True</property>
+                        <child>
+                          <object class="GtkFrame" id="frame5">
+                            <property name="visible">True</property>
+                            <property name="label_xalign">0</property>
+                            <property name="shadow_type">none</property>
+                            <child>
+                              <object class="GtkAlignment" id="alignment5">
+                                <property name="visible">True</property>
+                                <property name="bottom_padding">5</property>
+                                <property name="left_padding">12</property>
+                                <child>
+                                  <object class="GtkTable" id="table7">
+                                    <property name="visible">True</property>
+                                    <property name="n_rows">2</property>
+                                    <property name="n_columns">2</property>
+                                    <property name="row_spacing">5</property>
+                                    <child>
+                                      <object class="GtkRadioButton" id="dst_addr_any_rbutton">
+                                        <property name="label" translatable="yes">Any</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="active">True</property>
+                                        <property name="draw_indicator">True</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkRadioButton" id="dst_addr_custom_rbutton">
+                                        <property name="label" translatable="yes">Custom</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="active">True</property>
+                                        <property name="draw_indicator">True</property>
+                                        <property name="group">dst_addr_any_rbutton</property>
+                                        <signal name="toggled" handler="on_dst_addr_custom_rbutton_toggled"/>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="dst_addr_custom_entry">
+                                        <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="invisible_char">&#x2022;</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                        <property name="x_options">GTK_SHRINK | GTK_FILL</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child type="label">
+                              <object class="GtkLabel" id="label20">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Address:&lt;/b&gt;</property>
+                                <property name="use_markup">True</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkFrame" id="frame6">
+                            <property name="visible">True</property>
+                            <property name="label_xalign">0</property>
+                            <property name="shadow_type">none</property>
+                            <child>
+                              <object class="GtkAlignment" id="alignment6">
+                                <property name="visible">True</property>
+                                <property name="left_padding">12</property>
+                                <child>
+                                  <object class="GtkTable" id="table8">
+                                    <property name="visible">True</property>
+                                    <property name="n_rows">3</property>
+                                    <property name="n_columns">2</property>
+                                    <property name="column_spacing">5</property>
+                                    <property name="row_spacing">5</property>
+                                    <child>
+                                      <object class="GtkRadioButton" id="dst_port_any_rbutton">
+                                        <property name="label" translatable="yes">Any</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="draw_indicator">True</property>
+                                        <property name="group">dst_port_custom_rbutton</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkRadioButton" id="dst_port_custom_rbutton">
+                                        <property name="label" translatable="yes">Custom</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="active">True</property>
+                                        <property name="draw_indicator">True</property>
+                                        <signal name="toggled" handler="on_dst_port_custom_rbutton_toggled"/>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="dst_port_custom_entry">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="invisible_char">&#x2022;</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                        <property name="x_options">GTK_SHRINK | GTK_FILL</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkRadioButton" id="dst_app_rbutton">
+                                        <property name="label" translatable="yes">Application</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="active">True</property>
+                                        <property name="draw_indicator">True</property>
+                                        <property name="group">dst_port_custom_rbutton</property>
+                                        <signal name="toggled" handler="on_dst_app_rbutton_toggled"/>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">2</property>
+                                        <property name="bottom_attach">3</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBox" id="dst_app_cbox">
+                                        <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
+                                        <property name="model">apps_model</property>
+                                        <child>
+                                          <object class="GtkCellRendererText" id="cellrenderertext13"/>
+                                          <attributes>
+                                            <attribute name="text">0</attribute>
+                                          </attributes>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                        <property name="top_attach">2</property>
+                                        <property name="bottom_attach">3</property>
+                                        <property name="x_options">GTK_SHRINK | GTK_FILL</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child type="label">
+                              <object class="GtkLabel" id="label21">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Ports:&lt;/b&gt;</property>
+                                <property name="use_markup">True</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="label19">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Destination&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                    <attributes>
+                      <attribute name="scale" value="1.250000"/>
+                    </attributes>
+                  </object>
+                </child>
               </object>
               <packing>
-                <property name="expand">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="position">6</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkHBox" id="hbox5">
-            <property name="visible">True</property>
-            <child>
-              <object class="GtkLabel" id="label9">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Destination:</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="position">7</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkTable" id="table3">
-            <property name="visible">True</property>
-            <property name="n_rows">2</property>
-            <property name="n_columns">6</property>
-            <property name="row_spacing">5</property>
-            <child>
-              <object class="GtkLabel" id="label10">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Ports:</property>
-              </object>
-              <packing>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioButton" id="dst_port_any_rbutton">
-                <property name="label" translatable="yes">Any</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="draw_indicator">True</property>
-                <property name="group">dst_port_custom_rbutton</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioButton" id="dst_port_custom_rbutton">
-                <property name="label" translatable="yes">Custom</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="active">True</property>
-                <property name="draw_indicator">True</property>
-                <signal name="toggled" handler="on_dst_port_custom_rbutton_toggled"/>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="right_attach">3</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioButton" id="dst_app_rbutton">
-                <property name="label" translatable="yes">Application</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="draw_indicator">True</property>
-                <property name="group">dst_port_custom_rbutton</property>
-                <signal name="toggled" handler="on_dst_app_rbutton_toggled"/>
-              </object>
-              <packing>
-                <property name="left_attach">4</property>
-                <property name="right_attach">5</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBox" id="dst_app_cbox">
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="model">apps_model</property>
-                <child>
-                  <object class="GtkCellRendererText" id="cellrenderertext13"/>
-                  <attributes>
-                    <attribute name="text">0</attribute>
-                  </attributes>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">5</property>
-                <property name="right_attach">6</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label14">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Address:</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkRadioButton" id="dst_addr_any_rbutton">
-                <property name="label" translatable="yes">Any</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="active">True</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioButton" id="dst_addr_custom_rbutton">
-                <property name="label" translatable="yes">Custom</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="draw_indicator">True</property>
-                <property name="group">dst_addr_any_rbutton</property>
-                <signal name="toggled" handler="on_dst_addr_custom_rbutton_toggled"/>
-              </object>
-              <packing>
-                <property name="left_attach">2</property>
-                <property name="right_attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="dst_addr_custom_entry">
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can_focus">True</property>
-                <property name="invisible_char">&#x2022;</property>
-              </object>
-              <packing>
-                <property name="left_attach">3</property>
-                <property name="right_attach">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="dst_port_custom_entry">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="invisible_char">&#x2022;</property>
-              </object>
-              <packing>
-                <property name="left_attach">3</property>
-                <property name="right_attach">4</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="position">8</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child internal-child="action_area">
@@ -1122,6 +1259,8 @@
   </object>
   <object class="GtkAboutDialog" id="about_dialog">
     <property name="border_width">5</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">normal</property>
@@ -1170,6 +1309,10 @@
   </object>
   <object class="GtkDialog" id="prefs_dialog">
     <property name="border_width">5</property>
+    <property name="title" translatable="yes">Firewall Preferences</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="window_position">center-on-parent</property>
     <property name="type_hint">normal</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
@@ -1181,7 +1324,7 @@
             <property name="visible">True</property>
             <property name="n_rows">4</property>
             <property name="n_columns">2</property>
-            <property name="column_spacing">5</property>
+            <property name="column_spacing">10</property>
             <property name="row_spacing">5</property>
             <child>
               <object class="GtkCheckButton" id="enable_ipv6">
@@ -1219,11 +1362,13 @@
             <child>
               <object class="GtkLabel" id="label5">
                 <property name="visible">True</property>
+                <property name="xalign">0</property>
                 <property name="label" translatable="yes">Default outgoing policy:</property>
               </object>
               <packing>
                 <property name="top_attach">2</property>
                 <property name="bottom_attach">3</property>
+                <property name="x_options">GTK_FILL</property>
               </packing>
             </child>
             <child>
@@ -1245,8 +1390,12 @@
             <child>
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
+                <property name="xalign">0</property>
                 <property name="label" translatable="yes">Firewall logging:</property>
               </object>
+              <packing>
+                <property name="x_options">GTK_FILL</property>
+              </packing>
             </child>
             <child>
               <object class="GtkComboBox" id="incoming_policy_cbox">
@@ -1269,11 +1418,13 @@
             <child>
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
+                <property name="xalign">0</property>
                 <property name="label" translatable="yes">Default incoming policy:</property>
               </object>
               <packing>
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
+                <property name="x_options">GTK_FILL</property>
               </packing>
             </child>
             <child>
