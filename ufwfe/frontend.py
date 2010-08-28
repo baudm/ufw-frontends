@@ -25,7 +25,6 @@ class Frontend(UFWFrontend):
     def get_rules(self):
         """Returns a generator of processed rules"""
         app_rules = []
-        rule_num = 1
         for i, r in enumerate(self.backend.get_rules()):
             if r.dapp or r.sapp:
                 t = r.get_app_tuple()
@@ -33,8 +32,7 @@ class Frontend(UFWFrontend):
                     continue
                 else:
                     app_rules.append(t)
-            yield (i, rule_num, r)
-            rule_num += 1
+            yield (i, r)
 
     def set_rule(self, rule, ip_version=None):
         """set_rule(rule, ip_version=None)
@@ -45,9 +43,35 @@ class Frontend(UFWFrontend):
         """
         if ip_version is None:
             ip_version = get_ip_version(rule)
-        res = UFWFrontend.set_rule(self, rule, ip_version)
-        # If a rule is inserted, reset its position to 0
-        if rule.position:
-            rule = self.backend.get_rule_by_number(rule.position)
+        # Fix any inconsistency
+        if rule.sapp or rule.dapp:
+            rule.set_protocol('any')
+            if rule.sapp:
+                rule.sport = rule.sapp
+            if rule.dapp:
+                rule.dport = rule.dapp
+        # If trying to insert beyond the end, just set position to 0
+        if rule.position and not self.backend.get_rule_by_number(rule.position):
             rule.set_position(0)
+        res = UFWFrontend.set_rule(self, rule, ip_version)
+        # Reset the positions of the recently inserted rule and adjacent rules
+        if rule.position:
+            s = rule.position - 2
+            e = rule.position + 1
+            for r in self.backend.get_rules()[s:e]:
+                r.set_position(0)
         return res
+
+    def update_rule(self, pos, rule):
+        self.delete_rule(pos, True)
+        rule.set_position(pos)
+        self.set_rule(rule)
+
+    def move_rule(self, old, new):
+        if old == new:
+            return
+        rule = self.backend.get_rule_by_number(old)
+        rule = rule.dup_rule()
+        self.delete_rule(old, True)
+        rule.set_position(new)
+        self.set_rule(rule)

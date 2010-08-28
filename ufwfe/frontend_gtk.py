@@ -51,9 +51,7 @@ class GtkFrontend(Frontend):
         main_window.show_all()
 
     def _init_main_window(self):
-        # enable multiple selections
         self.selection = self.ui.get_object('rules_view').get_selection()
-        self.selection.set_mode(gtk.SELECTION_MULTIPLE)
         # set initial state of toggle button
         self._set_toggle_state(self.backend._is_enabled())
 
@@ -91,11 +89,13 @@ class GtkFrontend(Frontend):
         toggle.set_active(active)
         img = self.ui.get_object(img_id)
         toggle.set_image(img)
+        for name in ('insert_rule', 'delete_rule', 'rule_up', 'rule_down'):
+            self.ui.get_object(name).set_sensitive(active)
 
     def _get_cbox_values(self, name):
-        ls = self.ui.get_object(name).get_model()
+        model = self.ui.get_object(name).get_model()
         values = []
-        for v in ls:
+        for v in model:
             values.append(v[0])
         return values
 
@@ -129,10 +129,10 @@ class GtkFrontend(Frontend):
     def _update_rules_model(self):
         rules_model = self.ui.get_object('rules_model')
         rules_model.clear()
-        for row in self.get_rules():
-            idx, rule_num, r = row
+        for i, data in enumerate(self.get_rules()):
+            idx, r = data
             r = get_formatted_rule(r)
-            row = [rule_num, r.action, r.direction, r.protocol, r.src, r.sport, r.dst, r.dport, idx]
+            row = [i + 1, r.action, r.direction, r.protocol, r.src, r.sport, r.dst, r.dport, idx]
             rules_model.append(row)
 
     def _update_apps_model(self):
@@ -145,7 +145,10 @@ class GtkFrontend(Frontend):
 
     def _get_rule_from_dialog(self):
         action = self._get_combobox_value('action_cbox').lower()
-        protocol = self._get_combobox_value('protocol_cbox').lower()
+        if self.ui.get_object('protocol_cbox').get_sensitive():
+            protocol = self._get_combobox_value('protocol_cbox').lower()
+        else:
+            protocol = 'any'
         rule = UFWRule(action, protocol)
         # direction
         in_rbutton = self.ui.get_object('in_rbutton')
@@ -293,24 +296,45 @@ class GtkFrontend(Frontend):
 
     def on_delete_rule_clicked(self, widget):
         if self.backend._is_enabled():
-            rows = self.selection.get_selected_rows()[1]
-            rows.reverse()
-            for i in rows:
-                try:
-                    res = self.delete_rule(i[0] + 1, True)
-                except UFWError, e:
-                    res = e.value
-                    continue
+            model, itr = self.selection.get_selected()
+            pos = model.get_path(itr)[0] + 1
+            try:
+                res = self.delete_rule(pos, True)
+            except UFWError, e:
+                res = e.value
             self._set_statusbar_text(res)
             self._update_rules_model()
+
+    def on_rule_up_clicked(self, widget):
+        if self.backend._is_enabled():
+            model, itr = self.selection.get_selected()
+            pos = model.get_path(itr)[0] + 1
+            new = pos - 1
+            if new < 1:
+                return
+            self.move_rule(pos, new)
+            self._update_rules_model()
+            self.selection.select_path(new - 1)
+
+    def on_rule_down_clicked(self, widget):
+        if self.backend._is_enabled():
+            model, itr = self.selection.get_selected()
+            pos = model.get_path(itr)[0] + 1
+            new = pos + 1
+            if new > len(self.rules_model):
+                return
+            self.move_rule(pos, new)
+            self._update_rules_model()
+            self.selection.select_path(new - 1)
 
     def on_help_menu_activate(self, widget):
         self.about_dialog.run()
         self.about_dialog.hide()
 
-    def on_rules_view_row_activated(self, widget, itr, path):
+    def on_rules_view_row_activated(self, widget, path, view_column):
+        pos = path[0] + 1
         rules = self.backend.get_rules()
-        i = self.rules_model[itr[0]][8]
+        i = self.rules_model[pos - 1][8]
         self._load_rule_to_dialog(rules[i])
         while True:
             if self.rule_dialog.run():
@@ -319,18 +343,8 @@ class GtkFrontend(Frontend):
                 except UFWError, e:
                     self._show_dialog(e.value, 'rule_dialog')
                     continue
-                pos = itr[0] + 1
                 try:
-                    self.delete_rule(pos, True)
-                except UFWError, e:
-                    self._show_dialog(e.value, 'rule_dialog')
-                    continue
-                # If inserting at the end, position should be 0
-                if pos > len(self.rules_model) - 1:
-                    pos = 0
-                rule.set_position(pos)
-                try:
-                    self.set_rule(rule)
+                    self.update_rule(pos, rule)
                 except UFWError, e:
                     self._show_dialog(e.value, 'rule_dialog')
                     continue
