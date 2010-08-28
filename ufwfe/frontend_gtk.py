@@ -55,16 +55,7 @@ class GtkFrontend(Frontend):
         self.selection = self.ui.get_object('rules_view').get_selection()
         self.selection.set_mode(gtk.SELECTION_MULTIPLE)
         # set initial state of toggle button
-        toggle = self.ui.get_object('toggle_firewall')
-        if not self.backend._is_enabled():
-            toggle.set_label(_('Enable Firewall'))
-            toggle.set_active(False)
-            img = self.ui.get_object('play')
-        else:
-            toggle.set_label(_('Disable Firewall'))
-            toggle.set_active(True)
-            img = self.ui.get_object('stop')
-        toggle.set_image(img)
+        self._set_toggle_state(self.backend._is_enabled())
 
     def _init_dialogs(self):
         main_window = self.ui.get_object('main_window')
@@ -92,6 +83,15 @@ class GtkFrontend(Frontend):
         conf = self.backend.defaults['ipv6']
         cb.set_active(conf == 'yes')
 
+    def _set_toggle_state(self, active):
+        label = ('Disable Firewall' if active else 'Enable Firewall')
+        img_id = ('stop' if active else 'play')
+        toggle = self.ui.get_object('toggle_firewall')
+        toggle.set_label(_(label))
+        toggle.set_active(active)
+        img = self.ui.get_object(img_id)
+        toggle.set_image(img)
+
     def _get_cbox_values(self, name):
         ls = self.ui.get_object(name).get_model()
         values = []
@@ -117,13 +117,14 @@ class GtkFrontend(Frontend):
         cid = sb.get_context_id('default context')
         sb.push(cid, text)
 
-    def _show_error_dialog(self, msg):
-        main_window = self.ui.get_object('main_window')
-        md = gtk.MessageDialog(main_window,
-            gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_ERROR,
-            gtk.BUTTONS_CLOSE, msg)
-        md.run()
+    def _show_dialog(self, msg, parent='main_window', msg_type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_CLOSE):
+        widget = self.ui.get_object(parent)
+        md = gtk.MessageDialog(widget,
+            gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+            msg_type, buttons, msg)
+        res = md.run()
         md.destroy()
+        return res
 
     def _update_rules_model(self):
         rules_model = self.ui.get_object('rules_model')
@@ -259,15 +260,13 @@ class GtkFrontend(Frontend):
 
     def on_toggle_firewall_toggled(self, widget):
         if self.backend._is_enabled():
-            print self.set_enabled(False)
-            img = self.ui.get_object('play')
-            widget.set_image(img)
-            widget.set_label(_('Enable Firewall'))
+            res = self.set_enabled(False)
+            self._set_statusbar_text(res)
+            self._set_toggle_state(False)
         else:
-            print self.set_enabled(True)
-            img = self.ui.get_object('stop')
-            widget.set_image(img)
-            widget.set_label(_('Disable Firewall'))
+            res = self.set_enabled(True)
+            self._set_statusbar_text(res)
+            self._set_toggle_state(True)
 
     def on_reload_firewall_clicked(self, widget):
         if self.reload():
@@ -280,12 +279,12 @@ class GtkFrontend(Frontend):
                     try:
                         rule = self._get_rule_from_dialog()
                     except UFWError, e:
-                        self._show_error_dialog(e.value)
+                        self._show_dialog(e.value, 'rule_dialog')
                         continue
                     try:
                         res = self.set_rule(rule)
                     except UFWError, e:
-                        self._show_error_dialog(e.value)
+                        self._show_dialog(e.value, 'rule_dialog')
                         continue
                     self._set_statusbar_text(res)
                     self._update_rules_model()
@@ -318,13 +317,13 @@ class GtkFrontend(Frontend):
                 try:
                     rule = self._get_rule_from_dialog()
                 except UFWError, e:
-                    self._show_error_dialog(e.value)
+                    self._show_dialog(e.value, 'rule_dialog')
                     continue
                 pos = itr[0] + 1
                 try:
                     self.delete_rule(pos, True)
                 except UFWError, e:
-                    self._show_error_dialog(e.value)
+                    self._show_dialog(e.value, 'rule_dialog')
                     continue
                 # If inserting at the end, position should be 0
                 if pos > len(self.rules_model) - 1:
@@ -333,7 +332,7 @@ class GtkFrontend(Frontend):
                 try:
                     self.set_rule(rule)
                 except UFWError, e:
-                    self._show_error_dialog(e.value)
+                    self._show_dialog(e.value, 'rule_dialog')
                     continue
                 self._set_statusbar_text(_('Rule updated'))
                 self._update_rules_model()
@@ -341,10 +340,19 @@ class GtkFrontend(Frontend):
         self.rule_dialog.hide()
 
     def on_reset_fw_menu_activate(self, widget):
-        print self.reset(True)
+        msg = _('Resetting all rules to installed defaults.\nProceed with operation?')
+        res = self._show_dialog(msg, msg_type=gtk.MESSAGE_WARNING, buttons=gtk.BUTTONS_YES_NO)
+        if res == gtk.RESPONSE_YES:
+            self.reset(True)
+            self.rules_model.clear()
+            self._set_toggle_state(False)
+            self._set_statusbar_text(_('Firewall defaults restored'))
 
     def on_update_fw_menu_activate(self, widget):
-        print self.application_update('all')
+        res = self.application_update('all')
+        if not res:
+            res = _('Nothing to update')
+        self._show_dialog(res, msg_type=gtk.MESSAGE_INFO)
 
     def on_prefs_menu_activate(self, widget):
         if self.prefs_dialog.run():
@@ -362,6 +370,7 @@ class GtkFrontend(Frontend):
             self.enable_ipv6(cb.get_active())
             # reload firewall
             self.reload()
+            self._set_statusbar_text(_('Preferences saved'))
         self.prefs_dialog.hide()
 
     def on_main_window_destroy(self, widget):
