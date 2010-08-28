@@ -367,6 +367,8 @@ class GtkFrontend(Frontend):
         self.about_dialog.hide()
 
     def on_rules_view_row_activated(self, widget, path, view_column):
+        if not self.backend._is_enabled():
+            return
         pos = path[0] + 1
         rules = self.backend.get_rules()
         i = self.rules_model[pos - 1][8]
@@ -385,6 +387,7 @@ class GtkFrontend(Frontend):
                     continue
                 self._set_statusbar_text(_('Rule updated'))
                 self._update_rules_model()
+                self.selection.select_path(pos - 1)
             break
         self.rule_dialog.hide()
 
