@@ -303,13 +303,13 @@ class GtkFrontend(Frontend):
 
     def _process_prefs(self):
         # loglevel
-        level = self._get_combobox_value('logging_cbox')
+        level = self._get_combobox_value('logging_cbox').lower()
         self.set_loglevel(level)
         # default incoming
-        policy = self._get_combobox_value('incoming_policy_cbox')
+        policy = self._get_combobox_value('incoming_policy_cbox').lower()
         self.backend.set_default_policy(policy, 'incoming')
         # default outgoing
-        policy = self._get_combobox_value('outgoing_policy_cbox')
+        policy = self._get_combobox_value('outgoing_policy_cbox').lower()
         self.backend.set_default_policy(policy, 'outgoing')
         # enable IPv6?
         cb = self.ui.get_object('enable_ipv6')
