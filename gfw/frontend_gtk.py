@@ -324,6 +324,7 @@ class GtkFrontend(Frontend):
         gtk.main_quit()
 
     def on_prefs_dialog_show_activate(self, widget):
+        self._init_prefs_dialog()
         if self.prefs_dialog.run() == self.RESPONSE_OK:
             # loglevel
             level = self._get_combobox_value('logging_cbox').lower()
