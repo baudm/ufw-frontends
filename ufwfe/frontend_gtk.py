@@ -36,6 +36,7 @@ class GtkFrontend(Frontend):
         self.ui = gtk.Builder()
         path = get_ui_path(self.UI_FILE)
         self.ui.add_from_file(path)
+        self._init_action_groups()
         # models
         self.rules_model = self.ui.get_object('rules_model')
         self._update_rules_model()
@@ -46,7 +47,6 @@ class GtkFrontend(Frontend):
         self.about_dialog = self.ui.get_object('about_dialog')
         self._init_prefs_dialog()
         self._init_main_window()
-        self._init_actions()
         # connect signals and show main window
         self.ui.connect_signals(self)
         main_window = self.ui.get_object('main_window')
@@ -77,7 +77,7 @@ class GtkFrontend(Frontend):
         conf = self.backend.defaults['ipv6']
         cb.set_active(conf == 'yes')
 
-    def _init_actions(self):
+    def _init_action_groups(self):
         groups = {
             'rule_actions': [
                 'rule_add', 'rule_delete', 'rule_edit',
