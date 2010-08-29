@@ -16,24 +16,52 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import ufw.common
 import ufw.frontend
-from ufw.frontend import UFWFrontend
-from ufw.common import UFWError
+from ufw.util import valid_address
 
-from gfw.util import get_ip_version
+from gfw.i18n import _
+from gfw.util import ANY_ADDR
 
 
-def error(msg, exit=True):
-    raise UFWError(msg)
+def _error(msg, exit=True):
+    raise ufw.common.UFWError(msg)
 
 # Override the error function used by UFWFrontend
-ufw.frontend.error = error
+ufw.frontend.error = _error
 
 
-class Frontend(UFWFrontend, object):
+class Frontend(ufw.frontend.UFWFrontend, object):
 
     def __init__(self):
         super(Frontend, self).__init__(False)
+
+    @staticmethod
+    def _get_ip_version(rule):
+        """Determine IP version of rule.
+        Extracted from ufw.parser.UFWCommandRule.parse
+        """
+        # Determine src type
+        if rule.src == ANY_ADDR:
+            from_type = 'any'
+        else:
+            from_type = ('v6' if valid_address(rule.src, '6') else 'v4')
+        # Determine dst type
+        if rule.dst == ANY_ADDR:
+            to_type = 'any'
+        else:
+            to_type = ('v6' if valid_address(rule.dst, '6') else 'v4')
+        # Figure out the type of rule (IPv4, IPv6, or both)
+        if from_type == 'any' and to_type == 'any':
+            ip_version = 'both'
+        elif from_type != 'any' and to_type != 'any' and from_type != to_type:
+            err_msg = _("Mixed IP versions for 'from' and 'to'")
+            raise ufw.common.UFWError(err_msg)
+        elif from_type != 'any':
+            ip_version = from_type
+        elif to_type != 'any':
+            ip_version = to_type
+        return ip_version
 
     def enable_ipv6(self, enable=True):
         conf = ('yes' if enable else 'no')
@@ -68,7 +96,7 @@ class Frontend(UFWFrontend, object):
             * the recently added rule's position is reset
         """
         if ip_version is None:
-            ip_version = get_ip_version(rule)
+            ip_version = self._get_ip_version(rule)
         rule = rule.dup_rule()
         # Fix any inconsistency
         if rule.sapp or rule.dapp:
