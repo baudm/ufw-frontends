@@ -1,17 +1,14 @@
 
 import os.path
 
-import ufw.common
-
 
 ANY_ADDR = '0.0.0.0/0'
 ANY_PORT = 'any'
 
 
 def get_ui_path(ui_file):
-    if False:
-        path = os.path.join(ufw.common.share_dir, 'ui', ui_file)
-    else:
+    path = os.path.join('/usr', 'share', 'ufw-frontends', ui_file)
+    if not os.path.exists(path):
         path = os.path.join('ui', ui_file)
     return path
 
