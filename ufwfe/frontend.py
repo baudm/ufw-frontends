@@ -82,7 +82,8 @@ class Frontend(UFWFrontend):
 
     def update_rule(self, pos, rule):
         self.delete_rule(pos, True)
-        rule.set_position(pos)
+        if not rule.position:
+            rule.set_position(pos)
         self.set_rule(rule)
 
     def move_rule(self, old, new):

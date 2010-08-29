@@ -171,6 +171,9 @@ class GtkFrontend(Frontend):
         else:
             protocol = 'any'
         rule = UFWRule(action, protocol)
+        # position
+        pos = self.ui.get_object('position_adjustment').get_value()
+        rule.set_position(pos)
         # direction
         in_rbutton = self.ui.get_object('in_rbutton')
         direction = ('in' if in_rbutton.get_active() else 'out')
@@ -206,6 +209,11 @@ class GtkFrontend(Frontend):
         return rule
 
     def _restore_rule_dialog_defaults(self):
+        position = self.ui.get_object('position_adjustment')
+        # Max value should not exceed 'number of rules + 1'
+        position.set_upper(len(self.rules_model) + 1)
+        # Always set to the value of the currently selected row
+        position.set_value(self._get_selected_rule_pos())
         # active radio buttons
         active = [
             'in_rbutton', 'src_addr_custom_rbutton', 'src_port_any_rbutton',
