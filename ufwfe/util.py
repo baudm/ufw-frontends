@@ -21,20 +21,26 @@ def get_ui_path(ui_file):
 
 def get_formatted_rule(rule):
     r = rule.dup_rule()
-    r.action = r.action.upper()
-    r.direction = r.direction.upper()
+    r.action = r.action.title()
+    r.direction = r.direction.title()
     if r.dapp or r.sapp:
-        r.protocol = '-'
-    # src
+        r.protocol = ''
+        if r.sapp:
+            r.sport = r.sapp
+        if r.dapp:
+            r.dport = r.dapp
+    if r.protocol == 'any':
+        r.protocol = '*'
+    else:
+        r.protocol = r.protocol.upper()
+    if r.sport == ANY_PORT:
+        r.sport = '*'
+    if r.dport == ANY_PORT:
+        r.dport = '*'
     if r.src == ANY_ADDR:
-        r.src = 'any'
-    if r.sapp:
-        r.sport = r.sapp
-    # dst
+        r.src = '*'
     if r.dst == ANY_ADDR:
-        r.dst = 'any'
-    if r.dapp:
-        r.dport = r.dapp
+        r.dst = '*'
     return r
 
 
