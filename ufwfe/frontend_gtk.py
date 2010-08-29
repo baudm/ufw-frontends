@@ -138,11 +138,12 @@ class GtkFrontend(Frontend):
         cid = sb.get_context_id('default context')
         sb.push(cid, text)
 
-    def _show_dialog(self, msg, parent='main_window', msg_type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_CLOSE):
+    def _show_dialog(self, msg, parent='main_window', type=gtk.MESSAGE_ERROR,
+                        buttons=gtk.BUTTONS_CLOSE):
         widget = self.ui.get_object(parent)
         md = gtk.MessageDialog(widget,
-            gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-            msg_type, buttons, msg)
+                gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+                type, buttons, msg)
         res = md.run()
         md.destroy()
         return res
@@ -345,7 +346,7 @@ class GtkFrontend(Frontend):
 
     def on_firewall_reset_activate(self, action):
         msg = _('Resetting all rules to installed defaults.\nProceed with operation?')
-        res = self._show_dialog(msg, msg_type=gtk.MESSAGE_WARNING, buttons=gtk.BUTTONS_YES_NO)
+        res = self._show_dialog(msg, type=gtk.MESSAGE_WARNING, buttons=gtk.BUTTONS_YES_NO)
         if res == gtk.RESPONSE_YES:
             self.reset(True)
             self.rules_model.clear()
@@ -356,7 +357,7 @@ class GtkFrontend(Frontend):
         res = self.application_update('all')
         if not res:
             res = _('Nothing to update')
-        self._show_dialog(res, msg_type=gtk.MESSAGE_INFO)
+        self._show_dialog(res, type=gtk.MESSAGE_INFO)
 
     # -------------------------- Rule Actions --------------------------
 
@@ -413,6 +414,11 @@ class GtkFrontend(Frontend):
             return
         pos = self._get_selected_rule_pos()
         if not pos:
+            return
+        msg = _('Delete rule at position %d?') % (pos, )
+        res = self._show_dialog(msg, type=gtk.MESSAGE_QUESTION,
+                    buttons=gtk.BUTTONS_YES_NO)
+        if res == gtk.RESPONSE_NO:
             return
         try:
             res = self.delete_rule(pos, True)
