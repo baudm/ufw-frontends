@@ -18,6 +18,7 @@
 
 import sys
 
+import gobject
 import gtk
 
 from ufw.common import UFWRule, UFWError
@@ -138,7 +139,9 @@ class GtkFrontend(Frontend):
     def _set_statusbar_text(self, text):
         sb = self.ui.get_object('statusbar')
         cid = sb.get_context_id('default context')
-        sb.push(cid, text)
+        mid = sb.push(cid, text)
+        # Remove message after 5 seconds
+        gobject.timeout_add_seconds(5, sb.remove_message, cid, mid)
 
     def _show_dialog(self, msg, parent='main_window', type=gtk.MESSAGE_ERROR,
                         buttons=gtk.BUTTONS_CLOSE):
