@@ -32,7 +32,7 @@ class GtkFrontend(Frontend):
     RESPONSE_OK = -5
 
     def __init__(self):
-        Frontend.__init__(self)
+        super(GtkFrontend, self).__init__()
         self.ui = gtk.Builder()
         path = get_ui_path(self.UI_FILE)
         self.ui.add_from_file(path)

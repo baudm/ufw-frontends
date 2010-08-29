@@ -30,10 +30,10 @@ def error(msg, exit=True):
 ufw.frontend.error = error
 
 
-class Frontend(UFWFrontend):
+class Frontend(UFWFrontend, object):
 
     def __init__(self):
-        UFWFrontend.__init__(self, False)
+        super(Frontend, self).__init__(False)
 
     def enable_ipv6(self, enable=True):
         conf = ('yes' if enable else 'no')
@@ -80,7 +80,7 @@ class Frontend(UFWFrontend):
         # If trying to insert beyond the end, just set position to 0
         if rule.position and not self.backend.get_rule_by_number(rule.position):
             rule.set_position(0)
-        res = UFWFrontend.set_rule(self, rule, ip_version)
+        res = super(Frontend, self).set_rule(rule, ip_version)
         # Reset the positions of the recently inserted rule and adjacent rules
         if rule.position:
             s = (rule.position - 2 if rule.position > 1 else 0)
