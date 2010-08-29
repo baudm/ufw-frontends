@@ -4,7 +4,7 @@ import os.path
 from ufw.util import valid_address
 from ufw.common import UFWError, share_dir
 
-from ufwfe.i18n import _
+from gfw.i18n import _
 
 
 ANY_ADDR = '0.0.0.0/0'

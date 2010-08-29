@@ -20,10 +20,10 @@ import gtk
 
 from ufw.common import UFWRule, UFWError
 
-from ufwfe.frontend import Frontend
-from ufwfe.i18n import _
-from ufwfe.util import get_ui_path, get_formatted_rule
-from ufwfe.util import ANY_ADDR, ANY_PORT
+from gfw.frontend import Frontend
+from gfw.i18n import _
+from gfw.util import get_ui_path, get_formatted_rule
+from gfw.util import ANY_ADDR, ANY_PORT
 
 
 class GtkFrontend(Frontend):

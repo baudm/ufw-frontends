@@ -20,18 +20,18 @@ import sys
 
 from PyQt4 import QtGui, uic
 
-from ufw.frontend import UFWFrontend
 from ufw.common import UFWRule
 
-from i18n import _
+from gfw.frontend import Frontend
+from gfw.i18n import _
 
 
-class QtFrontend(UFWFrontend):
+class QtFrontend(Frontend):
 
     UI_FILE = 'ufw-qt.ui'
 
     def __init__(self):
-        UFWFrontend.__init__(self, False)
+        Frontend.__init__(self)
         self.ui = uic.loadUi(self.UI_FILE)
         self.ui.show()
 

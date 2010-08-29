@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from ufwfe.frontend_gtk import main
+from gfw.frontend_gtk import main
 
 
 if __name__ == '__main__':

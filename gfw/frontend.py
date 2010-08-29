@@ -20,7 +20,7 @@ import ufw.frontend
 from ufw.frontend import UFWFrontend
 from ufw.common import UFWError
 
-from ufwfe.util import get_ip_version
+from gfw.util import get_ip_version
 
 
 def error(msg, exit=True):
