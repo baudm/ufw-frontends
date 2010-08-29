@@ -178,48 +178,117 @@
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="menuitem2">
+              <object class="GtkMenuItem" id="menuitem5">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Fire_wall</property>
+                <property name="label" translatable="yes">_Edit</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
-                  <object class="GtkMenu" id="menu2">
+                  <object class="GtkMenu" id="menu5">
                     <property name="visible">True</property>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem6">
+                      <object class="GtkMenuItem" id="menuitem2">
                         <property name="visible">True</property>
-                        <property name="related_action">firewall_toggle</property>
-                        <property name="use_action_appearance">True</property>
-                        <property name="use_stock">True</property>
+                        <property name="label" translatable="yes">Fire_wall</property>
+                        <property name="use_underline">True</property>
+                        <child type="submenu">
+                          <object class="GtkMenu" id="menu2">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkImageMenuItem" id="imagemenuitem6">
+                                <property name="visible">True</property>
+                                <property name="related_action">firewall_toggle</property>
+                                <property name="use_action_appearance">True</property>
+                                <property name="use_stock">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkImageMenuItem" id="imagemenuitem7">
+                                <property name="visible">True</property>
+                                <property name="related_action">firewall_reload</property>
+                                <property name="use_action_appearance">True</property>
+                                <property name="use_stock">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkSeparatorMenuItem" id="separatormenuitem3">
+                                <property name="visible">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkImageMenuItem" id="imagemenuitem8">
+                                <property name="visible">True</property>
+                                <property name="related_action">firewall_update</property>
+                                <property name="use_action_appearance">True</property>
+                                <property name="use_stock">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkImageMenuItem" id="imagemenuitem9">
+                                <property name="visible">True</property>
+                                <property name="related_action">firewall_reset</property>
+                                <property name="use_action_appearance">True</property>
+                                <property name="use_stock">True</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem7">
+                      <object class="GtkMenuItem" id="menuitem3">
                         <property name="visible">True</property>
-                        <property name="related_action">firewall_reload</property>
-                        <property name="use_action_appearance">True</property>
-                        <property name="use_stock">True</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkSeparatorMenuItem" id="separatormenuitem3">
-                        <property name="visible">True</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem8">
-                        <property name="visible">True</property>
-                        <property name="related_action">firewall_update</property>
-                        <property name="use_action_appearance">True</property>
-                        <property name="use_stock">True</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem9">
-                        <property name="visible">True</property>
-                        <property name="related_action">firewall_reset</property>
-                        <property name="use_action_appearance">True</property>
-                        <property name="use_stock">True</property>
+                        <property name="label" translatable="yes">_Rule</property>
+                        <property name="use_underline">True</property>
+                        <child type="submenu">
+                          <object class="GtkMenu" id="menu4">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkImageMenuItem" id="imagemenuitem12">
+                                <property name="visible">True</property>
+                                <property name="related_action">rule_add</property>
+                                <property name="use_action_appearance">True</property>
+                                <property name="use_stock">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkImageMenuItem" id="imagemenuitem13">
+                                <property name="visible">True</property>
+                                <property name="related_action">rule_edit</property>
+                                <property name="use_action_appearance">True</property>
+                                <property name="use_stock">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkImageMenuItem" id="imagemenuitem14">
+                                <property name="visible">True</property>
+                                <property name="related_action">rule_delete</property>
+                                <property name="use_action_appearance">True</property>
+                                <property name="use_stock">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkSeparatorMenuItem" id="separatormenuitem4">
+                                <property name="visible">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkImageMenuItem" id="imagemenuitem15">
+                                <property name="visible">True</property>
+                                <property name="related_action">rule_up</property>
+                                <property name="use_action_appearance">True</property>
+                                <property name="use_stock">True</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkImageMenuItem" id="imagemenuitem16">
+                                <property name="visible">True</property>
+                                <property name="related_action">rule_down</property>
+                                <property name="use_action_appearance">True</property>
+                                <property name="use_stock">True</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
@@ -231,63 +300,6 @@
                       <object class="GtkImageMenuItem" id="imagemenuitem11">
                         <property name="visible">True</property>
                         <property name="related_action">prefs_dialog_show</property>
-                        <property name="use_action_appearance">True</property>
-                        <property name="use_stock">True</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkMenuItem" id="menuitem3">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">_Rule</property>
-                <property name="use_underline">True</property>
-                <child type="submenu">
-                  <object class="GtkMenu" id="menu4">
-                    <property name="visible">True</property>
-                    <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem12">
-                        <property name="visible">True</property>
-                        <property name="related_action">rule_add</property>
-                        <property name="use_action_appearance">True</property>
-                        <property name="use_stock">True</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem13">
-                        <property name="visible">True</property>
-                        <property name="related_action">rule_edit</property>
-                        <property name="use_action_appearance">True</property>
-                        <property name="use_stock">True</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem14">
-                        <property name="visible">True</property>
-                        <property name="related_action">rule_delete</property>
-                        <property name="use_action_appearance">True</property>
-                        <property name="use_stock">True</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkSeparatorMenuItem" id="separatormenuitem4">
-                        <property name="visible">True</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem15">
-                        <property name="visible">True</property>
-                        <property name="related_action">rule_up</property>
-                        <property name="use_action_appearance">True</property>
-                        <property name="use_stock">True</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem16">
-                        <property name="visible">True</property>
-                        <property name="related_action">rule_down</property>
                         <property name="use_action_appearance">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -539,7 +551,7 @@
                     <child>
                       <object class="GtkCellRendererText" id="cellrenderertext9"/>
                       <attributes>
-                        <attribute name="text">5</attribute>
+                        <attribute name="text">6</attribute>
                       </attributes>
                     </child>
                   </object>
