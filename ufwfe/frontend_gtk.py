@@ -43,7 +43,7 @@ class GtkFrontend(Frontend):
         self.rule_dialog = self.ui.get_object('rule_dialog')
         self.prefs_dialog = self.ui.get_object('prefs_dialog')
         self.about_dialog = self.ui.get_object('about_dialog')
-        self._init_dialogs()
+        self._init_prefs_dialog()
         self._init_main_window()
         self._init_actions()
         # connect signals and show main window
@@ -55,12 +55,6 @@ class GtkFrontend(Frontend):
         self.selection = self.ui.get_object('rules_view').get_selection()
         # set initial state of toggle button
         self._set_toggle_state(self.backend._is_enabled())
-
-    def _init_dialogs(self):
-        main_window = self.ui.get_object('main_window')
-        for name in ('rule_dialog', 'prefs_dialog', 'about_dialog'):
-            self.ui.get_object(name).set_transient_for(main_window)
-        self._init_prefs_dialog()
 
     def _init_prefs_dialog(self):
         # comboboxes
