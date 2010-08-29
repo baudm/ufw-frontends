@@ -355,16 +355,16 @@ class GtkFrontend(Frontend):
     def on_firewall_toggle_toggled(self, action):
         if self.backend._is_enabled():
             res = self.set_enabled(False)
-            self._set_statusbar_text(res)
             self._set_toggle_state(False)
         else:
             res = self.set_enabled(True)
-            self._set_statusbar_text(res)
             self._set_toggle_state(True)
+        self._set_statusbar_text(res)
 
     def on_firewall_reload_activate(self, action):
         if self.reload():
             self._update_rules_model()
+            self._set_statusbar_text(_('Firewall reloaded'))
 
     def on_firewall_reset_activate(self, action):
         msg = _('Resetting all rules to installed defaults.\nProceed with operation?')
