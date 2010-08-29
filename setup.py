@@ -25,7 +25,10 @@ setup(
     cmdclass={'install': Install},
     scripts=['ufw-gtk', 'ufw-qt'],
     packages=['gfw'],
-    data_files=[('share/ufw-frontends', ['ui/ufw-gtk.glade', 'ui/ufw-qt.ui'])],
+    data_files=[
+        ('share/ufw-frontends', ['share/ufw-gtk.glade', 'share/ufw-qt.ui', 'share/icon.png']),
+        ('share/applications', ['share/ufw-gtk.desktop', 'share/ufw-qt.desktop'])
+    ],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: X11 Applications :: GTK',
