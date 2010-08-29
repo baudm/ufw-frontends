@@ -29,6 +29,7 @@ from ufwfe.util import ANY_ADDR, ANY_PORT
 class GtkFrontend(Frontend):
 
     UI_FILE = 'ufw-gtk.glade'
+    RESPONSE_OK = -5
 
     def __init__(self):
         Frontend.__init__(self)
@@ -296,7 +297,7 @@ class GtkFrontend(Frontend):
         gtk.main_quit()
 
     def on_prefs_dialog_show_activate(self, widget):
-        if self.prefs_dialog.run():
+        if self.prefs_dialog.run() == self.RESPONSE_OK:
             # loglevel
             level = self._get_combobox_value('logging_cbox').lower()
             self.set_loglevel(level)
@@ -356,7 +357,7 @@ class GtkFrontend(Frontend):
             return
         self._restore_rule_dialog_defaults()
         while True:
-            if self.rule_dialog.run():
+            if self.rule_dialog.run() == self.RESPONSE_OK:
                 try:
                     rule = self._get_rule_from_dialog()
                 except UFWError, e:
@@ -382,7 +383,7 @@ class GtkFrontend(Frontend):
         i = self.rules_model[pos - 1][8]
         self._load_rule_to_dialog(rules[i])
         while True:
-            if self.rule_dialog.run():
+            if self.rule_dialog.run() == self.RESPONSE_OK:
                 try:
                     rule = self._get_rule_from_dialog()
                 except UFWError, e:
