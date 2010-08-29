@@ -11,7 +11,8 @@ class Install(install, object):
 
     def run(self):
         # Install scripts to prefix/sbin instead of prefix/bin
-        self.install_scripts = os.path.join(self.install_data, 'sbin')
+        root = os.path.dirname(self.install_scripts)
+        self.install_scripts = os.path.join(root, 'sbin')
         super(Install, self).run()
 
 
@@ -23,11 +24,11 @@ setup(
     author_email='djclue917@gmail.com',
     url='http://code.google.com/p/ufw-frontends/',
     cmdclass={'install': Install},
-    scripts=['ufw-gtk', 'ufw-qt'],
+    scripts=['ufw-gtk'],
     packages=['gfw'],
     data_files=[
-        ('share/ufw-frontends', ['share/ufw-gtk.glade', 'share/ufw-qt.ui', 'share/icon.png']),
-        ('share/applications', ['share/ufw-gtk.desktop', 'share/ufw-qt.desktop'])
+        ('share/ufw-frontends', ['share/ufw-gtk.glade', 'share/icon.png']),
+        ('share/applications', ['share/ufw-gtk.desktop'])
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
