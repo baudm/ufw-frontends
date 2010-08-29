@@ -294,6 +294,19 @@ class GtkFrontend(Frontend):
             return 0
         return model.get_path(itr)[0] + 1
 
+    def _widgets_set_sensitive(self, prefix, active):
+        for name in ('%s_custom_clear', '%s_custom_entry'):
+            w = self.ui.get_object(name % (prefix, ))
+            w.set_sensitive(active)
+        # Set focus on the text entry
+        self.rule_dialog.set_focus(w)
+
+    def _clear_and_focus(self, prefix):
+        name = '%s_custom_entry' % (prefix, )
+        entry = self.ui.get_object(name)
+        entry.set_text('')
+        self.rule_dialog.set_focus(entry)
+
     # ---------------------- Application Actions -----------------------
 
     def on_rules_export_activate(self, action):
@@ -463,20 +476,28 @@ class GtkFrontend(Frontend):
         self.ui.get_object('rule_edit').activate()
 
     def on_src_addr_custom_rbutton_toggled(self, widget):
-        entry = self.ui.get_object('src_addr_custom_entry')
-        entry.set_sensitive(widget.get_active())
+        self._widgets_set_sensitive('src_addr', widget.get_active())
 
     def on_dst_addr_custom_rbutton_toggled(self, widget):
-        entry = self.ui.get_object('dst_addr_custom_entry')
-        entry.set_sensitive(widget.get_active())
+        self._widgets_set_sensitive('dst_addr', widget.get_active())
 
     def on_src_port_custom_rbutton_toggled(self, widget):
-        cboxentry = self.ui.get_object('src_port_custom_entry')
-        cboxentry.set_sensitive(widget.get_active())
+        self._widgets_set_sensitive('src_port', widget.get_active())
 
     def on_dst_port_custom_rbutton_toggled(self, widget):
-        cboxentry = self.ui.get_object('dst_port_custom_entry')
-        cboxentry.set_sensitive(widget.get_active())
+        self._widgets_set_sensitive('dst_port', widget.get_active())
+
+    def on_src_addr_custom_clear_clicked(self, widget):
+        self._clear_and_focus('src_addr')
+
+    def on_dst_addr_custom_clear_clicked(self, widget):
+        self._clear_and_focus('dst_addr')
+
+    def on_src_port_custom_clear_clicked(self, widget):
+        self._clear_and_focus('src_port')
+
+    def on_dst_port_custom_clear_clicked(self, widget):
+        self._clear_and_focus('dst_port')
 
     def on_src_app_rbutton_toggled(self, widget):
         app_cbox = self.ui.get_object('src_app_cbox')

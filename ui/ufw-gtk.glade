@@ -932,7 +932,8 @@
                                   <object class="GtkTable" id="table5">
                                     <property name="visible">True</property>
                                     <property name="n_rows">2</property>
-                                    <property name="n_columns">2</property>
+                                    <property name="n_columns">3</property>
+                                    <property name="column_spacing">3</property>
                                     <property name="row_spacing">5</property>
                                     <child>
                                       <object class="GtkRadioButton" id="src_addr_any_rbutton">
@@ -976,6 +977,26 @@
                                     <child>
                                       <placeholder/>
                                     </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="src_addr_custom_clear">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">True</property>
+                                        <property name="image">image1</property>
+                                        <signal name="clicked" handler="on_src_addr_custom_clear_clicked"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">2</property>
+                                        <property name="right_attach">3</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                        <property name="x_options">GTK_SHRINK</property>
+                                        <property name="y_options">GTK_SHRINK</property>
+                                      </packing>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -1005,8 +1026,8 @@
                                   <object class="GtkTable" id="table6">
                                     <property name="visible">True</property>
                                     <property name="n_rows">3</property>
-                                    <property name="n_columns">2</property>
-                                    <property name="column_spacing">5</property>
+                                    <property name="n_columns">3</property>
+                                    <property name="column_spacing">3</property>
                                     <property name="row_spacing">5</property>
                                     <child>
                                       <object class="GtkRadioButton" id="src_port_any_rbutton">
@@ -1088,6 +1109,30 @@
                                     <child>
                                       <placeholder/>
                                     </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="src_port_custom_clear">
+                                        <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">True</property>
+                                        <property name="image">image2</property>
+                                        <signal name="clicked" handler="on_src_port_custom_clear_clicked"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">2</property>
+                                        <property name="right_attach">3</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                        <property name="x_options">GTK_SHRINK</property>
+                                        <property name="y_options">GTK_SHRINK</property>
+                                      </packing>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -1151,7 +1196,8 @@
                                   <object class="GtkTable" id="table7">
                                     <property name="visible">True</property>
                                     <property name="n_rows">2</property>
-                                    <property name="n_columns">2</property>
+                                    <property name="n_columns">3</property>
+                                    <property name="column_spacing">3</property>
                                     <property name="row_spacing">5</property>
                                     <child>
                                       <object class="GtkRadioButton" id="dst_addr_any_rbutton">
@@ -1197,6 +1243,27 @@
                                     <child>
                                       <placeholder/>
                                     </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="dst_addr_custom_clear">
+                                        <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">True</property>
+                                        <property name="image">image3</property>
+                                        <signal name="clicked" handler="on_dst_addr_custom_clear_clicked"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">2</property>
+                                        <property name="right_attach">3</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                        <property name="x_options">GTK_SHRINK</property>
+                                        <property name="y_options">GTK_SHRINK</property>
+                                      </packing>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -1226,8 +1293,8 @@
                                   <object class="GtkTable" id="table8">
                                     <property name="visible">True</property>
                                     <property name="n_rows">3</property>
-                                    <property name="n_columns">2</property>
-                                    <property name="column_spacing">5</property>
+                                    <property name="n_columns">3</property>
+                                    <property name="column_spacing">3</property>
                                     <property name="row_spacing">5</property>
                                     <child>
                                       <object class="GtkRadioButton" id="dst_port_any_rbutton">
@@ -1306,6 +1373,29 @@
                                     </child>
                                     <child>
                                       <placeholder/>
+                                    </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="dst_port_custom_clear">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">True</property>
+                                        <property name="image">image4</property>
+                                        <signal name="clicked" handler="on_dst_port_custom_clear_clicked"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">2</property>
+                                        <property name="right_attach">3</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                        <property name="x_options">GTK_SHRINK</property>
+                                        <property name="y_options">GTK_SHRINK</property>
+                                      </packing>
                                     </child>
                                   </object>
                                 </child>
@@ -1710,5 +1800,21 @@
     <property name="upper">100</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
+  </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="stock">gtk-clear</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="stock">gtk-clear</property>
+  </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="stock">gtk-clear</property>
+  </object>
+  <object class="GtkImage" id="image4">
+    <property name="visible">True</property>
+    <property name="stock">gtk-clear</property>
   </object>
 </interface>
