@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import sys
+
 import gtk
 
 from ufw.common import UFWRule, UFWError
@@ -515,8 +517,12 @@ class GtkFrontend(Frontend):
 
 
 def main():
-    ui = GtkFrontend()
-    gtk.main()
+    try:
+        ui = GtkFrontend()
+    except UFWError, e:
+        sys.exit(e.value)
+    else:
+        gtk.main()
 
 
 if __name__ == '__main__':

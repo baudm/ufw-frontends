@@ -20,7 +20,7 @@ import sys
 
 from PyQt4 import QtGui, uic
 
-from ufw.common import UFWRule
+from ufw.common import UFWRule, UFWError
 
 from gfw.frontend import Frontend
 from gfw.i18n import _
@@ -31,15 +31,19 @@ class QtFrontend(Frontend):
     UI_FILE = 'ufw-qt.ui'
 
     def __init__(self):
-        Frontend.__init__(self)
+        super(QtFrontend, self).__init__()
         self.ui = uic.loadUi(self.UI_FILE)
         self.ui.show()
 
 
 def main():
     app = QtGui.QApplication(sys.argv)
-    ui = QtFrontend()
-    sys.exit(app.exec_())
+    try:
+        ui = QtFrontend()
+    except UFWError, e:
+        sys.exit(e.value)
+    else:
+        sys.exit(app.exec_())
 
 
 if __name__ == '__main__':
