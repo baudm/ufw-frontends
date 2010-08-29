@@ -241,6 +241,9 @@ class GtkFrontend(Frontend):
 
     def _load_rule_to_dialog(self, rule):
         self._restore_rule_dialog_defaults()
+        position = self.ui.get_object('position_adjustment')
+        # When editing, max position should be equal to the number of rules
+        position.set_upper(len(self.rules_model))
         # action
         self._set_combobox_value('action_cbox', rule.action)
         # direction
