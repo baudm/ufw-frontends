@@ -16,9 +16,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import ufw.frontend
 from ufw.frontend import UFWFrontend
+from ufw.common import UFWError
 
 from ufwfe.util import get_ip_version
+
+
+def error(msg, exit=True):
+    raise UFWError(msg)
+
+# Override the error function used by UFWFrontend
+ufw.frontend.error = error
 
 
 class Frontend(UFWFrontend):
