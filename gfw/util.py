@@ -9,7 +9,7 @@ ANY_PORT = 'any'
 def get_ui_path(ui_file):
     path = os.path.join('/usr', 'share', 'ufw-frontends', ui_file)
     if not os.path.exists(path):
-        path = os.path.join('ui', ui_file)
+        path = os.path.join('share', ui_file)
     return path
 
 
