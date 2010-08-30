@@ -317,6 +317,17 @@ class GtkFrontend(Frontend):
         entry.set_text('')
         self.rule_dialog.set_focus(entry)
 
+    def _app_rbutton_toggle(self, prefix, active):
+        for name in ['%s_app_cbox', '%s_app_info']:
+            w = self.ui.get_object(name % (prefix, ))
+            w.set_sensitive(active)
+        # 'Toggle' prefix
+        prefix = ('dst' if prefix == 'src' else 'src')
+        name = '%s_app_rbutton' % (prefix, )
+        rbutton = self.ui.get_object(name)
+        protocol = self.ui.get_object('protocol_cbox')
+        protocol.set_sensitive(not active and not rbutton.get_active())
+
     # ---------------------- Application Actions -----------------------
 
     def on_rules_export_activate(self, action):
@@ -531,18 +542,20 @@ class GtkFrontend(Frontend):
         self._clear_and_focus('dst_port')
 
     def on_src_app_rbutton_toggled(self, widget):
-        app_cbox = self.ui.get_object('src_app_cbox')
-        app_cbox.set_sensitive(widget.get_active())
-        app_rbutton = self.ui.get_object('dst_app_rbutton')
-        protocol_cbox = self.ui.get_object('protocol_cbox')
-        protocol_cbox.set_sensitive(not widget.get_active() and not app_rbutton.get_active())
+        self._app_rbutton_toggle('src', widget.get_active())
 
     def on_dst_app_rbutton_toggled(self, widget):
-        app_cbox = self.ui.get_object('dst_app_cbox')
-        app_cbox.set_sensitive(widget.get_active())
-        app_rbutton = self.ui.get_object('src_app_rbutton')
-        protocol_cbox = self.ui.get_object('protocol_cbox')
-        protocol_cbox.set_sensitive(not widget.get_active() and not app_rbutton.get_active())
+        self._app_rbutton_toggle('dst', widget.get_active())
+
+    def on_src_app_info_clicked(self, widget):
+        app = self._get_combobox_value('src_app_cbox')
+        info = self.get_application_info(app)
+        self._show_dialog(info, 'rule_dialog', gtk.MESSAGE_INFO)
+
+    def on_dst_app_info_clicked(self, widget):
+        app = self._get_combobox_value('dst_app_cbox')
+        info = self.get_application_info(app)
+        self._show_dialog(info, 'rule_dialog', gtk.MESSAGE_INFO)
 
 
 def main():
