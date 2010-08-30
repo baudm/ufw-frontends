@@ -47,6 +47,7 @@ class GtkFrontend(Frontend):
         # dialogs
         self.rule_dialog = self.ui.get_object('rule_dialog')
         self.prefs_dialog = self.ui.get_object('prefs_dialog')
+        self.reports_dialog = self.ui.get_object('reports_dialog')
         self.about_dialog = self.ui.get_object('about_dialog')
         self._init_prefs_dialog()
         self._init_main_window()
@@ -327,7 +328,7 @@ class GtkFrontend(Frontend):
     def on_quit_activate(self, action):
         gtk.main_quit()
 
-    def on_prefs_dialog_show_activate(self, widget):
+    def on_prefs_dialog_show_activate(self, action):
         self._init_prefs_dialog()
         if self.prefs_dialog.run() == self.RESPONSE_OK:
             # loglevel
@@ -347,7 +348,27 @@ class GtkFrontend(Frontend):
             self._set_statusbar_text(_('Preferences saved'))
         self.prefs_dialog.hide()
 
-    def on_about_dialog_show_activate(self, widget):
+    def on_reports_dialog_show_activate(self, action):
+        self.reports_dialog.run()
+        self.reports_dialog.hide()
+        # Reset
+        cbox = self.ui.get_object('report_cbox')
+        cbox.set_active(-1)
+        buf = self.ui.get_object('reports_buffer')
+        buf.set_text('')
+
+    def on_report_cbox_changed(self, widget):
+        active = widget.get_active()
+        model = widget.get_model()
+        report = model[active][0].split('-')[0]
+        if report != 'listening':
+            res = self.get_show_raw(report)
+        else:
+            res = self.get_show_listening()
+        buf = self.ui.get_object('reports_buffer')
+        buf.set_text(res)
+
+    def on_about_dialog_show_activate(self, action):
         self.about_dialog.run()
         self.about_dialog.hide()
 
