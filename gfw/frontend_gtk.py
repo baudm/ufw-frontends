@@ -50,16 +50,16 @@ class GtkFrontend(Frontend):
         self.reports_dialog = self.ui.get_object('reports_dialog')
         self.about_dialog = self.ui.get_object('about_dialog')
         self._init_prefs_dialog()
-        self._init_main_window()
         # connect signals and show main window
         self.ui.connect_signals(self)
+        self._init_main_window()
         self.main_window = self.ui.get_object('main_window')
         self.main_window.show_all()
 
     def _init_main_window(self):
         self.selection = self.ui.get_object('rules_view').get_selection()
         # set initial state of toggle button
-        self._set_toggle_state(self.backend._is_enabled())
+        self._update_action_states()
 
     def _init_prefs_dialog(self):
         # comboboxes
@@ -97,7 +97,8 @@ class GtkFrontend(Frontend):
                 a = self.ui.get_object(action)
                 ag.add_action(a)
 
-    def _set_toggle_state(self, active):
+    def _update_action_states(self):
+        active = self.backend._is_enabled()
         if active:
             label = 'Disable'
             short_label = 'Disable Firewall'
@@ -108,7 +109,10 @@ class GtkFrontend(Frontend):
             stock_id = gtk.STOCK_MEDIA_PLAY
         # Set action properties
         action = self.ui.get_object('firewall_toggle')
+        # Temporarily block the handler to prevent infinite loops
+        action.handler_block_by_func(self.on_firewall_toggle_toggled)
         action.set_active(active)
+        action.handler_unblock_by_func(self.on_firewall_toggle_toggled)
         action.set_label(_(label))
         action.set_short_label(_(short_label))
         action.set_stock_id(stock_id)
@@ -440,13 +444,9 @@ class GtkFrontend(Frontend):
     # ------------------------ Firewall Actions ------------------------
 
     def on_firewall_toggle_toggled(self, action):
-        if self.backend._is_enabled():
-            res = self.set_enabled(False)
-            self._set_toggle_state(False)
-        else:
-            res = self.set_enabled(True)
-            self._set_toggle_state(True)
+        res = self.set_enabled(not self.backend._is_enabled())
         self._set_statusbar_text(res)
+        self._update_action_states()
 
     def on_firewall_reload_activate(self, action):
         if self.reload():
@@ -459,7 +459,7 @@ class GtkFrontend(Frontend):
         if res == gtk.RESPONSE_YES:
             self.reset(True)
             self.rules_model.clear()
-            self._set_toggle_state(False)
+            self._update_action_states()
             self._set_statusbar_text(_('Firewall defaults restored'))
 
     def on_firewall_update_activate(self, action):
