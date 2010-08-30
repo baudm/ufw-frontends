@@ -53,8 +53,8 @@ class GtkFrontend(Frontend):
         self._init_main_window()
         # connect signals and show main window
         self.ui.connect_signals(self)
-        main_window = self.ui.get_object('main_window')
-        main_window.show_all()
+        self.main_window = self.ui.get_object('main_window')
+        self.main_window.show_all()
 
     def _init_main_window(self):
         self.selection = self.ui.get_object('rules_view').get_selection()
@@ -328,10 +328,43 @@ class GtkFrontend(Frontend):
         protocol = self.ui.get_object('protocol_cbox')
         protocol.set_sensitive(not active and not rbutton.get_active())
 
+    def _create_file_chooser_dialog(self, save=True):
+        if save:
+            action = gtk.FILE_CHOOSER_ACTION_SAVE
+            ok_button = gtk.STOCK_SAVE_AS
+            title = 'Export Rules'
+        else:
+            action = gtk.FILE_CHOOSER_ACTION_OPEN
+            ok_button = gtk.STOCK_OPEN
+            title = 'Import Rules'
+        buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                    ok_button, gtk.RESPONSE_OK)
+        dlg = gtk.FileChooserDialog(_(title), self.main_window, action, buttons)
+        # Shell scripts filter
+        f = gtk.FileFilter()
+        f.set_name('Shell scripts')
+        f.add_mime_type('application/x-sh')
+        f.add_pattern('*.sh')
+        dlg.add_filter(f)
+        # All files filter
+        f = gtk.FileFilter()
+        f.set_name('All files')
+        f.add_pattern('*')
+        dlg.add_filter(f)
+        return dlg
+
     # ---------------------- Application Actions -----------------------
 
     def on_rules_export_activate(self, action):
-        pass
+        chooser = self._create_file_chooser_dialog()
+        if chooser.run() == gtk.RESPONSE_OK:
+            filename = chooser.get_filename()
+            if filename:
+                f = open(filename, 'w')
+                f.write('#!/bin/sh\n')
+                f.writelines(self.export_commands())
+                f.close()
+        chooser.destroy()
 
     def on_rules_import_activate(self, action):
         pass

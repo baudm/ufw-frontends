@@ -1895,7 +1895,6 @@ logo.png:
   <object class="GtkAction" id="rules_export">
     <property name="label">Export Rules</property>
     <property name="stock_id">gtk-save-as</property>
-    <property name="sensitive">False</property>
     <signal name="activate" handler="on_rules_export_activate"/>
   </object>
   <object class="GtkAction" id="rules_import">

@@ -19,6 +19,7 @@
 import ufw.common
 import ufw.frontend
 from ufw.util import valid_address
+from ufw.parser import UFWCommandRule
 
 from gfw.i18n import _
 from gfw.util import ANY_ADDR
@@ -87,6 +88,19 @@ class Frontend(ufw.frontend.UFWFrontend, object):
                 else:
                     app_rules.append(t)
             yield (i, r)
+
+    def export_commands(self):
+        commands = []
+        for i, rule in self.get_rules():
+            rule = rule.dup_rule()
+            # Enclose app names in quotation marks
+            if rule.sapp:
+                rule.sapp = "'" + rule.sapp + "'"
+            if rule.dapp:
+                rule.dapp = "'" + rule.dapp + "'"
+            cmd = 'ufw ' + UFWCommandRule.get_command(rule) + '\n'
+            commands.append(cmd)
+        return commands
 
     def set_rule(self, rule, ip_version=None):
         """set_rule(rule, ip_version=None)
