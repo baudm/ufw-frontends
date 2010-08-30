@@ -27,7 +27,7 @@ setup(
     scripts=['ufw-gtk'],
     packages=['gfw'],
     data_files=[
-        ('share/ufw-frontends', ['share/ufw-gtk.glade', 'share/icon.png']),
+        ('share/ufw-frontends', ['share/ufw-gtk.glade', 'share/icon.png', 'share/logo.png']),
         ('share/applications', ['share/ufw-gtk.desktop'])
     ],
     classifiers=[
