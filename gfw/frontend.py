@@ -89,7 +89,7 @@ class Frontend(ufw.frontend.UFWFrontend, object):
                     app_rules.append(t)
             yield (i, r)
 
-    def export_commands(self, path):
+    def export_rules(self, path):
         with open(path, 'w') as f:
             f.write('#!/bin/sh\n')
             for i, rule in self.get_rules():
@@ -102,12 +102,12 @@ class Frontend(ufw.frontend.UFWFrontend, object):
                 cmd = 'ufw ' + UFWCommandRule.get_command(rule) + '\n'
                 f.write(cmd)
 
-    def import_commands(self, path):
+    def import_rules(self, path):
         with open(path, 'r') as f:
             for line in f:
                 if not line.startswith('ufw '):
                     continue
-                cmd = ['rule']
+                args = ['rule']
                 for arg in line.split()[1:]:
                     # Check for start of multi-word app name
                     if arg.startswith("'") and not arg.endswith("'"):
@@ -116,9 +116,9 @@ class Frontend(ufw.frontend.UFWFrontend, object):
                     # Check for end of multi-word app name
                     elif not arg.startswith("'") and arg.endswith("'"):
                         arg = ' '.join([tmp, arg])
-                    cmd.append(arg.strip("'"))
-                p = UFWCommandRule(cmd[1])
-                pr = p.parse(cmd)
+                    args.append(arg.strip("'"))
+                p = UFWCommandRule(args[1])
+                pr = p.parse(args)
                 self.set_rule(pr.data['rule'], pr.data['iptype'])
 
     def set_rule(self, rule, ip_version=None):

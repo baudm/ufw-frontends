@@ -362,7 +362,7 @@ class GtkFrontend(Frontend):
             if chooser.run() == gtk.RESPONSE_OK:
                 filename = chooser.get_filename()
                 try:
-                    self.export_commands(filename)
+                    self.export_rules(filename)
                 except IOError, e:
                     self._show_dialog(e.strerror, chooser)
                     continue
@@ -377,7 +377,7 @@ class GtkFrontend(Frontend):
             if chooser.run() == gtk.RESPONSE_OK:
                 filename = chooser.get_filename()
                 try:
-                    res = self.import_commands(filename)
+                    self.import_rules(filename)
                 except IOError, e:
                     self._show_dialog(e.strerror, chooser)
                     continue
@@ -388,6 +388,7 @@ class GtkFrontend(Frontend):
                     self._set_statusbar_text(_('Rules imported'))
             break
         chooser.destroy()
+        self._update_rules_model()
 
     def on_quit_activate(self, action):
         gtk.main_quit()
