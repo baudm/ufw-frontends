@@ -177,8 +177,8 @@
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem1">
                         <property name="visible">True</property>
-                        <property name="related_action">rules_import</property>
                         <property name="use_action_appearance">True</property>
+                        <property name="related_action">rules_import</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -186,8 +186,8 @@
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem2">
                         <property name="visible">True</property>
-                        <property name="related_action">rules_export</property>
                         <property name="use_action_appearance">True</property>
+                        <property name="related_action">rules_export</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -200,8 +200,8 @@
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem3">
                         <property name="visible">True</property>
-                        <property name="related_action">quit</property>
                         <property name="use_action_appearance">True</property>
+                        <property name="related_action">quit</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <accelerator key="q" signal="activate" modifiers="GDK_CONTROL_MASK"/>
@@ -230,8 +230,8 @@
                             <child>
                               <object class="GtkImageMenuItem" id="imagemenuitem6">
                                 <property name="visible">True</property>
-                                <property name="related_action">firewall_toggle</property>
                                 <property name="use_action_appearance">True</property>
+                                <property name="related_action">firewall_toggle</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                                 <accelerator key="t" signal="activate" modifiers="GDK_CONTROL_MASK"/>
@@ -240,8 +240,8 @@
                             <child>
                               <object class="GtkImageMenuItem" id="imagemenuitem7">
                                 <property name="visible">True</property>
-                                <property name="related_action">firewall_reload</property>
                                 <property name="use_action_appearance">True</property>
+                                <property name="related_action">firewall_reload</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                                 <accelerator key="r" signal="activate" modifiers="GDK_CONTROL_MASK"/>
@@ -253,20 +253,10 @@
                               </object>
                             </child>
                             <child>
-                              <object class="GtkImageMenuItem" id="imagemenuitem8">
-                                <property name="visible">True</property>
-                                <property name="related_action">firewall_update</property>
-                                <property name="use_action_appearance">True</property>
-                                <property name="use_underline">True</property>
-                                <property name="use_stock">True</property>
-                                <accelerator key="u" signal="activate" modifiers="GDK_CONTROL_MASK"/>
-                              </object>
-                            </child>
-                            <child>
                               <object class="GtkImageMenuItem" id="imagemenuitem9">
                                 <property name="visible">True</property>
-                                <property name="related_action">firewall_reset</property>
                                 <property name="use_action_appearance">True</property>
+                                <property name="related_action">firewall_reset</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                               </object>
@@ -286,8 +276,8 @@
                             <child>
                               <object class="GtkImageMenuItem" id="imagemenuitem12">
                                 <property name="visible">True</property>
-                                <property name="related_action">rule_add</property>
                                 <property name="use_action_appearance">True</property>
+                                <property name="related_action">rule_add</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                                 <accelerator key="i" signal="activate" modifiers="GDK_CONTROL_MASK"/>
@@ -296,8 +286,8 @@
                             <child>
                               <object class="GtkImageMenuItem" id="imagemenuitem13">
                                 <property name="visible">True</property>
-                                <property name="related_action">rule_edit</property>
                                 <property name="use_action_appearance">True</property>
+                                <property name="related_action">rule_edit</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                                 <accelerator key="e" signal="activate" modifiers="GDK_CONTROL_MASK"/>
@@ -306,8 +296,8 @@
                             <child>
                               <object class="GtkImageMenuItem" id="imagemenuitem14">
                                 <property name="visible">True</property>
-                                <property name="related_action">rule_delete</property>
                                 <property name="use_action_appearance">True</property>
+                                <property name="related_action">rule_delete</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                                 <accelerator key="Delete" signal="activate"/>
@@ -321,8 +311,8 @@
                             <child>
                               <object class="GtkImageMenuItem" id="imagemenuitem15">
                                 <property name="visible">True</property>
-                                <property name="related_action">rule_up</property>
                                 <property name="use_action_appearance">True</property>
+                                <property name="related_action">rule_up</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                                 <accelerator key="Up" signal="activate" modifiers="GDK_SHIFT_MASK"/>
@@ -331,8 +321,8 @@
                             <child>
                               <object class="GtkImageMenuItem" id="imagemenuitem16">
                                 <property name="visible">True</property>
-                                <property name="related_action">rule_down</property>
                                 <property name="use_action_appearance">True</property>
+                                <property name="related_action">rule_down</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                                 <accelerator key="Down" signal="activate" modifiers="GDK_SHIFT_MASK"/>
@@ -350,8 +340,8 @@
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem11">
                         <property name="visible">True</property>
-                        <property name="related_action">prefs_dialog_show</property>
                         <property name="use_action_appearance">True</property>
+                        <property name="related_action">prefs_dialog_show</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <accelerator key="p" signal="activate" modifiers="GDK_CONTROL_MASK"/>
@@ -370,10 +360,20 @@
                   <object class="GtkMenu" id="menu6">
                     <property name="visible">True</property>
                     <child>
+                      <object class="GtkImageMenuItem" id="imagemenuitem8">
+                        <property name="visible">True</property>
+                        <property name="use_action_appearance">True</property>
+                        <property name="related_action">firewall_update</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                        <accelerator key="u" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem4">
                         <property name="visible">True</property>
-                        <property name="related_action">reports_dialog_show</property>
                         <property name="use_action_appearance">True</property>
+                        <property name="related_action">reports_dialog_show</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -393,8 +393,8 @@
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem10">
                         <property name="visible">True</property>
-                        <property name="related_action">about_dialog_show</property>
                         <property name="use_action_appearance">True</property>
+                        <property name="related_action">about_dialog_show</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -1852,29 +1852,29 @@ logo.png:
   </object>
   <object class="GtkActionGroup" id="rule_actions"/>
   <object class="GtkToggleAction" id="firewall_toggle">
-    <property name="label">Enable</property>
+    <property name="label">_Enable</property>
     <property name="short_label">Enable Firewall</property>
     <property name="tooltip">Toggle the firewall status</property>
     <property name="stock_id">gtk-media-play</property>
     <signal name="toggled" handler="on_firewall_toggle_toggled"/>
   </object>
   <object class="GtkAction" id="firewall_reload">
-    <property name="label">Reload</property>
+    <property name="label">_Reload</property>
     <property name="short_label">Reload Firewall</property>
     <property name="tooltip">Reload the firewall rules</property>
     <property name="stock_id">gtk-refresh</property>
     <signal name="activate" handler="on_firewall_reload_activate"/>
   </object>
   <object class="GtkAction" id="firewall_reset">
-    <property name="label">Reset</property>
+    <property name="label">Re_set</property>
     <property name="short_label">Reset Firewall</property>
     <property name="tooltip">Reset the firewall to its default configuration</property>
     <property name="stock_id">gtk-revert-to-saved</property>
     <signal name="activate" handler="on_firewall_reset_activate"/>
   </object>
   <object class="GtkAction" id="firewall_update">
-    <property name="label">Update Rules</property>
-    <property name="short_label">Update Rules</property>
+    <property name="label">_Update Rules</property>
+    <property name="short_label">_Update Rules</property>
     <property name="tooltip">Update  the  firewall  with updated profile  information</property>
     <property name="stock_id">gtk-go-up</property>
     <signal name="activate" handler="on_firewall_update_activate"/>
@@ -1893,12 +1893,14 @@ logo.png:
     <signal name="activate" handler="on_about_dialog_show_activate"/>
   </object>
   <object class="GtkAction" id="rules_export">
-    <property name="label">Export Rules</property>
+    <property name="label">_Export Rules...</property>
+    <property name="short_label">_Export Rules...</property>
     <property name="stock_id">gtk-save-as</property>
     <signal name="activate" handler="on_rules_export_activate"/>
   </object>
   <object class="GtkAction" id="rules_import">
-    <property name="label">Import Rules</property>
+    <property name="label">_Import Rules...</property>
+    <property name="short_label">_Import Rules...</property>
     <property name="stock_id">gtk-open</property>
     <signal name="activate" handler="on_rules_import_activate"/>
   </object>
@@ -1925,13 +1927,13 @@ logo.png:
     <property name="stock">gtk-clear</property>
   </object>
   <object class="GtkAction" id="reports_dialog_show">
-    <property name="label">_Reports</property>
-    <property name="short_label">_Reports</property>
+    <property name="label">Report _Viewer</property>
+    <property name="short_label">Report _Viewer</property>
     <property name="stock_id">gtk-dialog-info</property>
     <signal name="activate" handler="on_reports_dialog_show_activate"/>
   </object>
   <object class="GtkDialog" id="reports_dialog">
-    <property name="width_request">500</property>
+    <property name="width_request">600</property>
     <property name="height_request">400</property>
     <property name="border_width">5</property>
     <property name="type_hint">normal</property>
