@@ -603,13 +603,15 @@ class GtkFrontend(Frontend):
 
     def on_src_app_info_clicked(self, widget):
         app = self._get_combobox_value('src_app_cbox')
-        info = self.get_application_info(app)
-        self._show_dialog(info, self.rule_dialog, gtk.MESSAGE_INFO)
+        if app is not None:
+            info = self.get_application_info(app)
+            self._show_dialog(info, self.rule_dialog, gtk.MESSAGE_INFO)
 
     def on_dst_app_info_clicked(self, widget):
         app = self._get_combobox_value('dst_app_cbox')
-        info = self.get_application_info(app)
-        self._show_dialog(info, self.rule_dialog, gtk.MESSAGE_INFO)
+        if app is not None:
+            info = self.get_application_info(app)
+            self._show_dialog(info, self.rule_dialog, gtk.MESSAGE_INFO)
 
 
 def main():
