@@ -29,6 +29,18 @@ from gfw.util import get_ui_path, get_formatted_rule
 from gfw.util import ANY_ADDR, ANY_PORT
 
 
+class Builder(gtk.Builder):
+    """Convenience class for easy access of GTK objects"""
+
+    def __getattr__(self, name):
+        attr = self.get_object(name)
+        if attr is not None:
+            return attr
+        else:
+            # Raise an AttributeError
+            return self.__getattribute__(name)
+
+
 class GtkFrontend(Frontend):
 
     UI_FILE = 'ufw-gtk.glade'
@@ -36,30 +48,20 @@ class GtkFrontend(Frontend):
 
     def __init__(self):
         super(GtkFrontend, self).__init__()
-        self.ui = gtk.Builder()
+        self.ui = Builder()
         path = get_ui_path(self.UI_FILE)
         self.ui.add_from_file(path)
-        self._init_action_groups()
+        self._selection = self.ui.rules_view.get_selection()
         # models
-        self.rules_model = self.ui.get_object('rules_model')
         self._update_rules_model()
         self._update_apps_model()
-        # dialogs
-        self.rule_dialog = self.ui.get_object('rule_dialog')
-        self.prefs_dialog = self.ui.get_object('prefs_dialog')
-        self.reports_dialog = self.ui.get_object('reports_dialog')
-        self.about_dialog = self.ui.get_object('about_dialog')
+        # actions and action groups
+        self._init_action_groups()
         self._init_prefs_dialog()
-        # connect signals and show main window
+        # connect signals
         self.ui.connect_signals(self)
-        self._init_main_window()
-        self.main_window = self.ui.get_object('main_window')
-        self.main_window.show_all()
-
-    def _init_main_window(self):
-        self.selection = self.ui.get_object('rules_view').get_selection()
-        # set initial state of toggle button
         self._update_action_states()
+        self.ui.main_window.show_all()
 
     def _init_prefs_dialog(self):
         # comboboxes
@@ -77,9 +79,8 @@ class GtkFrontend(Frontend):
             cbox = self.ui.get_object(name)
             cbox.set_active(default)
         # checkbox
-        cb = self.ui.get_object('enable_ipv6')
         conf = self.backend.defaults['ipv6']
-        cb.set_active(conf == 'yes')
+        self.ui.enable_ipv6.set_active(conf == 'yes')
 
     def _init_action_groups(self):
         groups = {
@@ -108,7 +109,7 @@ class GtkFrontend(Frontend):
             short_label = 'Enable Firewall'
             stock_id = gtk.STOCK_MEDIA_PLAY
         # Set action properties
-        action = self.ui.get_object('firewall_toggle')
+        action = self.ui.firewall_toggle
         # Temporarily block the handler to prevent infinite loops
         action.handler_block_by_func(self.on_firewall_toggle_toggled)
         action.set_active(active)
@@ -117,9 +118,9 @@ class GtkFrontend(Frontend):
         action.set_short_label(_(short_label))
         action.set_stock_id(stock_id)
         # Enable/disable related controls
-        self.ui.get_object('rules_view').set_sensitive(active)
-        self.ui.get_object('rule_actions').set_sensitive(active)
-        self.ui.get_object('firewall_actions').set_sensitive(active)
+        self.ui.rules_view.set_sensitive(active)
+        self.ui.rule_actions.set_sensitive(active)
+        self.ui.firewall_actions.set_sensitive(active)
 
     def _get_combobox_values(self, name):
         model = self.ui.get_object(name).get_model()
@@ -142,16 +143,15 @@ class GtkFrontend(Frontend):
         cbox.set_active(i)
 
     def _set_statusbar_text(self, text):
-        sb = self.ui.get_object('statusbar')
-        cid = sb.get_context_id('default context')
-        mid = sb.push(cid, text)
+        cid = self.ui.statusbar.get_context_id('default context')
+        mid = self.ui.statusbar.push(cid, text)
         # Remove message after 5 seconds
-        gobject.timeout_add_seconds(5, sb.remove_message, cid, mid)
+        gobject.timeout_add_seconds(5, self.ui.statusbar.remove_message, cid, mid)
 
     def _show_dialog(self, msg, parent=None, type=gtk.MESSAGE_ERROR,
                         buttons=gtk.BUTTONS_CLOSE):
         if parent is None:
-            parent = self.main_window
+            parent = self.ui.main_window
         md = gtk.MessageDialog(parent,
                 gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
                 type, buttons, msg)
@@ -160,72 +160,68 @@ class GtkFrontend(Frontend):
         return res
 
     def _update_rules_model(self):
-        rules_model = self.ui.get_object('rules_model')
-        rules_model.clear()
+        self.ui.rules_model.clear()
         for i, data in enumerate(self.get_rules()):
             idx, r = data
             r = get_formatted_rule(r)
             row = [i + 1, r.action, r.direction, r.protocol, r.src, r.sport, r.dst, r.dport, idx]
-            rules_model.append(row)
+            self.ui.rules_model.append(row)
 
     def _update_apps_model(self):
-        apps_model = self.ui.get_object('apps_model')
-        apps_model.clear()
+        self.ui.apps_model.clear()
         apps = self.backend.profiles.keys()
         apps.sort()
         for app in apps:
-            apps_model.append([app])
+            self.ui.apps_model.append([app])
 
     def _get_rule_from_dialog(self):
         action = self._get_combobox_value('action_cbox').lower()
-        if self.ui.get_object('protocol_cbox').get_sensitive():
+        if self.ui.protocol_cbox.get_sensitive():
             protocol = self._get_combobox_value('protocol_cbox').lower()
         else:
             protocol = 'any'
         rule = UFWRule(action, protocol)
         # position
-        pos = self.ui.get_object('position_adjustment').get_value()
+        pos = self.ui.position_adjustment.get_value()
         rule.set_position(pos)
         # direction
-        in_rbutton = self.ui.get_object('in_rbutton')
-        direction = ('in' if in_rbutton.get_active() else 'out')
+        direction = ('in' if self.ui.in_rbutton.get_active() else 'out')
         rule.set_direction(direction)
         # logtype
         log_map = {'Off': '', 'New Connections': 'log', 'Packets': 'log-all'}
         logtype = log_map[self._get_combobox_value('rule_logging_cbox')]
         rule.set_logtype(logtype)
         # src
-        if self.ui.get_object('src_addr_custom_rbutton').get_active():
-            addr = self.ui.get_object('src_addr_custom_entry').get_text()
+        if self.ui.src_addr_custom_rbutton.get_active():
+            addr = self.ui.src_addr_custom_entry.get_text()
             rule.set_src(addr)
         # src port
         port = ANY_PORT
-        if self.ui.get_object('src_port_custom_rbutton').get_active():
-            port = self.ui.get_object('src_port_custom_entry').get_text()
-        elif self.ui.get_object('src_app_rbutton').get_active():
+        if self.ui.src_port_custom_rbutton.get_active():
+            port = self.ui.src_port_custom_entry.get_text()
+        elif self.ui.src_app_rbutton.get_active():
             port = self._get_combobox_value('src_app_cbox')
             rule.sapp = port
         rule.set_port(port, 'src')
         # dst
-        if self.ui.get_object('dst_addr_custom_rbutton').get_active():
-            addr = self.ui.get_object('dst_addr_custom_entry').get_text()
+        if self.ui.dst_addr_custom_rbutton.get_active():
+            addr = self.ui.dst_addr_custom_entry.get_text()
             rule.set_dst(addr)
         # dst port
         port = ANY_PORT
-        if self.ui.get_object('dst_port_custom_rbutton').get_active():
-            port = self.ui.get_object('dst_port_custom_entry').get_text()
-        elif self.ui.get_object('dst_app_rbutton').get_active():
+        if self.ui.dst_port_custom_rbutton.get_active():
+            port = self.ui.dst_port_custom_entry.get_text()
+        elif self.ui.dst_app_rbutton.get_active():
             port = self._get_combobox_value('dst_app_cbox')
             rule.dapp = port
         rule.set_port(port, 'dst')
         return rule
 
     def _restore_rule_dialog_defaults(self):
-        position = self.ui.get_object('position_adjustment')
         # Max value should not exceed 'number of rules + 1'
-        position.set_upper(len(self.rules_model) + 1)
+        self.ui.position_adjustment.set_upper(len(self.ui.rules_model) + 1)
         # Always set to the value of the currently selected row
-        position.set_value(self._get_selected_rule_pos())
+        self.ui.position_adjustment.set_value(self._get_selected_rule_pos())
         # active radio buttons
         active = [
             'in_rbutton', 'src_addr_custom_rbutton', 'src_port_any_rbutton',
@@ -250,14 +246,12 @@ class GtkFrontend(Frontend):
 
     def _load_rule_to_dialog(self, rule):
         self._restore_rule_dialog_defaults()
-        position = self.ui.get_object('position_adjustment')
         # When editing, max position should be equal to the number of rules
-        position.set_upper(len(self.rules_model))
+        self.ui.position_adjustment.set_upper(len(self.ui.rules_model))
         # action
         self._set_combobox_value('action_cbox', rule.action)
         # direction
-        in_rbutton = self.ui.get_object('in_rbutton')
-        in_rbutton.set_active(rule.direction == 'in')
+        self.ui.in_rbutton.set_active(rule.direction == 'in')
         # protocol
         if rule.sapp or rule.dapp:
             self._set_combobox_value('protocol_cbox', 'any')
@@ -269,41 +263,41 @@ class GtkFrontend(Frontend):
         self._set_combobox_value('rule_logging_cbox', logtype)
         # src
         if rule.src == ANY_ADDR:
-            self.ui.get_object('src_addr_any_rbutton').set_active(True)
+            self.ui.src_addr_any_rbutton.set_active(True)
             addr = ''
         else:
-            self.ui.get_object('src_addr_custom_rbutton').set_active(True)
+            self.ui.src_addr_custom_rbutton.set_active(True)
             addr = rule.src
-        self.ui.get_object('src_addr_custom_entry').set_text(addr)
+        self.ui.src_addr_custom_entry.set_text(addr)
         # src port
         if rule.sapp:
-            self.ui.get_object('src_app_rbutton').set_active(True)
+            self.ui.src_app_rbutton.set_active(True)
             self._set_combobox_value('src_app_cbox', rule.sapp)
         elif rule.sport == ANY_PORT:
-            self.ui.get_object('src_port_any_rbutton').set_active(True)
+            self.ui.src_port_any_rbutton.set_active(True)
         else:
-            self.ui.get_object('src_port_custom_rbutton').set_active(True)
-            self.ui.get_object('src_port_custom_entry').set_text(rule.sport)
+            self.ui.src_port_custom_rbutton.set_active(True)
+            self.ui.src_port_custom_entry.set_text(rule.sport)
         # dst
         if rule.dst == ANY_ADDR:
-            self.ui.get_object('dst_addr_any_rbutton').set_active(True)
+            self.ui.dst_addr_any_rbutton.set_active(True)
             addr = ''
         else:
-            self.ui.get_object('dst_addr_custom_rbutton').set_active(True)
+            self.ui.dst_addr_custom_rbutton.set_active(True)
             addr = rule.dst
-        self.ui.get_object('dst_addr_custom_entry').set_text(addr)
+        self.ui.dst_addr_custom_entry.set_text(addr)
         # src port
         if rule.dapp:
-            self.ui.get_object('dst_app_rbutton').set_active(True)
+            self.ui.dst_app_rbutton.set_active(True)
             self._set_combobox_value('dst_app_cbox', rule.dapp)
         elif rule.dport == ANY_PORT:
-            self.ui.get_object('dst_port_any_rbutton').set_active(True)
+            self.ui.dst_port_any_rbutton.set_active(True)
         else:
-            self.ui.get_object('dst_port_custom_rbutton').set_active(True)
-            self.ui.get_object('dst_port_custom_entry').set_text(rule.dport)
+            self.ui.dst_port_custom_rbutton.set_active(True)
+            self.ui.dst_port_custom_entry.set_text(rule.dport)
 
     def _get_selected_rule_pos(self):
-        model, itr = self.selection.get_selected()
+        model, itr = self._selection.get_selected()
         if not itr:
             return 0
         return model.get_path(itr)[0] + 1
@@ -314,13 +308,13 @@ class GtkFrontend(Frontend):
             w.set_sensitive(active)
         # Set focus on the text entry
         if active:
-            self.rule_dialog.set_focus(w)
+            self.ui.rule_dialog.set_focus(w)
 
     def _clear_and_focus(self, prefix):
         name = '%s_custom_entry' % (prefix, )
         entry = self.ui.get_object(name)
         entry.set_text('')
-        self.rule_dialog.set_focus(entry)
+        self.ui.rule_dialog.set_focus(entry)
 
     def _app_rbutton_toggle(self, prefix, active):
         for name in ['%s_app_cbox', '%s_app_info']:
@@ -330,8 +324,8 @@ class GtkFrontend(Frontend):
         prefix = ('dst' if prefix == 'src' else 'src')
         name = '%s_app_rbutton' % (prefix, )
         rbutton = self.ui.get_object(name)
-        protocol = self.ui.get_object('protocol_cbox')
-        protocol.set_sensitive(not active and not rbutton.get_active())
+        sensitive = (not active and not rbutton.get_active())
+        self.ui.protocol_cbox.set_sensitive(sensitive)
 
     def _create_file_chooser_dialog(self, save=True):
         if save:
@@ -344,7 +338,7 @@ class GtkFrontend(Frontend):
             title = 'Import Rules'
         buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                     ok_button, gtk.RESPONSE_OK)
-        dlg = gtk.FileChooserDialog(_(title), self.main_window, action, buttons)
+        dlg = gtk.FileChooserDialog(_(title), self.ui.main_window, action, buttons)
         # Shell scripts filter
         f = gtk.FileFilter()
         f.set_name('Shell scripts')
@@ -399,7 +393,7 @@ class GtkFrontend(Frontend):
 
     def on_prefs_dialog_show_activate(self, action):
         self._init_prefs_dialog()
-        if self.prefs_dialog.run() == self.RESPONSE_OK:
+        if self.ui.prefs_dialog.run() == self.RESPONSE_OK:
             # loglevel
             level = self._get_combobox_value('logging_cbox').lower()
             self.set_loglevel(level)
@@ -410,21 +404,18 @@ class GtkFrontend(Frontend):
             policy = self._get_combobox_value('outgoing_policy_cbox').lower()
             self.backend.set_default_policy(policy, 'outgoing')
             # enable IPv6?
-            cb = self.ui.get_object('enable_ipv6')
-            self.enable_ipv6(cb.get_active())
+            self.enable_ipv6(self.ui.enable_ipv6.get_active())
             # reload firewall
             self.reload()
             self._set_statusbar_text(_('Preferences saved'))
-        self.prefs_dialog.hide()
+        self.ui.prefs_dialog.hide()
 
     def on_reports_dialog_show_activate(self, action):
-        self.reports_dialog.run()
-        self.reports_dialog.hide()
+        self.ui.reports_dialog.run()
+        self.ui.reports_dialog.hide()
         # Reset
-        cbox = self.ui.get_object('report_cbox')
-        cbox.set_active(-1)
-        buf = self.ui.get_object('reports_buffer')
-        buf.set_text('')
+        self.ui.report_cbox.set_active(-1)
+        self.ui.reports_buffer.set_text('')
 
     def on_report_cbox_changed(self, widget):
         active = widget.get_active()
@@ -434,12 +425,11 @@ class GtkFrontend(Frontend):
             res = self.get_show_raw(report)
         else:
             res = self.get_show_listening()
-        buf = self.ui.get_object('reports_buffer')
-        buf.set_text(res)
+        self.ui.reports_buffer.set_text(res)
 
     def on_about_dialog_show_activate(self, action):
-        self.about_dialog.run()
-        self.about_dialog.hide()
+        self.ui.about_dialog.run()
+        self.ui.about_dialog.hide()
 
     # ------------------------ Firewall Actions ------------------------
 
@@ -458,7 +448,7 @@ class GtkFrontend(Frontend):
         res = self._show_dialog(msg, type=gtk.MESSAGE_WARNING, buttons=gtk.BUTTONS_YES_NO)
         if res == gtk.RESPONSE_YES:
             self.reset(True)
-            self.rules_model.clear()
+            self.ui.rules_model.clear()
             self._update_action_states()
             self._set_statusbar_text(_('Firewall defaults restored'))
 
@@ -475,21 +465,21 @@ class GtkFrontend(Frontend):
             return
         self._restore_rule_dialog_defaults()
         while True:
-            if self.rule_dialog.run() == self.RESPONSE_OK:
+            if self.ui.rule_dialog.run() == self.RESPONSE_OK:
                 try:
                     rule = self._get_rule_from_dialog()
                 except UFWError, e:
-                    self._show_dialog(e.value, self.rule_dialog)
+                    self._show_dialog(e.value, self.ui.rule_dialog)
                     continue
                 try:
                     res = self.set_rule(rule)
                 except UFWError, e:
-                    self._show_dialog(e.value, self.rule_dialog)
+                    self._show_dialog(e.value, self.ui.rule_dialog)
                     continue
                 self._set_statusbar_text(res)
                 self._update_rules_model()
             break
-        self.rule_dialog.hide()
+        self.ui.rule_dialog.hide()
 
     def on_rule_edit_activate(self, action):
         if not self.backend._is_enabled():
@@ -498,25 +488,25 @@ class GtkFrontend(Frontend):
         if not pos:
             return
         rules = self.backend.get_rules()
-        i = self.rules_model[pos - 1][8]
+        i = self.ui.rules_model[pos - 1][8]
         self._load_rule_to_dialog(rules[i])
         while True:
-            if self.rule_dialog.run() == self.RESPONSE_OK:
+            if self.ui.rule_dialog.run() == self.RESPONSE_OK:
                 try:
                     rule = self._get_rule_from_dialog()
                 except UFWError, e:
-                    self._show_dialog(e.value, self.rule_dialog)
+                    self._show_dialog(e.value, self.ui.rule_dialog)
                     continue
                 try:
                     self.update_rule(pos, rule)
                 except UFWError, e:
-                    self._show_dialog(e.value, self.rule_dialog)
+                    self._show_dialog(e.value, self.ui.rule_dialog)
                     continue
                 self._set_statusbar_text(_('Rule updated'))
                 self._update_rules_model()
-                self.selection.select_path(pos - 1)
+                self._selection.select_path(pos - 1)
             break
-        self.rule_dialog.hide()
+        self.ui.rule_dialog.hide()
 
     def on_rule_delete_activate(self, action):
         if not self.backend._is_enabled():
@@ -548,7 +538,7 @@ class GtkFrontend(Frontend):
             return
         self.move_rule(pos, new)
         self._update_rules_model()
-        self.selection.select_path(new - 1)
+        self._selection.select_path(new - 1)
 
     def on_rule_down_activate(self, action):
         if not self.backend._is_enabled():
@@ -557,19 +547,19 @@ class GtkFrontend(Frontend):
         if not pos:
             return
         new = pos + 1
-        if new > len(self.rules_model):
+        if new > len(self.ui.rules_model):
             return
         self.move_rule(pos, new)
         self._update_rules_model()
-        self.selection.select_path(new - 1)
+        self._selection.select_path(new - 1)
 
     # ------------------------ Other Callbacks -------------------------
 
     def on_main_window_destroy(self, widget):
-        self.ui.get_object('quit').activate()
+        self.ui.quit.activate()
 
     def on_rules_view_row_activated(self, widget, path, view_column):
-        self.ui.get_object('rule_edit').activate()
+        self.ui.rule_edit.activate()
 
     def on_src_addr_custom_rbutton_toggled(self, widget):
         self._widgets_set_sensitive('src_addr', widget.get_active())
@@ -605,13 +595,13 @@ class GtkFrontend(Frontend):
         app = self._get_combobox_value('src_app_cbox')
         if app is not None:
             info = self.get_application_info(app)
-            self._show_dialog(info, self.rule_dialog, gtk.MESSAGE_INFO)
+            self._show_dialog(info, self.ui.rule_dialog, gtk.MESSAGE_INFO)
 
     def on_dst_app_info_clicked(self, widget):
         app = self._get_combobox_value('dst_app_cbox')
         if app is not None:
             info = self.get_application_info(app)
-            self._show_dialog(info, self.rule_dialog, gtk.MESSAGE_INFO)
+            self._show_dialog(info, self.ui.rule_dialog, gtk.MESSAGE_INFO)
 
 
 def main():
