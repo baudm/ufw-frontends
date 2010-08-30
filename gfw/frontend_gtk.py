@@ -144,10 +144,11 @@ class GtkFrontend(Frontend):
         # Remove message after 5 seconds
         gobject.timeout_add_seconds(5, sb.remove_message, cid, mid)
 
-    def _show_dialog(self, msg, parent='main_window', type=gtk.MESSAGE_ERROR,
+    def _show_dialog(self, msg, parent=None, type=gtk.MESSAGE_ERROR,
                         buttons=gtk.BUTTONS_CLOSE):
-        widget = self.ui.get_object(parent)
-        md = gtk.MessageDialog(widget,
+        if parent is None:
+            parent = self.main_window
+        md = gtk.MessageDialog(parent,
                 gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
                 type, buttons, msg)
         res = md.run()
@@ -357,17 +358,36 @@ class GtkFrontend(Frontend):
 
     def on_rules_export_activate(self, action):
         chooser = self._create_file_chooser_dialog()
-        if chooser.run() == gtk.RESPONSE_OK:
-            filename = chooser.get_filename()
-            if filename:
-                f = open(filename, 'w')
-                f.write('#!/bin/sh\n')
-                f.writelines(self.export_commands())
-                f.close()
+        while True:
+            if chooser.run() == gtk.RESPONSE_OK:
+                filename = chooser.get_filename()
+                try:
+                    self.export_commands(filename)
+                except IOError, e:
+                    self._show_dialog(e.strerror, chooser)
+                    continue
+                else:
+                    self._set_statusbar_text(_('Rules exported'))
+            break
         chooser.destroy()
 
     def on_rules_import_activate(self, action):
-        pass
+        chooser = self._create_file_chooser_dialog(False)
+        while True:
+            if chooser.run() == gtk.RESPONSE_OK:
+                filename = chooser.get_filename()
+                try:
+                    res = self.import_commands(filename)
+                except IOError, e:
+                    self._show_dialog(e.strerror, chooser)
+                    continue
+                except UFWError, e:
+                    self._show_dialog(e.value, chooser)
+                    continue
+                else:
+                    self._set_statusbar_text(_('Rules imported'))
+            break
+        chooser.destroy()
 
     def on_quit_activate(self, action):
         gtk.main_quit()
@@ -458,12 +478,12 @@ class GtkFrontend(Frontend):
                 try:
                     rule = self._get_rule_from_dialog()
                 except UFWError, e:
-                    self._show_dialog(e.value, 'rule_dialog')
+                    self._show_dialog(e.value, self.rule_dialog)
                     continue
                 try:
                     res = self.set_rule(rule)
                 except UFWError, e:
-                    self._show_dialog(e.value, 'rule_dialog')
+                    self._show_dialog(e.value, self.rule_dialog)
                     continue
                 self._set_statusbar_text(res)
                 self._update_rules_model()
@@ -484,12 +504,12 @@ class GtkFrontend(Frontend):
                 try:
                     rule = self._get_rule_from_dialog()
                 except UFWError, e:
-                    self._show_dialog(e.value, 'rule_dialog')
+                    self._show_dialog(e.value, self.rule_dialog)
                     continue
                 try:
                     self.update_rule(pos, rule)
                 except UFWError, e:
-                    self._show_dialog(e.value, 'rule_dialog')
+                    self._show_dialog(e.value, self.rule_dialog)
                     continue
                 self._set_statusbar_text(_('Rule updated'))
                 self._update_rules_model()
@@ -583,12 +603,12 @@ class GtkFrontend(Frontend):
     def on_src_app_info_clicked(self, widget):
         app = self._get_combobox_value('src_app_cbox')
         info = self.get_application_info(app)
-        self._show_dialog(info, 'rule_dialog', gtk.MESSAGE_INFO)
+        self._show_dialog(info, self.rule_dialog, gtk.MESSAGE_INFO)
 
     def on_dst_app_info_clicked(self, widget):
         app = self._get_combobox_value('dst_app_cbox')
         info = self.get_application_info(app)
-        self._show_dialog(info, 'rule_dialog', gtk.MESSAGE_INFO)
+        self._show_dialog(info, self.rule_dialog, gtk.MESSAGE_INFO)
 
 
 def main():

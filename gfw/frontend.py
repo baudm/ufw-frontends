@@ -89,18 +89,37 @@ class Frontend(ufw.frontend.UFWFrontend, object):
                     app_rules.append(t)
             yield (i, r)
 
-    def export_commands(self):
-        commands = []
-        for i, rule in self.get_rules():
-            rule = rule.dup_rule()
-            # Enclose app names in quotation marks
-            if rule.sapp:
-                rule.sapp = "'" + rule.sapp + "'"
-            if rule.dapp:
-                rule.dapp = "'" + rule.dapp + "'"
-            cmd = 'ufw ' + UFWCommandRule.get_command(rule) + '\n'
-            commands.append(cmd)
-        return commands
+    def export_commands(self, path):
+        with open(path, 'w') as f:
+            f.write('#!/bin/sh\n')
+            for i, rule in self.get_rules():
+                rule = rule.dup_rule()
+                # Enclose app names in quotation marks
+                if rule.sapp:
+                    rule.sapp = "'" + rule.sapp + "'"
+                if rule.dapp:
+                    rule.dapp = "'" + rule.dapp + "'"
+                cmd = 'ufw ' + UFWCommandRule.get_command(rule) + '\n'
+                f.write(cmd)
+
+    def import_commands(self, path):
+        with open(path, 'r') as f:
+            for line in f:
+                if not line.startswith('ufw '):
+                    continue
+                cmd = ['rule']
+                for arg in line.split()[1:]:
+                    # Check for start of multi-word app name
+                    if arg.startswith("'") and not arg.endswith("'"):
+                        tmp = arg
+                        continue
+                    # Check for end of multi-word app name
+                    elif not arg.startswith("'") and arg.endswith("'"):
+                        arg = ' '.join([tmp, arg])
+                    cmd.append(arg.strip("'"))
+                p = UFWCommandRule(cmd[1])
+                pr = p.parse(cmd)
+                self.set_rule(pr.data['rule'], pr.data['iptype'])
 
     def set_rule(self, rule, ip_version=None):
         """set_rule(rule, ip_version=None)
