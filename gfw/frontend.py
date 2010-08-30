@@ -21,7 +21,6 @@ import ufw.frontend
 from ufw.util import valid_address
 from ufw.parser import UFWCommandRule
 
-from gfw.i18n import _
 from gfw.util import ANY_ADDR
 
 

@@ -23,10 +23,8 @@ import gtk
 
 from ufw.common import UFWRule, UFWError
 
+import gfw.util
 from gfw.frontend import Frontend
-from gfw.i18n import _
-from gfw.util import get_ui_path, get_formatted_rule
-from gfw.util import ANY_ADDR, ANY_PORT
 
 
 class Builder(gtk.Builder):
@@ -49,7 +47,7 @@ class GtkFrontend(Frontend):
     def __init__(self):
         super(GtkFrontend, self).__init__()
         self.ui = Builder()
-        path = get_ui_path(self.UI_FILE)
+        path = gfw.util.get_ui_path(self.UI_FILE)
         self.ui.add_from_file(path)
         self._selection = self.ui.rules_view.get_selection()
         # models
@@ -163,7 +161,7 @@ class GtkFrontend(Frontend):
         self.ui.rules_model.clear()
         for i, data in enumerate(self.get_rules()):
             idx, r = data
-            r = get_formatted_rule(r)
+            r = gfw.util.get_formatted_rule(r)
             row = [i + 1, r.action, r.direction, r.protocol, r.src, r.sport, r.dst, r.dport, idx]
             self.ui.rules_model.append(row)
 
@@ -196,7 +194,7 @@ class GtkFrontend(Frontend):
             addr = self.ui.src_addr_custom_entry.get_text()
             rule.set_src(addr)
         # src port
-        port = ANY_PORT
+        port = gfw.util.ANY_PORT
         if self.ui.src_port_custom_rbutton.get_active():
             port = self.ui.src_port_custom_entry.get_text()
         elif self.ui.src_app_rbutton.get_active():
@@ -208,7 +206,7 @@ class GtkFrontend(Frontend):
             addr = self.ui.dst_addr_custom_entry.get_text()
             rule.set_dst(addr)
         # dst port
-        port = ANY_PORT
+        port = gfw.util.ANY_PORT
         if self.ui.dst_port_custom_rbutton.get_active():
             port = self.ui.dst_port_custom_entry.get_text()
         elif self.ui.dst_app_rbutton.get_active():
@@ -262,7 +260,7 @@ class GtkFrontend(Frontend):
         logtype = log_rmap[rule.logtype]
         self._set_combobox_value('rule_logging_cbox', logtype)
         # src
-        if rule.src == ANY_ADDR:
+        if rule.src == gfw.util.ANY_ADDR:
             self.ui.src_addr_any_rbutton.set_active(True)
             addr = ''
         else:
@@ -273,13 +271,13 @@ class GtkFrontend(Frontend):
         if rule.sapp:
             self.ui.src_app_rbutton.set_active(True)
             self._set_combobox_value('src_app_cbox', rule.sapp)
-        elif rule.sport == ANY_PORT:
+        elif rule.sport == gfw.util.ANY_PORT:
             self.ui.src_port_any_rbutton.set_active(True)
         else:
             self.ui.src_port_custom_rbutton.set_active(True)
             self.ui.src_port_custom_entry.set_text(rule.sport)
         # dst
-        if rule.dst == ANY_ADDR:
+        if rule.dst == gfw.util.ANY_ADDR:
             self.ui.dst_addr_any_rbutton.set_active(True)
             addr = ''
         else:
@@ -290,7 +288,7 @@ class GtkFrontend(Frontend):
         if rule.dapp:
             self.ui.dst_app_rbutton.set_active(True)
             self._set_combobox_value('dst_app_cbox', rule.dapp)
-        elif rule.dport == ANY_PORT:
+        elif rule.dport == gfw.util.ANY_PORT:
             self.ui.dst_port_any_rbutton.set_active(True)
         else:
             self.ui.dst_port_custom_rbutton.set_active(True)

@@ -1,11 +1,22 @@
-import os
+import os.path
 import gettext
 
 import ufw.common
 
-gettext.install(ufw.common.programName)
-# Internationalization
-gettext.bindtextdomain(ufw.common.programName,
-                       os.path.join(ufw.common.trans_dir, 'messages'))
-gettext.textdomain(ufw.common.programName)
-_ = gettext.gettext
+
+def translation():
+    for var in ['LANGUAGE', 'LC_ALL', 'LC_MESSAGES', 'LANG']:
+        lang = os.getenv(var)
+        if lang:
+            break
+    # Use only the first language
+    lang = lang.split(':')[0]
+    lang = os.path.splitext(lang)[0]
+    path = os.path.join(ufw.common.trans_dir, 'messages', lang + '.mo')
+    try:
+        f = open(path, 'r')
+    except IOError:
+        t = gettext.NullTranslations()
+    else:
+        t = gettext.GNUTranslations(f)
+    return t
