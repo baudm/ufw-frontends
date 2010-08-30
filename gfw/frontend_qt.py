@@ -40,7 +40,7 @@ def main():
     app = QtGui.QApplication(sys.argv)
     try:
         ui = QtFrontend()
-    except UFWError, e:
+    except UFWError as e:
         sys.exit(e.value)
     else:
         sys.exit(app.exec_())

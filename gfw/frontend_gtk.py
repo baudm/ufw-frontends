@@ -361,7 +361,7 @@ class GtkFrontend(Frontend):
                 filename = chooser.get_filename()
                 try:
                     self.export_rules(filename)
-                except IOError, e:
+                except IOError as e:
                     self._show_dialog(e.strerror, chooser)
                     continue
                 else:
@@ -376,10 +376,10 @@ class GtkFrontend(Frontend):
                 filename = chooser.get_filename()
                 try:
                     self.import_rules(filename)
-                except IOError, e:
+                except IOError as e:
                     self._show_dialog(e.strerror, chooser)
                     continue
-                except UFWError, e:
+                except UFWError as e:
                     self._show_dialog(e.value, chooser)
                     continue
                 else:
@@ -471,12 +471,12 @@ class GtkFrontend(Frontend):
             if self.ui.rule_dialog.run() == self.RESPONSE_OK:
                 try:
                     rule = self._get_rule_from_dialog()
-                except UFWError, e:
+                except UFWError as e:
                     self._show_dialog(e.value, self.ui.rule_dialog)
                     continue
                 try:
                     res = self.set_rule(rule)
-                except UFWError, e:
+                except UFWError as e:
                     self._show_dialog(e.value, self.ui.rule_dialog)
                     continue
                 self._set_statusbar_text(res)
@@ -497,12 +497,12 @@ class GtkFrontend(Frontend):
             if self.ui.rule_dialog.run() == self.RESPONSE_OK:
                 try:
                     rule = self._get_rule_from_dialog()
-                except UFWError, e:
+                except UFWError as e:
                     self._show_dialog(e.value, self.ui.rule_dialog)
                     continue
                 try:
                     self.update_rule(pos, rule)
-                except UFWError, e:
+                except UFWError as e:
                     self._show_dialog(e.value, self.ui.rule_dialog)
                     continue
                 self._set_statusbar_text(_('Rule updated'))
@@ -524,7 +524,7 @@ class GtkFrontend(Frontend):
             return
         try:
             res = self.delete_rule(pos, True)
-        except UFWError, e:
+        except UFWError as e:
             self._show_dialog(e.value)
         else:
             self._set_statusbar_text(res)
@@ -610,7 +610,7 @@ class GtkFrontend(Frontend):
 def main():
     try:
         ui = GtkFrontend()
-    except UFWError, e:
+    except UFWError as e:
         sys.exit(e.value)
     else:
         gtk.main()
