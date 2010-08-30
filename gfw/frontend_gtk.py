@@ -307,7 +307,8 @@ class GtkFrontend(Frontend):
             w = self.ui.get_object(name % (prefix, ))
             w.set_sensitive(active)
         # Set focus on the text entry
-        self.rule_dialog.set_focus(w)
+        if active:
+            self.rule_dialog.set_focus(w)
 
     def _clear_and_focus(self, prefix):
         name = '%s_custom_entry' % (prefix, )
