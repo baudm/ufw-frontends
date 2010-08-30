@@ -422,7 +422,10 @@ class GtkFrontend(Frontend):
         model = widget.get_model()
         report = model[active][0].split('-')[0]
         if report != 'listening':
-            res = self.get_show_raw(report)
+            try:
+                res = self.get_show_raw(report)
+            except UFWError:
+                res = ''
         else:
             res = self.get_show_listening()
         self.ui.reports_buffer.set_text(res)
