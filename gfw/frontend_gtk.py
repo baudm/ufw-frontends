@@ -100,12 +100,12 @@ class GtkFrontend(Frontend):
     def _update_action_states(self):
         active = self.backend._is_enabled()
         if active:
-            label = 'Disable'
-            short_label = 'Disable Firewall'
+            label = _('Disable')
+            short_label = _('Disable Firewall')
             stock_id = gtk.STOCK_STOP
         else:
-            label = 'Enable'
-            short_label = 'Enable Firewall'
+            label = _('Enable')
+            short_label = _('Enable Firewall')
             stock_id = gtk.STOCK_MEDIA_PLAY
         # Set action properties
         action = self.ui.firewall_toggle
@@ -113,8 +113,8 @@ class GtkFrontend(Frontend):
         action.handler_block_by_func(self.on_firewall_toggle_toggled)
         action.set_active(active)
         action.handler_unblock_by_func(self.on_firewall_toggle_toggled)
-        action.set_label(_(label))
-        action.set_short_label(_(short_label))
+        action.set_label(label)
+        action.set_short_label(short_label)
         action.set_stock_id(stock_id)
         # Enable/disable related controls
         self.ui.rules_view.set_sensitive(active)
@@ -302,14 +302,14 @@ class GtkFrontend(Frontend):
         if save:
             action = gtk.FILE_CHOOSER_ACTION_SAVE
             ok_button = gtk.STOCK_SAVE_AS
-            title = 'Export Rules'
+            title = _('Export Rules')
         else:
             action = gtk.FILE_CHOOSER_ACTION_OPEN
             ok_button = gtk.STOCK_OPEN
-            title = 'Import Rules'
+            title = _('Import Rules')
         buttons = (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                     ok_button, gtk.RESPONSE_OK)
-        dlg = gtk.FileChooserDialog(_(title), self.ui.main_window, action, buttons)
+        dlg = gtk.FileChooserDialog(title, self.ui.main_window, action, buttons)
         # Shell scripts filter
         f = gtk.FileFilter()
         f.set_name('Shell scripts')
