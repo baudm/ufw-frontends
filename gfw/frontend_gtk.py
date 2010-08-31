@@ -62,20 +62,16 @@ class GtkFrontend(Frontend):
         self.ui.main_window.show_all()
 
     def _init_prefs_dialog(self):
-        # comboboxes
+        # Get current values
         logging_opts = map(str.lower, self._get_combobox_values('logging_cbox'))
         policy_opts = map(str.lower, self._get_combobox_values('incoming_policy_cbox'))
         logging = logging_opts.index(self.backend.defaults['loglevel'])
         default_incoming = policy_opts.index(self.backend.get_default_policy('input'))
         default_outgoing = policy_opts.index(self.backend.get_default_policy('output'))
-        defaults = {
-            'logging_cbox': logging,
-            'incoming_policy_cbox': default_incoming,
-            'outgoing_policy_cbox': default_outgoing
-        }
-        for name, default in defaults.iteritems():
-            cbox = self.ui.get_object(name)
-            cbox.set_active(default)
+        # Set values to comboboxes
+        self.ui.logging_cbox.set_active(logging)
+        self.ui.incoming_policy_cbox.set_active(default_incoming)
+        self.ui.outgoing_policy_cbox.set_active(default_outgoing)
         # checkbox
         conf = self.backend.defaults['ipv6']
         self.ui.enable_ipv6.set_active(conf == 'yes')
@@ -221,27 +217,23 @@ class GtkFrontend(Frontend):
         self.ui.position_adjustment.set_upper(len(self.ui.rules_model) + 1)
         # Always set to the value of the currently selected row
         self.ui.position_adjustment.set_value(self._get_selected_rule_pos())
-        # active radio buttons
-        active = [
-            'in_rbutton', 'src_addr_custom_rbutton', 'src_port_any_rbutton',
-            'dst_addr_any_rbutton', 'dst_port_custom_rbutton'
-        ]
-        for k in active:
-            self.ui.get_object(k).set_active(True)
-        # blank text boxes
-        blank = [
-            'src_addr_custom_entry', 'src_port_custom_entry',
-            'dst_addr_custom_entry', 'dst_port_custom_entry'
-        ]
-        for k in blank:
-            self.ui.get_object(k).set_text('')
-        # set combobox defaults
-        cboxes = {
-            'action_cbox': 0, 'protocol_cbox': 0, 'rule_logging_cbox': 0,
-            'src_app_cbox': -1, 'dst_app_cbox': -1
-        }
-        for k, v in cboxes.iteritems():
-            self.ui.get_object(k).set_active(v)
+        # Set active radio buttons
+        self.ui.in_rbutton.set_active(True)
+        self.ui.src_addr_custom_rbutton.set_active(True)
+        self.ui.src_port_any_rbutton.set_active(True)
+        self.ui.dst_addr_any_rbutton.set_active(True)
+        self.ui.dst_port_custom_rbutton.set_active(True)
+        # Clear text extries
+        self.ui.src_addr_custom_entry.set_text('')
+        self.ui.src_port_custom_entry.set_text('')
+        self.ui.dst_addr_custom_entry.set_text('')
+        self.ui.dst_port_custom_entry.set_text('')
+        # Set combobox defaults
+        self.ui.action_cbox.set_active(0)
+        self.ui.protocol_cbox.set_active(0)
+        self.ui.rule_logging_cbox.set_active(0)
+        self.ui.src_app_cbox.set_active(-1)
+        self.ui.dst_app_cbox.set_active(-1)
 
     def _load_rule_to_dialog(self, rule):
         self._restore_rule_dialog_defaults()
@@ -603,7 +595,7 @@ class GtkFrontend(Frontend):
 
     def on_src_app_info_clicked(self, widget):
         self._app_info_clicked('src')
-        
+
     def on_dst_app_info_clicked(self, widget):
         self._app_info_clicked('dst')
 
