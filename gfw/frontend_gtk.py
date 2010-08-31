@@ -17,6 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
+import gettext
 
 import gobject
 import gtk
@@ -25,6 +26,10 @@ from ufw.common import UFWRule, UFWError
 
 import gfw.util
 from gfw.frontend import Frontend
+
+# module-wide localization
+t = gettext.translation('ufw-frontends', fallback=True)
+_ = t.gettext
 
 
 class Builder(gtk.Builder):
