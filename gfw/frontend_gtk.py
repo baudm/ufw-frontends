@@ -162,7 +162,8 @@ class GtkFrontend(Frontend):
         for i, data in enumerate(self.get_rules()):
             idx, r = data
             r = gfw.util.get_formatted_rule(r)
-            row = [i + 1, r.action, r.direction, r.protocol, r.src, r.sport, r.dst, r.dport, idx]
+            row = [i + 1, r.action, r.direction, r.protocol, r.src, r.sport,
+                    r.dst, r.dport, idx]
             self.ui.rules_model.append(row)
 
     def _update_apps_model(self):
@@ -299,31 +300,6 @@ class GtkFrontend(Frontend):
         if not itr:
             return 0
         return model.get_path(itr)[0] + 1
-
-    def _widgets_set_sensitive(self, prefix, active):
-        for name in ('%s_custom_clear', '%s_custom_entry'):
-            w = self.ui.get_object(name % (prefix, ))
-            w.set_sensitive(active)
-        # Set focus on the text entry
-        if active:
-            self.ui.rule_dialog.set_focus(w)
-
-    def _clear_and_focus(self, prefix):
-        name = '%s_custom_entry' % (prefix, )
-        entry = self.ui.get_object(name)
-        entry.set_text('')
-        self.ui.rule_dialog.set_focus(entry)
-
-    def _app_rbutton_toggle(self, prefix, active):
-        for name in ['%s_app_cbox', '%s_app_info']:
-            w = self.ui.get_object(name % (prefix, ))
-            w.set_sensitive(active)
-        # 'Toggle' prefix
-        prefix = ('dst' if prefix == 'src' else 'src')
-        name = '%s_app_rbutton' % (prefix, )
-        rbutton = self.ui.get_object(name)
-        sensitive = (not active and not rbutton.get_active())
-        self.ui.protocol_cbox.set_sensitive(sensitive)
 
     def _create_file_chooser_dialog(self, save=True):
         if save:
@@ -554,7 +530,7 @@ class GtkFrontend(Frontend):
         self._update_rules_model()
         self._selection.select_path(new - 1)
 
-    # ------------------------ Other Callbacks -------------------------
+    # --------------------- Main Window Callbacks ----------------------
 
     def on_main_window_destroy(self, widget):
         self.ui.quit.activate()
@@ -562,47 +538,74 @@ class GtkFrontend(Frontend):
     def on_rules_view_row_activated(self, widget, path, view_column):
         self.ui.rule_edit.activate()
 
+    # --------------------- Rule Dialog Callbacks ----------------------
+
+    def _custom_rbutton_toggled(self, prefix, active):
+        for name in ('%s_custom_clear', '%s_custom_entry'):
+            w = self.ui.get_object(name % (prefix, ))
+            w.set_sensitive(active)
+        # Set focus on the text entry
+        if active:
+            self.ui.rule_dialog.set_focus(w)
+
     def on_src_addr_custom_rbutton_toggled(self, widget):
-        self._widgets_set_sensitive('src_addr', widget.get_active())
+        self._custom_rbutton_toggled('src_addr', widget.get_active())
 
     def on_dst_addr_custom_rbutton_toggled(self, widget):
-        self._widgets_set_sensitive('dst_addr', widget.get_active())
+        self._custom_rbutton_toggled('dst_addr', widget.get_active())
 
     def on_src_port_custom_rbutton_toggled(self, widget):
-        self._widgets_set_sensitive('src_port', widget.get_active())
+        self._custom_rbutton_toggled('src_port', widget.get_active())
 
     def on_dst_port_custom_rbutton_toggled(self, widget):
-        self._widgets_set_sensitive('dst_port', widget.get_active())
+        self._custom_rbutton_toggled('dst_port', widget.get_active())
+
+    def _custom_clear_clicked(self, prefix):
+        name = '%s_custom_entry' % (prefix, )
+        entry = self.ui.get_object(name)
+        entry.set_text('')
+        self.ui.rule_dialog.set_focus(entry)
 
     def on_src_addr_custom_clear_clicked(self, widget):
-        self._clear_and_focus('src_addr')
+        self._custom_clear_clicked('src_addr')
 
     def on_dst_addr_custom_clear_clicked(self, widget):
-        self._clear_and_focus('dst_addr')
+        self._custom_clear_clicked('dst_addr')
 
     def on_src_port_custom_clear_clicked(self, widget):
-        self._clear_and_focus('src_port')
+        self._custom_clear_clicked('src_port')
 
     def on_dst_port_custom_clear_clicked(self, widget):
-        self._clear_and_focus('dst_port')
+        self._custom_clear_clicked('dst_port')
+
+    def _app_rbutton_toggled(self, prefix, active):
+        for name in ['%s_app_cbox', '%s_app_info']:
+            w = self.ui.get_object(name % (prefix, ))
+            w.set_sensitive(active)
+        # 'Toggle' prefix
+        prefix = ('dst' if prefix == 'src' else 'src')
+        name = '%s_app_rbutton' % (prefix, )
+        rbutton = self.ui.get_object(name)
+        sensitive = (not active and not rbutton.get_active())
+        self.ui.protocol_cbox.set_sensitive(sensitive)
 
     def on_src_app_rbutton_toggled(self, widget):
-        self._app_rbutton_toggle('src', widget.get_active())
+        self._app_rbutton_toggled('src', widget.get_active())
 
     def on_dst_app_rbutton_toggled(self, widget):
-        self._app_rbutton_toggle('dst', widget.get_active())
+        self._app_rbutton_toggled('dst', widget.get_active())
+
+    def _app_info_clicked(self, prefix):
+        app = self._get_combobox_value('%s_app_cbox' % (prefix, ))
+        if app is not None:
+            info = self.get_application_info(app)
+            self._show_dialog(info, self.ui.rule_dialog, gtk.MESSAGE_INFO)
 
     def on_src_app_info_clicked(self, widget):
-        app = self._get_combobox_value('src_app_cbox')
-        if app is not None:
-            info = self.get_application_info(app)
-            self._show_dialog(info, self.ui.rule_dialog, gtk.MESSAGE_INFO)
-
+        self._app_info_clicked('src')
+        
     def on_dst_app_info_clicked(self, widget):
-        app = self._get_combobox_value('dst_app_cbox')
-        if app is not None:
-            info = self.get_application_info(app)
-            self._show_dialog(info, self.ui.rule_dialog, gtk.MESSAGE_INFO)
+        self._app_info_clicked('dst')
 
 
 def main():
