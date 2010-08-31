@@ -12,14 +12,10 @@ import ufw.util
 
 def ufw_localize():
     # Just return if the _() function is already installed
-    try:
-        ufw.common._
-    except AttributeError:
-        pass
-    else:
+    if hasattr(ufw.common, '_'):
         return
     lang = ''
-    for var in ['LANGUAGE', 'LC_ALL', 'LC_MESSAGES', 'LANG']:
+    for var in ('LANGUAGE', 'LC_ALL', 'LC_MESSAGES', 'LANG'):
         lang = os.getenv(var)
         if lang:
             break
@@ -33,6 +29,7 @@ def ufw_localize():
         t = gettext.NullTranslations()
     else:
         t = gettext.GNUTranslations(f)
+        f.close()
     # Manually install the _() function for module-wide l10n
     x = t.gettext
     ufw.applications._ = x
