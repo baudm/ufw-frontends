@@ -252,7 +252,10 @@ class GtkFrontend(Frontend):
         # action
         self._set_combobox_value('action_cbox', rule.action)
         # direction
-        self.ui.in_rbutton.set_active(rule.direction == 'in')
+        if rule.direction == 'in':
+            self.ui.in_rbutton.set_active(True)
+        else:
+            self.ui.out_rbutton.set_active(True)
         # protocol
         if rule.sapp or rule.dapp:
             self._set_combobox_value('protocol_cbox', 'any')
