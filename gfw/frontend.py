@@ -68,9 +68,19 @@ class Frontend(ufw.frontend.UFWFrontend, object):
             ip_version = to_type
         return ip_version
 
-    def enable_ipv6(self, enable=True):
+    def config_ipv6(self, enable):
         conf = ('yes' if enable else 'no')
         self.backend.set_default(self.backend.files['defaults'], 'IPV6', conf)
+
+    def config_ipt_module(self, name, enable):
+        modules = self.backend.defaults['ipt_modules'].split()
+        if enable and name not in modules:
+            modules.append(name)
+        elif not enable and name in modules:
+            modules.remove(name)
+        modules = '"' + ' '.join(modules) + '"'
+        self.backend.set_default(self.backend.files['defaults'],
+                                 'IPT_MODULES', modules)
 
     def reload(self):
         """Reload firewall"""

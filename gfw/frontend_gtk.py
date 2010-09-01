@@ -67,19 +67,24 @@ class GtkFrontend(Frontend):
         self.ui.main_window.show_all()
 
     def _init_prefs_dialog(self):
+        conf = self.backend.defaults
         # Get current values
         logging_opts = map(str.lower, self._get_combobox_values('logging_cbox'))
         policy_opts = map(str.lower, self._get_combobox_values('incoming_policy_cbox'))
-        logging = logging_opts.index(self.backend.defaults['loglevel'])
+        logging = logging_opts.index(conf['loglevel'])
         default_incoming = policy_opts.index(self.backend.get_default_policy('input'))
         default_outgoing = policy_opts.index(self.backend.get_default_policy('output'))
         # Set values to comboboxes
         self.ui.logging_cbox.set_active(logging)
         self.ui.incoming_policy_cbox.set_active(default_incoming)
         self.ui.outgoing_policy_cbox.set_active(default_outgoing)
-        # checkbox
-        conf = self.backend.defaults['ipv6']
-        self.ui.enable_ipv6.set_active(conf == 'yes')
+        # checkboxes
+        self.ui.enable_ipv6.set_active(conf['ipv6'] == 'yes')
+        # IPT modules
+        enable = ('nf_conntrack_pptp' in conf['ipt_modules'])
+        self.ui.pptp_chkbox.set_active(enable)
+        enable = ('nf_conntrack_netbios_ns' in conf['ipt_modules'])
+        self.ui.netbios_chkbox.set_active(enable)
 
     def _init_action_groups(self):
         groups = {
@@ -375,7 +380,12 @@ class GtkFrontend(Frontend):
             policy = self._get_combobox_value('outgoing_policy_cbox').lower()
             self.backend.set_default_policy(policy, 'outgoing')
             # enable IPv6?
-            self.enable_ipv6(self.ui.enable_ipv6.get_active())
+            self.config_ipv6(self.ui.enable_ipv6.get_active())
+            # Enable additional IPT modules?
+            self.config_ipt_module('nf_conntrack_pptp',
+                                   self.ui.pptp_chkbox.get_active())
+            self.config_ipt_module('nf_conntrack_netbios_ns',
+                                   self.ui.netbios_chkbox.get_active())
             # reload firewall
             self.reload()
             self._set_statusbar_text(_('Preferences saved'))

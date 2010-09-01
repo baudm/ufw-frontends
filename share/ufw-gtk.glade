@@ -177,8 +177,8 @@
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem1">
                         <property name="visible">True</property>
-                        <property name="use_action_appearance">True</property>
                         <property name="related_action">rules_import</property>
+                        <property name="use_action_appearance">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -186,8 +186,8 @@
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem2">
                         <property name="visible">True</property>
-                        <property name="use_action_appearance">True</property>
                         <property name="related_action">rules_export</property>
+                        <property name="use_action_appearance">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -200,8 +200,8 @@
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem3">
                         <property name="visible">True</property>
-                        <property name="use_action_appearance">True</property>
                         <property name="related_action">quit</property>
+                        <property name="use_action_appearance">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <accelerator key="q" signal="activate" modifiers="GDK_CONTROL_MASK"/>
@@ -230,8 +230,8 @@
                             <child>
                               <object class="GtkImageMenuItem" id="imagemenuitem6">
                                 <property name="visible">True</property>
-                                <property name="use_action_appearance">True</property>
                                 <property name="related_action">firewall_toggle</property>
+                                <property name="use_action_appearance">True</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                                 <accelerator key="t" signal="activate" modifiers="GDK_CONTROL_MASK"/>
@@ -240,8 +240,8 @@
                             <child>
                               <object class="GtkImageMenuItem" id="imagemenuitem7">
                                 <property name="visible">True</property>
-                                <property name="use_action_appearance">True</property>
                                 <property name="related_action">firewall_reload</property>
+                                <property name="use_action_appearance">True</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                                 <accelerator key="r" signal="activate" modifiers="GDK_CONTROL_MASK"/>
@@ -255,8 +255,8 @@
                             <child>
                               <object class="GtkImageMenuItem" id="imagemenuitem9">
                                 <property name="visible">True</property>
-                                <property name="use_action_appearance">True</property>
                                 <property name="related_action">firewall_reset</property>
+                                <property name="use_action_appearance">True</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                               </object>
@@ -276,8 +276,8 @@
                             <child>
                               <object class="GtkImageMenuItem" id="imagemenuitem12">
                                 <property name="visible">True</property>
-                                <property name="use_action_appearance">True</property>
                                 <property name="related_action">rule_add</property>
+                                <property name="use_action_appearance">True</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                                 <accelerator key="i" signal="activate" modifiers="GDK_CONTROL_MASK"/>
@@ -286,8 +286,8 @@
                             <child>
                               <object class="GtkImageMenuItem" id="imagemenuitem13">
                                 <property name="visible">True</property>
-                                <property name="use_action_appearance">True</property>
                                 <property name="related_action">rule_edit</property>
+                                <property name="use_action_appearance">True</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                                 <accelerator key="e" signal="activate" modifiers="GDK_CONTROL_MASK"/>
@@ -296,8 +296,8 @@
                             <child>
                               <object class="GtkImageMenuItem" id="imagemenuitem14">
                                 <property name="visible">True</property>
-                                <property name="use_action_appearance">True</property>
                                 <property name="related_action">rule_delete</property>
+                                <property name="use_action_appearance">True</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                                 <accelerator key="Delete" signal="activate"/>
@@ -311,8 +311,8 @@
                             <child>
                               <object class="GtkImageMenuItem" id="imagemenuitem15">
                                 <property name="visible">True</property>
-                                <property name="use_action_appearance">True</property>
                                 <property name="related_action">rule_up</property>
+                                <property name="use_action_appearance">True</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                                 <accelerator key="Up" signal="activate" modifiers="GDK_SHIFT_MASK"/>
@@ -321,8 +321,8 @@
                             <child>
                               <object class="GtkImageMenuItem" id="imagemenuitem16">
                                 <property name="visible">True</property>
-                                <property name="use_action_appearance">True</property>
                                 <property name="related_action">rule_down</property>
+                                <property name="use_action_appearance">True</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                                 <accelerator key="Down" signal="activate" modifiers="GDK_SHIFT_MASK"/>
@@ -340,8 +340,8 @@
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem11">
                         <property name="visible">True</property>
-                        <property name="use_action_appearance">True</property>
                         <property name="related_action">prefs_dialog_show</property>
+                        <property name="use_action_appearance">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <accelerator key="p" signal="activate" modifiers="GDK_CONTROL_MASK"/>
@@ -362,8 +362,8 @@
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem8">
                         <property name="visible">True</property>
-                        <property name="use_action_appearance">True</property>
                         <property name="related_action">firewall_update</property>
+                        <property name="use_action_appearance">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <accelerator key="u" signal="activate" modifiers="GDK_CONTROL_MASK"/>
@@ -372,8 +372,8 @@
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem4">
                         <property name="visible">True</property>
-                        <property name="use_action_appearance">True</property>
                         <property name="related_action">reports_dialog_show</property>
+                        <property name="use_action_appearance">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -393,8 +393,8 @@
                     <child>
                       <object class="GtkImageMenuItem" id="imagemenuitem10">
                         <property name="visible">True</property>
-                        <property name="use_action_appearance">True</property>
                         <property name="related_action">about_dialog_show</property>
+                        <property name="use_action_appearance">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -1648,120 +1648,181 @@ logo.png:
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="transient_for">main_window</property>
+    <property name="has_separator">False</property>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox3">
         <property name="visible">True</property>
         <property name="spacing">2</property>
         <child>
-          <object class="GtkTable" id="table1">
+          <object class="GtkNotebook" id="notebook1">
             <property name="visible">True</property>
-            <property name="n_rows">4</property>
-            <property name="n_columns">2</property>
-            <property name="column_spacing">10</property>
-            <property name="row_spacing">5</property>
+            <property name="can_focus">True</property>
             <child>
-              <object class="GtkCheckButton" id="enable_ipv6">
-                <property name="label" translatable="yes">Enable IPv6 support</property>
+              <object class="GtkTable" id="table1">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="draw_indicator">True</property>
+                <property name="n_rows">4</property>
+                <property name="n_columns">2</property>
+                <property name="column_spacing">10</property>
+                <property name="row_spacing">5</property>
+                <child>
+                  <object class="GtkCheckButton" id="enable_ipv6">
+                    <property name="label" translatable="yes">Enable IPv6 support</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">3</property>
+                    <property name="bottom_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="outgoing_policy_cbox">
+                    <property name="visible">True</property>
+                    <property name="model">policies_model</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext3"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label5">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Default outgoing policy:</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
+                    <property name="x_options">GTK_FILL</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="logging_cbox">
+                    <property name="visible">True</property>
+                    <property name="model">loglevels_model</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label3">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Firewall logging:</property>
+                  </object>
+                  <packing>
+                    <property name="x_options">GTK_FILL</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="incoming_policy_cbox">
+                    <property name="visible">True</property>
+                    <property name="model">policies_model</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label4">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Default incoming policy:</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options">GTK_FILL</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="label11">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">General</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">3</property>
-                <property name="bottom_attach">4</property>
+                <property name="tab_fill">False</property>
               </packing>
             </child>
             <child>
-              <object class="GtkComboBox" id="outgoing_policy_cbox">
+              <object class="GtkVBox" id="vbox5">
                 <property name="visible">True</property>
-                <property name="model">policies_model</property>
+                <property name="spacing">5</property>
                 <child>
-                  <object class="GtkCellRendererText" id="cellrenderertext3"/>
-                  <attributes>
-                    <attribute name="text">0</attribute>
-                  </attributes>
+                  <object class="GtkCheckButton" id="netbios_chkbox">
+                    <property name="label" translatable="yes">nf_conntrack_netbios_ns (for Samba)</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="pptp_chkbox">
+                    <property name="label" translatable="yes">nf_conntrack_pptp (for VPN)</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">2</property>
-                <property name="bottom_attach">3</property>
+                <property name="position">1</property>
               </packing>
             </child>
-            <child>
-              <object class="GtkLabel" id="label5">
+            <child type="tab">
+              <object class="GtkLabel" id="label13">
                 <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">Default outgoing policy:</property>
+                <property name="label" translatable="yes">IPT Modules</property>
               </object>
               <packing>
-                <property name="top_attach">2</property>
-                <property name="bottom_attach">3</property>
-                <property name="x_options">GTK_FILL</property>
+                <property name="position">1</property>
+                <property name="tab_fill">False</property>
               </packing>
-            </child>
-            <child>
-              <object class="GtkComboBox" id="logging_cbox">
-                <property name="visible">True</property>
-                <property name="model">loglevels_model</property>
-                <child>
-                  <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                  <attributes>
-                    <attribute name="text">0</attribute>
-                  </attributes>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label3">
-                <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">Firewall logging:</property>
-              </object>
-              <packing>
-                <property name="x_options">GTK_FILL</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBox" id="incoming_policy_cbox">
-                <property name="visible">True</property>
-                <property name="model">policies_model</property>
-                <child>
-                  <object class="GtkCellRendererText" id="cellrenderertext2"/>
-                  <attributes>
-                    <attribute name="text">0</attribute>
-                  </attributes>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label4">
-                <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">Default incoming policy:</property>
-              </object>
-              <packing>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-                <property name="x_options">GTK_FILL</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
           <packing>
