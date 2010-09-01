@@ -1,0 +1,30 @@
+ufw-frontends
+Version 0.2.0
+09/01/2010
+
+
+New Features:
+
+* Add support for enabling/disabling additional IPT modules specifically
+  nf_conntrack_netbios_ns and nf_conntrack_pptp (cset 5e20eb96b633)
+* Add support for importing rules (cset 8488cc40686f)
+* Implement exporting of rules (cset 0b2d1bd23d14)
+* Add simple way of displaying app profile info (cset 6c965bc9d10a)
+* Add support for displaying reports (cset a209756b280b)
+
+
+Bug fixes:
+
+* Fix setting of rule direction when loading a rule into
+  the Rule Editor (cset 34faa1f24870)
+* Make sure that all translatable strings are marked as such (cset 2b45cf04cac9)
+* Use per-module localization so that ufw translations could co-exist with
+  _future_ ufw-frontends translations. (cset 772bf80c57dc)
+* Fix PyGTK frontend hang when resetting rules (Issue 3, cset 43e6ba5c84fb)
+
+
+Changes:
+
+* Make rule action and direction uppercase to add emphasis (cset b2c69dc63107)
+* Move 'Update Rules' menu item from Edit -> Firewall to Tools (cset b6ab763282dd)
+* Change name in .desktop files to 'Firewall Manager' (cset 6685e308f9ab)
