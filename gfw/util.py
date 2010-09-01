@@ -15,8 +15,8 @@ def get_ui_path(ui_file):
 
 def get_formatted_rule(rule):
     r = rule.dup_rule()
-    r.action = r.action.title()
-    r.direction = r.direction.title()
+    r.action = r.action.upper()
+    r.direction = r.direction.upper()
     if r.dapp or r.sapp:
         r.protocol = ''
         if r.sapp:
