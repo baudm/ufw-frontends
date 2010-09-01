@@ -156,9 +156,9 @@ class Frontend(ufw.frontend.UFWFrontend, object):
         if rule.position and not self.backend.get_rule_by_number(rule.position):
             rule.set_position(0)
         res = super(Frontend, self).set_rule(rule, ip_version)
-        # Reset the positions of the recently inserted rule and adjacent rules
+        # Reset the positions of the recently inserted rule(s)
         if rule.position:
-            s = (rule.position - 2 if rule.position > 1 else 0)
+            s = rule.position - 1
             e = rule.position + 1
             for r in self.backend.get_rules()[s:e]:
                 r.set_position(0)
