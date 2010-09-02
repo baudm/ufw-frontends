@@ -153,6 +153,26 @@
       </row>
     </data>
   </object>
+  <object class="GtkListStore" id="events_model">
+    <columns>
+      <!-- column-name datetime -->
+      <column type="gchararray"/>
+      <!-- column-name event -->
+      <column type="gchararray"/>
+      <!-- column-name iface_in -->
+      <column type="gchararray"/>
+      <!-- column-name iface_out -->
+      <column type="gchararray"/>
+      <!-- column-name src -->
+      <column type="gchararray"/>
+      <!-- column-name sport -->
+      <column type="gchararray"/>
+      <!-- column-name dst -->
+      <column type="gchararray"/>
+      <!-- column-name dport -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkWindow" id="main_window">
     <property name="width_request">650</property>
     <property name="height_request">500</property>
@@ -416,8 +436,8 @@
             <child>
               <object class="GtkToggleToolButton" id="toolbutton1">
                 <property name="visible">True</property>
-                <property name="use_action_appearance">True</property>
                 <property name="related_action">firewall_toggle</property>
+                <property name="use_action_appearance">True</property>
                 <property name="label" translatable="yes">toolbutton1</property>
                 <property name="use_underline">True</property>
               </object>
@@ -429,8 +449,8 @@
             <child>
               <object class="GtkToolButton" id="toolbutton2">
                 <property name="visible">True</property>
-                <property name="use_action_appearance">True</property>
                 <property name="related_action">firewall_reload</property>
+                <property name="use_action_appearance">True</property>
                 <property name="label" translatable="yes">toolbutton2</property>
                 <property name="use_underline">True</property>
               </object>
@@ -450,8 +470,8 @@
             <child>
               <object class="GtkToolButton" id="toolbutton3">
                 <property name="visible">True</property>
-                <property name="use_action_appearance">True</property>
                 <property name="related_action">rule_delete</property>
+                <property name="use_action_appearance">True</property>
                 <property name="label" translatable="yes">toolbutton3</property>
                 <property name="use_underline">True</property>
               </object>
@@ -463,8 +483,8 @@
             <child>
               <object class="GtkToolButton" id="toolbutton4">
                 <property name="visible">True</property>
-                <property name="use_action_appearance">True</property>
                 <property name="related_action">rule_edit</property>
+                <property name="use_action_appearance">True</property>
                 <property name="label" translatable="yes">toolbutton4</property>
                 <property name="use_underline">True</property>
               </object>
@@ -476,8 +496,8 @@
             <child>
               <object class="GtkToolButton" id="toolbutton5">
                 <property name="visible">True</property>
-                <property name="use_action_appearance">True</property>
                 <property name="related_action">rule_add</property>
+                <property name="use_action_appearance">True</property>
                 <property name="label" translatable="yes">toolbutton5</property>
                 <property name="use_underline">True</property>
               </object>
@@ -497,8 +517,8 @@
             <child>
               <object class="GtkToolButton" id="toolbutton6">
                 <property name="visible">True</property>
-                <property name="use_action_appearance">True</property>
                 <property name="related_action">rule_down</property>
+                <property name="use_action_appearance">True</property>
                 <property name="label" translatable="yes">toolbutton6</property>
                 <property name="use_underline">True</property>
               </object>
@@ -510,8 +530,8 @@
             <child>
               <object class="GtkToolButton" id="toolbutton7">
                 <property name="visible">True</property>
-                <property name="use_action_appearance">True</property>
                 <property name="related_action">rule_up</property>
+                <property name="use_action_appearance">True</property>
                 <property name="label" translatable="yes">toolbutton7</property>
                 <property name="use_underline">True</property>
               </object>
@@ -530,7 +550,7 @@
           <object class="GtkNotebook" id="notebook2">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="tab_hborder">10</property>
+            <property name="tab_hborder">5</property>
             <child>
               <object class="GtkScrolledWindow" id="scrolledwindow1">
                 <property name="visible">True</property>
@@ -1790,7 +1810,6 @@ logo.png:
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Firewall Preferences</property>
     <property name="resizable">False</property>
-    <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
@@ -1805,6 +1824,7 @@ logo.png:
           <object class="GtkNotebook" id="notebook1">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="tab_hborder">5</property>
             <child>
               <object class="GtkTable" id="table1">
                 <property name="visible">True</property>
@@ -2027,7 +2047,7 @@ logo.png:
     </action-widgets>
   </object>
   <object class="GtkAction" id="rule_add">
-    <property name="label">_Add</property>
+    <property name="label">_Add...</property>
     <property name="short_label">Add Rule</property>
     <property name="tooltip">Add a new rule</property>
     <property name="stock_id">gtk-add</property>
@@ -2048,7 +2068,7 @@ logo.png:
     <signal name="activate" handler="on_rule_up_activate"/>
   </object>
   <object class="GtkAction" id="rule_edit">
-    <property name="label">_Edit</property>
+    <property name="label">_Edit...</property>
     <property name="short_label">Edit Rule</property>
     <property name="tooltip">Edit the currently selected rule</property>
     <property name="stock_id">gtk-edit</property>
@@ -2147,7 +2167,10 @@ logo.png:
     <property name="width_request">600</property>
     <property name="height_request">400</property>
     <property name="border_width">5</property>
-    <property name="type_hint">normal</property>
+    <property name="title" translatable="yes">Reports Viewer</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="type_hint">dialog</property>
     <property name="transient_for">main_window</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
@@ -2261,25 +2284,5 @@ logo.png:
   <object class="GtkImage" id="image6">
     <property name="visible">True</property>
     <property name="stock">gtk-info</property>
-  </object>
-  <object class="GtkListStore" id="events_model">
-    <columns>
-      <!-- column-name datetime -->
-      <column type="gchararray"/>
-      <!-- column-name event -->
-      <column type="gchararray"/>
-      <!-- column-name iface_in -->
-      <column type="gchararray"/>
-      <!-- column-name iface_out -->
-      <column type="gchararray"/>
-      <!-- column-name src -->
-      <column type="gchararray"/>
-      <!-- column-name sport -->
-      <column type="gchararray"/>
-      <!-- column-name dst -->
-      <column type="gchararray"/>
-      <!-- column-name dport -->
-      <column type="gchararray"/>
-    </columns>
   </object>
 </interface>
