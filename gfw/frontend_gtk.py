@@ -559,6 +559,11 @@ class GtkFrontend(Frontend):
     def on_rules_view_row_activated(self, widget, path, view_column):
         self.ui.rule_edit.activate()
 
+    def on_rules_view_button_press_event(self, widget, event):
+        # Show popup on right-click only
+        if event.button == 3:
+            self.ui.rule_menu.popup(None, None, None, event.button, event.time)
+
     # --------------------- Rule Dialog Callbacks ----------------------
 
     def _custom_rbutton_toggled(self, prefix, active):
