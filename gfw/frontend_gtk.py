@@ -25,6 +25,7 @@ import gtk
 from ufw.common import UFWRule, UFWError
 
 import gfw.util
+import gfw.event
 from gfw.frontend import Frontend
 
 # module-wide localization
@@ -48,6 +49,7 @@ class GtkFrontend(Frontend):
 
     UI_FILE = 'ufw-gtk.glade'
     RESPONSE_OK = -5
+    MAX_EVENTS = 100
 
     def __init__(self):
         super(GtkFrontend, self).__init__()
@@ -65,6 +67,14 @@ class GtkFrontend(Frontend):
         self.ui.connect_signals(self)
         self._update_action_states()
         self.ui.main_window.show_all()
+        def callback(data):
+            def append(x):
+                if len(self.ui.events_model) > self.MAX_EVENTS:
+                    self.ui.events_model.clear()
+                self.ui.events_model.append(x)
+            gobject.idle_add(append, data)
+        self._notifier = gfw.event.create_notifier(callback)
+        self._notifier.start()
 
     def _init_prefs_dialog(self):
         conf = self.backend.defaults
@@ -168,8 +178,8 @@ class GtkFrontend(Frontend):
         for i, data in enumerate(self.get_rules()):
             idx, r = data
             r = gfw.util.get_formatted_rule(r)
-            row = [i + 1, r.action, r.direction, r.protocol, r.src, r.sport,
-                    r.dst, r.dport, idx]
+            row = (i + 1, r.action, r.direction, r.protocol, r.src, r.sport,
+                    r.dst, r.dport, idx)
             self.ui.rules_model.append(row)
 
     def _update_apps_model(self):
@@ -368,6 +378,7 @@ class GtkFrontend(Frontend):
         self._update_rules_model()
 
     def on_quit_activate(self, action):
+        self._notifier.stop()
         gtk.main_quit()
 
     def on_prefs_dialog_show_activate(self, action):
@@ -619,6 +630,7 @@ class GtkFrontend(Frontend):
 
 
 def main():
+    gobject.threads_init()
     try:
         ui = GtkFrontend()
     except UFWError as e:
