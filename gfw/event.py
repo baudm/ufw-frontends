@@ -32,22 +32,24 @@ class EventHandler(pyinotify.ProcessEvent):
 
     def _parse(self, data):
         data = data.split()
-        event = data[8].rstrip(']')
         time = ' '.join(data[:3])
-        iface_in = data[9].partition('=')[2]
-        iface_out = data[10].partition('=')[2]
-        if iface_in:
-            proto = data[20].partition('=')[2]
-            src = data[12].partition('=')[2]
-            sport = data[21].partition('=')[2]
-            dst = data[13].partition('=')[2]
-            dport = data[22].partition('=')[2]
-        if iface_out:
-            proto = data[19].partition('=')[2]
-            src = data[11].partition('=')[2]
-            sport = data[20].partition('=')[2]
-            dst = data[12].partition('=')[2]
-            dport = data[21].partition('=')[2]
+        for i in data[6:]:
+            if i in ('AUDIT]', 'ALLOW]', 'BLOCK]'):
+                event = i.rstrip(']')
+            elif i.startswith('IN='):
+                iface_in = i.partition('=')[2]
+            elif i.startswith('OUT='):
+                iface_out = i.partition('=')[2]
+            elif i.startswith('SRC='):
+                src = i.partition('=')[2]
+            elif i.startswith('DST='):
+                dst = i.partition('=')[2]
+            elif i.startswith('PROTO='):
+                proto = i.partition('=')[2]
+            elif i.startswith('SPT='):
+                sport = i.partition('=')[2]
+            elif i.startswith('DPT='):
+                dport = i.partition('=')[2]
         return (time, event, iface_in, iface_out, proto, src, sport, dst, dport)
 
     def process_IN_MODIFY(self, event):
