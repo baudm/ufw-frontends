@@ -36,3 +36,21 @@ def get_formatted_rule(rule):
     if r.dst == ANY_ADDR:
         r.dst = '*'
     return r
+
+
+def get_connections(append):
+    with open('/proc/net/nf_conntrack', 'r') as f:
+        for line in f:
+            line = line.split()
+            if line[2] != 'udp' and line[5] != 'ESTABLISHED':
+                continue
+            proto = line[2].upper()
+            s = 5
+            if line[2] == 'tcp':
+                s += 1
+            src = line[s].partition('=')[2]
+            dst = line[s + 1].partition('=')[2]
+            sport = line[s + 2].partition('=')[2]
+            dport = line[s + 3].partition('=')[2]
+            conn = (proto, src, sport, dst, dport)
+            append(conn)

@@ -66,7 +66,7 @@ class GtkFrontend(Frontend):
         # connect signals
         self.ui.connect_signals(self)
         self._update_action_states()
-        self.ui.main_window.show_all()
+        self._conn_timer = None
         def callback(data):
             def append(x):
                 if len(self.ui.events_model) > self.MAX_EVENTS:
@@ -75,6 +75,7 @@ class GtkFrontend(Frontend):
             gobject.idle_add(append, data)
         self._notifier = gfw.event.create_notifier(callback)
         self._notifier.start()
+        self.ui.main_window.show_all()
 
     def _init_prefs_dialog(self):
         conf = self.backend.defaults
@@ -172,6 +173,11 @@ class GtkFrontend(Frontend):
         res = md.run()
         md.destroy()
         return res
+
+    def _update_conns_model(self):
+        self.ui.conns_model.clear()
+        gfw.util.get_connections(self.ui.conns_model.append)
+        return True
 
     def _update_rules_model(self):
         self.ui.rules_model.clear()
@@ -563,6 +569,13 @@ class GtkFrontend(Frontend):
         # Show popup on right-click only
         if event.button == 3:
             self.ui.rule_menu.popup(None, None, None, event.button, event.time)
+
+    def on_view_switch_page(self, widget, page, page_num):
+        if page_num == 2:
+            self._update_conns_model()
+            self._conn_timer = gobject.timeout_add_seconds(5, self._update_conns_model)
+        elif self._conn_timer is not None:
+            gobject.source_remove(self._conn_timer)
 
     # --------------------- Rule Dialog Callbacks ----------------------
 
