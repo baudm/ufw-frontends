@@ -163,6 +163,8 @@
       <column type="gchararray"/>
       <!-- column-name iface_out -->
       <column type="gchararray"/>
+      <!-- column-name proto -->
+      <column type="gchararray"/>
       <!-- column-name src -->
       <column type="gchararray"/>
       <!-- column-name sport -->
@@ -436,8 +438,8 @@
             <child>
               <object class="GtkToggleToolButton" id="toolbutton1">
                 <property name="visible">True</property>
-                <property name="related_action">firewall_toggle</property>
                 <property name="use_action_appearance">True</property>
+                <property name="related_action">firewall_toggle</property>
                 <property name="label" translatable="yes">toolbutton1</property>
                 <property name="use_underline">True</property>
               </object>
@@ -449,8 +451,8 @@
             <child>
               <object class="GtkToolButton" id="toolbutton2">
                 <property name="visible">True</property>
-                <property name="related_action">firewall_reload</property>
                 <property name="use_action_appearance">True</property>
+                <property name="related_action">firewall_reload</property>
                 <property name="label" translatable="yes">toolbutton2</property>
                 <property name="use_underline">True</property>
               </object>
@@ -470,8 +472,8 @@
             <child>
               <object class="GtkToolButton" id="toolbutton3">
                 <property name="visible">True</property>
-                <property name="related_action">rule_delete</property>
                 <property name="use_action_appearance">True</property>
+                <property name="related_action">rule_delete</property>
                 <property name="label" translatable="yes">toolbutton3</property>
                 <property name="use_underline">True</property>
               </object>
@@ -483,8 +485,8 @@
             <child>
               <object class="GtkToolButton" id="toolbutton4">
                 <property name="visible">True</property>
-                <property name="related_action">rule_edit</property>
                 <property name="use_action_appearance">True</property>
+                <property name="related_action">rule_edit</property>
                 <property name="label" translatable="yes">toolbutton4</property>
                 <property name="use_underline">True</property>
               </object>
@@ -496,8 +498,8 @@
             <child>
               <object class="GtkToolButton" id="toolbutton5">
                 <property name="visible">True</property>
-                <property name="related_action">rule_add</property>
                 <property name="use_action_appearance">True</property>
+                <property name="related_action">rule_add</property>
                 <property name="label" translatable="yes">toolbutton5</property>
                 <property name="use_underline">True</property>
               </object>
@@ -517,8 +519,8 @@
             <child>
               <object class="GtkToolButton" id="toolbutton6">
                 <property name="visible">True</property>
-                <property name="related_action">rule_down</property>
                 <property name="use_action_appearance">True</property>
+                <property name="related_action">rule_down</property>
                 <property name="label" translatable="yes">toolbutton6</property>
                 <property name="use_underline">True</property>
               </object>
@@ -530,8 +532,8 @@
             <child>
               <object class="GtkToolButton" id="toolbutton7">
                 <property name="visible">True</property>
-                <property name="related_action">rule_up</property>
                 <property name="use_action_appearance">True</property>
+                <property name="related_action">rule_up</property>
                 <property name="label" translatable="yes">toolbutton7</property>
                 <property name="use_underline">True</property>
               </object>
@@ -747,6 +749,19 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn17">
+                        <property name="resizable">True</property>
+                        <property name="title">Protocol</property>
+                        <property name="expand">True</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext26"/>
+                          <attributes>
+                            <attribute name="text">4</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkTreeViewColumn" id="treeviewcolumn13">
                         <property name="resizable">True</property>
                         <property name="title">Source</property>
@@ -754,7 +769,7 @@
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext22"/>
                           <attributes>
-                            <attribute name="text">4</attribute>
+                            <attribute name="text">5</attribute>
                           </attributes>
                         </child>
                       </object>
@@ -767,7 +782,7 @@
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext23"/>
                           <attributes>
-                            <attribute name="text">5</attribute>
+                            <attribute name="text">6</attribute>
                           </attributes>
                         </child>
                       </object>
@@ -780,7 +795,7 @@
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext24"/>
                           <attributes>
-                            <attribute name="text">6</attribute>
+                            <attribute name="text">7</attribute>
                           </attributes>
                         </child>
                       </object>
@@ -793,7 +808,7 @@
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext25"/>
                           <attributes>
-                            <attribute name="text">7</attribute>
+                            <attribute name="text">8</attribute>
                           </attributes>
                         </child>
                       </object>

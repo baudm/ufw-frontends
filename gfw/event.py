@@ -48,7 +48,7 @@ class EventHandler(pyinotify.ProcessEvent):
             sport = data[20].partition('=')[2]
             dst = data[12].partition('=')[2]
             dport = data[21].partition('=')[2]
-        return (time, event, iface_in, iface_out, src, sport, dst, dport)
+        return (time, event, iface_in, iface_out, proto, src, sport, dst, dport)
 
     def process_IN_MODIFY(self, event):
         line = self._log.readline()
