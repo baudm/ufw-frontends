@@ -139,9 +139,7 @@ class GtkFrontend(Frontend):
 
     def _get_combobox_values(self, name):
         model = self.ui.get_object(name).get_model()
-        values = []
-        for v in model:
-            values.append(v[0])
+        values = [v[0] for v in model]
         return values
 
     def _get_combobox_value(self, name):
