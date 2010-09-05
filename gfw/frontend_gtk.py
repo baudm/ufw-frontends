@@ -33,6 +33,17 @@ t = gettext.translation('ufw-frontends', fallback=True)
 _ = t.gettext
 
 
+class Notifier(gfw.event.Notifier):
+
+    def __init__(self, callback):
+        gfw.event.Notifier.__init__(self, callback)
+        self._w = gobject.io_add_watch(self._fd, gobject.IO_IN | gobject.IO_PRI,
+                                       self._trigger)
+
+    def __del__(self):
+        gobject.source_remove(self._w)
+
+
 class Builder(gtk.Builder):
     """Convenience class for easy access of GTK objects"""
 
@@ -71,7 +82,7 @@ class GtkFrontend(Frontend):
             if len(self.ui.events_model) > self.MAX_EVENTS:
                 self.ui.events_model.clear()
             self.ui.events_model.append(data)
-        self._notifier = gfw.event.GNotifier(callback)
+        self._notifier = Notifier(callback)
         self.ui.main_window.show_all()
 
     def _init_prefs_dialog(self):
