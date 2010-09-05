@@ -18,6 +18,8 @@
 
 import pyinotify
 
+import gobject
+
 
 LOG_FILE = '/var/log/ufw.log'
 
@@ -58,9 +60,20 @@ class EventHandler(pyinotify.ProcessEvent):
         self._callback(data)
 
 
-def create_notifier(cb):
-    handler = EventHandler(callback=cb)
-    wm = pyinotify.WatchManager()
-    notifier = pyinotify.ThreadedNotifier(wm, handler)
-    wm.add_watch(LOG_FILE, pyinotify.IN_MODIFY)
-    return notifier
+class GNotifier(pyinotify.Notifier):
+
+    def __init__(self, callback):
+        handler = EventHandler(callback=callback)
+        wm = pyinotify.WatchManager()
+        wm.add_watch(LOG_FILE, pyinotify.IN_MODIFY)
+        pyinotify.Notifier.__init__(self, wm, handler)
+        self._w = gobject.io_add_watch(self._fd, gobject.IO_IN | gobject.IO_PRI,
+                                       self._trigger)
+
+    def __del__(self):
+        gobject.source_remove(self._w)
+
+    def _trigger(self, source, cb_condition):
+        self.read_events()
+        self.process_events()
+        return True

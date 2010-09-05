@@ -68,13 +68,10 @@ class GtkFrontend(Frontend):
         self._update_action_states()
         self._conn_timer = None
         def callback(data):
-            def append(x):
-                if len(self.ui.events_model) > self.MAX_EVENTS:
-                    self.ui.events_model.clear()
-                self.ui.events_model.append(x)
-            gobject.idle_add(append, data)
-        self._notifier = gfw.event.create_notifier(callback)
-        self._notifier.start()
+            if len(self.ui.events_model) > self.MAX_EVENTS:
+                self.ui.events_model.clear()
+            self.ui.events_model.append(data)
+        self._notifier = gfw.event.GNotifier(callback)
         self.ui.main_window.show_all()
 
     def _init_prefs_dialog(self):
@@ -382,7 +379,6 @@ class GtkFrontend(Frontend):
         self._update_rules_model()
 
     def on_quit_activate(self, action):
-        self._notifier.stop()
         gtk.main_quit()
 
     def on_prefs_dialog_show_activate(self, action):
