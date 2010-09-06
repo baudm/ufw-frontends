@@ -100,10 +100,16 @@ class GtkFrontend(Frontend):
         # checkboxes
         self.ui.enable_ipv6.set_active(conf['ipv6'] == 'yes')
         # IPT modules
-        enable = ('nf_conntrack_pptp' in conf['ipt_modules'])
-        self.ui.pptp_chkbox.set_active(enable)
+        enable = ('nf_conntrack_ftp' in conf['ipt_modules'] and
+                  'nf_nat_ftp' in conf['ipt_modules'])
+        self.ui.mod_ftp_chkbox.set_active(enable)
+        enable = ('nf_conntrack_irc' in conf['ipt_modules'] and
+                  'nf_nat_irc' in conf['ipt_modules'])
+        self.ui.mod_irc_chkbox.set_active(enable)
         enable = ('nf_conntrack_netbios_ns' in conf['ipt_modules'])
-        self.ui.netbios_chkbox.set_active(enable)
+        self.ui.mod_netbios_chkbox.set_active(enable)
+        enable = ('nf_conntrack_pptp' in conf['ipt_modules'])
+        self.ui.mod_pptp_chkbox.set_active(enable)
 
     def _init_action_groups(self):
         groups = {
@@ -407,10 +413,22 @@ class GtkFrontend(Frontend):
             # enable IPv6?
             self.config_ipv6(self.ui.enable_ipv6.get_active())
             # Enable additional IPT modules?
-            self.config_ipt_module('nf_conntrack_pptp',
-                                   self.ui.pptp_chkbox.get_active())
+            # FTP
+            self.config_ipt_module('nf_conntrack_ftp',
+                                   self.ui.mod_ftp_chkbox.get_active())
+            self.config_ipt_module('nf_nat_ftp',
+                                   self.ui.mod_ftp_chkbox.get_active())
+            # IRC
+            self.config_ipt_module('nf_conntrack_irc',
+                                   self.ui.mod_irc_chkbox.get_active())
+            self.config_ipt_module('nf_nat_irc',
+                                   self.ui.mod_irc_chkbox.get_active())
+            # NetBIOS
             self.config_ipt_module('nf_conntrack_netbios_ns',
-                                   self.ui.netbios_chkbox.get_active())
+                                   self.ui.mod_netbios_chkbox.get_active())
+            # PPTP
+            self.config_ipt_module('nf_conntrack_pptp',
+                                   self.ui.mod_pptp_chkbox.get_active())
             # reload firewall
             self.reload()
             self._set_statusbar_text(_('Preferences saved'))

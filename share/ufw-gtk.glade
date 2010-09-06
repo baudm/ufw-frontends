@@ -452,8 +452,8 @@
             <child>
               <object class="GtkToggleToolButton" id="toolbutton1">
                 <property name="visible">True</property>
-                <property name="use_action_appearance">True</property>
                 <property name="related_action">firewall_toggle</property>
+                <property name="use_action_appearance">True</property>
                 <property name="label" translatable="yes">toolbutton1</property>
                 <property name="use_underline">True</property>
               </object>
@@ -465,8 +465,8 @@
             <child>
               <object class="GtkToolButton" id="toolbutton2">
                 <property name="visible">True</property>
-                <property name="use_action_appearance">True</property>
                 <property name="related_action">firewall_reload</property>
+                <property name="use_action_appearance">True</property>
                 <property name="label" translatable="yes">toolbutton2</property>
                 <property name="use_underline">True</property>
               </object>
@@ -486,8 +486,8 @@
             <child>
               <object class="GtkToolButton" id="toolbutton3">
                 <property name="visible">True</property>
-                <property name="use_action_appearance">True</property>
                 <property name="related_action">rule_delete</property>
+                <property name="use_action_appearance">True</property>
                 <property name="label" translatable="yes">toolbutton3</property>
                 <property name="use_underline">True</property>
               </object>
@@ -499,8 +499,8 @@
             <child>
               <object class="GtkToolButton" id="toolbutton4">
                 <property name="visible">True</property>
-                <property name="use_action_appearance">True</property>
                 <property name="related_action">rule_edit</property>
+                <property name="use_action_appearance">True</property>
                 <property name="label" translatable="yes">toolbutton4</property>
                 <property name="use_underline">True</property>
               </object>
@@ -512,8 +512,8 @@
             <child>
               <object class="GtkToolButton" id="toolbutton5">
                 <property name="visible">True</property>
-                <property name="use_action_appearance">True</property>
                 <property name="related_action">rule_add</property>
+                <property name="use_action_appearance">True</property>
                 <property name="label" translatable="yes">toolbutton5</property>
                 <property name="use_underline">True</property>
               </object>
@@ -533,8 +533,8 @@
             <child>
               <object class="GtkToolButton" id="toolbutton6">
                 <property name="visible">True</property>
-                <property name="use_action_appearance">True</property>
                 <property name="related_action">rule_down</property>
+                <property name="use_action_appearance">True</property>
                 <property name="label" translatable="yes">toolbutton6</property>
                 <property name="use_underline">True</property>
               </object>
@@ -546,8 +546,8 @@
             <child>
               <object class="GtkToolButton" id="toolbutton7">
                 <property name="visible">True</property>
-                <property name="use_action_appearance">True</property>
                 <property name="related_action">rule_up</property>
+                <property name="use_action_appearance">True</property>
                 <property name="label" translatable="yes">toolbutton7</property>
                 <property name="use_underline">True</property>
               </object>
@@ -2080,8 +2080,8 @@ logo.png:
                 <property name="border_width">10</property>
                 <property name="spacing">5</property>
                 <child>
-                  <object class="GtkCheckButton" id="netbios_chkbox">
-                    <property name="label" translatable="yes">nf_conntrack_netbios_ns (for Samba)</property>
+                  <object class="GtkCheckButton" id="mod_ftp_chkbox">
+                    <property name="label" translatable="yes">File Transfer Protocol</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -2093,8 +2093,8 @@ logo.png:
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="pptp_chkbox">
-                    <property name="label" translatable="yes">nf_conntrack_pptp (for VPN)</property>
+                  <object class="GtkCheckButton" id="mod_irc_chkbox">
+                    <property name="label" translatable="yes">Internet Relay Chat (DCC)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -2105,6 +2105,32 @@ logo.png:
                     <property name="position">1</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkCheckButton" id="mod_netbios_chkbox">
+                    <property name="label" translatable="yes">NetBIOS name service (for Samba)</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="mod_pptp_chkbox">
+                    <property name="label" translatable="yes">Point-to-Point Tunneling Protocol (for VPN)</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -2113,7 +2139,7 @@ logo.png:
             <child type="tab">
               <object class="GtkLabel" id="label13">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">IPT Modules</property>
+                <property name="label" translatable="yes">Modules</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -2293,7 +2319,7 @@ logo.png:
     <property name="width_request">600</property>
     <property name="height_request">400</property>
     <property name="border_width">5</property>
-    <property name="title" translatable="yes">Reports Viewer</property>
+    <property name="title" translatable="yes">Report Viewer</property>
     <property name="window_position">center-on-parent</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
