@@ -16,18 +16,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import gettext
-
 import ufw.common
 import ufw.frontend
 from ufw.util import valid_address
 from ufw.parser import UFWCommandRule
 
 from gfw.util import ANY_ADDR
-
-# module-wide localization
-t = gettext.translation('ufw-frontends', fallback=True)
-_ = t.gettext
+from gfw.l10n import _
 
 # Override the error function used by UFWFrontend
 def _error(msg, exit=True):

@@ -17,17 +17,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-import gettext
 
 from PyQt4 import QtGui, uic
 
 from ufw.common import UFWRule, UFWError
 
+from gfw.l10n import _
 from gfw.frontend import Frontend
-
-# module-wide localization
-t = gettext.translation('ufw-frontends', fallback=True)
-_ = t.gettext
 
 
 class QtFrontend(Frontend):

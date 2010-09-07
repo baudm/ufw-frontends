@@ -27,6 +27,10 @@ import ufw.frontend
 import ufw.parser
 import ufw.util
 
+# For module-wide localization
+_t = gettext.translation('ufw-frontends', fallback=True)
+_ = _t.gettext
+
 
 def ufw_localize():
     # Just return if the _() function is already installed
