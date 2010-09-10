@@ -33,6 +33,7 @@ class EventHandler(pyinotify.ProcessEvent):
     def _parse(self, data):
         data = data.split()
         time = ' '.join(data[:3])
+        sport = dport = ''
         for i in data[6:]:
             if i in ('AUDIT]', 'ALLOW]', 'BLOCK]'):
                 event = i.rstrip(']')
