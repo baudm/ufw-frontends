@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os.path
+import types
 import gettext
 
 import ufw.applications
@@ -38,11 +38,7 @@ def ufw_localize():
         return
     t = gettext.translation(ufw.common.programName, fallback=True)
     # Manually install the _() function for module-wide l10n
-    x = t.gettext
-    ufw.applications._ = x
-    ufw.backend_iptables._ = x
-    ufw.backend._ = x
-    ufw.common._ = x
-    ufw.frontend._ = x
-    ufw.parser._ = x
-    ufw.util._ = x
+    for name in dir(ufw):
+        module = getattr(ufw, name)
+        if isinstance(module, types.ModuleType):
+            module._ = t.gettext
