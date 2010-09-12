@@ -667,7 +667,6 @@ class GtkFrontend(Frontend):
 
 
 def main():
-    gobject.threads_init()
     try:
         ui = GtkFrontend()
     except UFWError as e:
