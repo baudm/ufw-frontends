@@ -1,0 +1,240 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2010-10-12 18:12+PHT\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: gfw/frontend.py:58
+msgid "Mixed IP versions for 'from' and 'to'"
+msgstr ""
+
+#: gfw/frontend_gtk.py:129
+msgid "Disable"
+msgstr ""
+
+#: gfw/frontend_gtk.py:130
+msgid "Disable Firewall"
+msgstr ""
+
+#: gfw/frontend_gtk.py:133
+msgid "Enable"
+msgstr ""
+
+#: gfw/frontend_gtk.py:134
+msgid "Enable Firewall"
+msgstr ""
+
+#: gfw/frontend_gtk.py:337
+msgid "Export Rules"
+msgstr ""
+
+#: gfw/frontend_gtk.py:341
+msgid "Import Rules"
+msgstr ""
+
+#: gfw/frontend_gtk.py:371
+msgid "Rules exported"
+msgstr ""
+
+#: gfw/frontend_gtk.py:389
+msgid "Rules imported"
+msgstr ""
+
+#: gfw/frontend_gtk.py:430
+msgid "Preferences saved"
+msgstr ""
+
+#: gfw/frontend_gtk.py:467
+msgid "Firewall reloaded"
+msgstr ""
+
+#: gfw/frontend_gtk.py:470
+msgid ""
+"Resetting all rules to installed defaults.\n"
+"Proceed with operation?"
+msgstr ""
+
+#: gfw/frontend_gtk.py:476
+msgid "Firewall defaults restored"
+msgstr ""
+
+#: gfw/frontend_gtk.py:481
+msgid "Nothing to update"
+msgstr ""
+
+#: gfw/frontend_gtk.py:528
+msgid "Rule updated"
+msgstr ""
+
+#: gfw/frontend_gtk.py:540
+msgid "Delete rule at position %d?"
+msgstr ""
+
+#: share/ufw-gtk.glade:195
+msgid "Uncomplicated Firewall"
+msgstr ""
+
+#: share/ufw-gtk.glade:208
+msgid "_File"
+msgstr ""
+
+#: share/ufw-gtk.glade:253
+msgid "_Edit"
+msgstr ""
+
+#: share/ufw-gtk.glade:261
+msgid "Fire_wall"
+msgstr ""
+
+#: share/ufw-gtk.glade:307
+msgid "_Rule"
+msgstr ""
+
+#: share/ufw-gtk.glade:393
+msgid "_Tools"
+msgstr ""
+
+#: share/ufw-gtk.glade:424
+msgid "_Help"
+msgstr ""
+
+#: share/ufw-gtk.glade:697
+msgid "Rules"
+msgstr ""
+
+#: share/ufw-gtk.glade:841
+msgid "Events"
+msgstr ""
+
+#: share/ufw-gtk.glade:936
+msgid "Connections"
+msgstr ""
+
+#: share/ufw-gtk.glade:963
+msgid "Firewall Rule"
+msgstr ""
+
+#: share/ufw-gtk.glade:1013
+msgid "Position:"
+msgstr ""
+
+#: share/ufw-gtk.glade:1058
+msgid "Action:"
+msgstr ""
+
+#: share/ufw-gtk.glade:1073
+msgid "Direction:"
+msgstr ""
+
+#: share/ufw-gtk.glade:1110
+msgid "In"
+msgstr ""
+
+#: share/ufw-gtk.glade:1123
+msgid "Out"
+msgstr ""
+
+#: share/ufw-gtk.glade:1158
+msgid "Protocol:"
+msgstr ""
+
+#: share/ufw-gtk.glade:1171
+msgid "Logging:"
+msgstr ""
+
+#: share/ufw-gtk.glade:1236
+msgid "<b>General</b>"
+msgstr ""
+
+#: share/ufw-gtk.glade:1304 share/ufw-gtk.glade:1398 share/ufw-gtk.glade:1583
+#: share/ufw-gtk.glade:1680
+msgid "Any"
+msgstr ""
+
+#: share/ufw-gtk.glade:1314 share/ufw-gtk.glade:1408 share/ufw-gtk.glade:1593
+#: share/ufw-gtk.glade:1690
+msgid "Custom"
+msgstr ""
+
+#: share/ufw-gtk.glade:1371 share/ufw-gtk.glade:1653
+msgid "<b>Address:</b>"
+msgstr ""
+
+#: share/ufw-gtk.glade:1439 share/ufw-gtk.glade:1719
+msgid "Application"
+msgstr ""
+
+#: share/ufw-gtk.glade:1522 share/ufw-gtk.glade:1801
+msgid "<b>Port:</b>"
+msgstr ""
+
+#: share/ufw-gtk.glade:1538
+msgid "Source"
+msgstr ""
+
+#: share/ufw-gtk.glade:1817
+msgid "<b>Destination</b>"
+msgstr ""
+
+#: share/ufw-gtk.glade:1941
+msgid "Firewall Preferences"
+msgstr ""
+
+#: share/ufw-gtk.glade:1987
+msgid "Default outgoing policy:"
+msgstr ""
+
+#: share/ufw-gtk.glade:2015
+msgid "Firewall logging:"
+msgstr ""
+
+#: share/ufw-gtk.glade:2043
+msgid "Default incoming policy:"
+msgstr ""
+
+#: share/ufw-gtk.glade:2053
+msgid "Enable IPv6 support"
+msgstr ""
+
+#: share/ufw-gtk.glade:2074
+msgid "General"
+msgstr ""
+
+#: share/ufw-gtk.glade:2087
+msgid "File Transfer Protocol"
+msgstr ""
+
+#: share/ufw-gtk.glade:2100
+msgid "Internet Relay Chat (DCC)"
+msgstr ""
+
+#: share/ufw-gtk.glade:2113
+msgid "NetBIOS name service (for Samba)"
+msgstr ""
+
+#: share/ufw-gtk.glade:2126
+msgid "Point-to-Point Tunneling Protocol (for VPN)"
+msgstr ""
+
+#: share/ufw-gtk.glade:2145
+msgid "Modules"
+msgstr ""
+
+#: share/ufw-gtk.glade:2325
+msgid "Report Viewer"
+msgstr ""
+
+#: share/ufw-gtk.glade:2345
+msgid "Show report:"
+msgstr ""
