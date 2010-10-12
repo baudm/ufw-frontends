@@ -54,7 +54,7 @@ class Builder(gtk.Builder):
 
 class GtkFrontend(Frontend):
 
-    UI_FILE = 'ufw-gtk.glade'
+    UI_FILE = 'ufw-gtk.ui'
     RESPONSE_OK = -5
     MAX_EVENTS = 100
 
