@@ -26,9 +26,14 @@ class EventHandler(pyinotify.ProcessEvent):
 
     def my_init(self, callback):
         self._log = open(LOG_FILE, 'r')
-        # Seek to the end of the file
-        self._log.seek(0, 2)
         self._callback = callback
+        # Seek to near the end of the file
+        self._log.seek(-5120, 2)
+        # Get rid of a possibly incomplete line
+        self._log.readline()
+        for line in self._log:
+            data = self._parse(line)
+            callback(data)
 
     def _parse(self, data):
         data = data.split()
