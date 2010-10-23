@@ -76,7 +76,8 @@ class GtkFrontend(Frontend):
         self._conn_timer = None
         def callback(data):
             if len(self.ui.events_model) > self.MAX_EVENTS:
-                self.ui.events_model.clear()
+                i = self.ui.events_model.get_iter_first()
+                self.ui.events_model.remove(i)
             self.ui.events_model.append(data)
         self._notifier = Notifier(callback)
         self.ui.main_window.show_all()
