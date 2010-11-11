@@ -37,6 +37,7 @@ class Notifier(gfw.event.Notifier):
                                        self._trigger)
 
     def __del__(self):
+        gfw.event.Notifier.__del__(self)
         gobject.source_remove(self._w)
 
 

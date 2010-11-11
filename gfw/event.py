@@ -28,16 +28,15 @@ _re_event = re.compile(r'\[UFW ([A-Z ]+)\]')
 
 class EventHandler(pyinotify.ProcessEvent):
 
-    def my_init(self, callback):
-        self._log = open(LOG_FILE, 'r')
+    def my_init(self, log, callback):
+        self._log = log
         self._callback = callback
-        # Seek to near the end of the file
-        self._log.seek(-5120, 2)
         # Get rid of a possibly incomplete line
         self._log.readline()
         for line in self._log:
             data = self._parse(line)
-            callback(data)
+            if data is not None:
+                self._callback(data)
 
     def _parse(self, data):
         event = _re_event.findall(data)[0]
@@ -65,10 +64,16 @@ class EventHandler(pyinotify.ProcessEvent):
 class Notifier(pyinotify.Notifier):
 
     def __init__(self, callback):
-        handler = EventHandler(callback=callback)
+        self._log = open(LOG_FILE, 'r')
+        # Seek to near the end of the file
+        self._log.seek(-4096, 2)
+        handler = EventHandler(log=self._log, callback=callback)
         wm = pyinotify.WatchManager()
         wm.add_watch(LOG_FILE, pyinotify.IN_MODIFY)
         pyinotify.Notifier.__init__(self, wm, handler)
+
+    def __del__(self):
+        self._log.close()
 
     def _trigger(self, *args):
         self.read_events()
