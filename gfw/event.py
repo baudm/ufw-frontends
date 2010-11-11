@@ -16,10 +16,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import re
+
 import pyinotify
 
 
 LOG_FILE = '/var/log/ufw.log'
+_re_keyval = re.compile(r'([A-Z]+)=([^ ]*)')
+_re_event = re.compile(r'\[UFW ([A-Z ]+)\]')
 
 
 class EventHandler(pyinotify.ProcessEvent):
@@ -36,32 +40,26 @@ class EventHandler(pyinotify.ProcessEvent):
             callback(data)
 
     def _parse(self, data):
-        data = data.split()
-        time = ' '.join(data[:3])
-        sport = dport = ''
-        for i in data[6:]:
-            if i in ('AUDIT]', 'ALLOW]', 'BLOCK]'):
-                event = i.rstrip(']')
-            elif i.startswith('IN='):
-                iface_in = i.partition('=')[2]
-            elif i.startswith('OUT='):
-                iface_out = i.partition('=')[2]
-            elif i.startswith('SRC='):
-                src = i.partition('=')[2]
-            elif i.startswith('DST='):
-                dst = i.partition('=')[2]
-            elif i.startswith('PROTO='):
-                proto = i.partition('=')[2]
-            elif i.startswith('SPT='):
-                sport = i.partition('=')[2]
-            elif i.startswith('DPT='):
-                dport = i.partition('=')[2]
+        event = _re_event.findall(data)[0]
+        # Only show 'LIMIT BLOCK' and 'BLOCK' events
+        if 'BLOCK' not in event:
+            return
+        time = ' '.join(data.split()[:3])
+        data = dict(_re_keyval.findall(data))
+        iface_in = data['IN']
+        iface_out = data['OUT']
+        src = data['SRC']
+        dst = data['DST']
+        proto = data['PROTO']
+        sport = data['SPT']
+        dport = data['DPT']
         return (time, event, iface_in, iface_out, proto, src, sport, dst, dport)
 
     def process_IN_MODIFY(self, event):
         line = self._log.readline()
         data = self._parse(line)
-        self._callback(data)
+        if data is not None:
+            self._callback(data)
 
 
 class Notifier(pyinotify.Notifier):
