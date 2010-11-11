@@ -107,6 +107,8 @@ class GtkFrontend(Frontend):
         self.ui.mod_netbios_chkbox.set_active(enable)
         enable = ('nf_conntrack_pptp' in conf['ipt_modules'])
         self.ui.mod_pptp_chkbox.set_active(enable)
+        enable = ('nf_conntrack_sane' in conf['ipt_modules'])
+        self.ui.mod_saned_chkbox.set_active(enable)
 
     def _init_action_groups(self):
         groups = {
@@ -426,6 +428,9 @@ class GtkFrontend(Frontend):
             # PPTP
             self.config_ipt_module('nf_conntrack_pptp',
                                    self.ui.mod_pptp_chkbox.get_active())
+            # saned
+            self.config_ipt_module('nf_conntrack_sane',
+                                   self.ui.mod_saned_chkbox.get_active())
             # reload firewall
             self.reload()
             self._set_statusbar_text(_('Preferences saved'))
