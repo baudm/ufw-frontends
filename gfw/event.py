@@ -31,6 +31,8 @@ class EventHandler(pyinotify.ProcessEvent):
     def my_init(self, log, callback):
         self._log = log
         self._callback = callback
+        # Seek to near the end of the file
+        self._log.seek(-4096, 2)
         # Get rid of a possibly incomplete line
         self._log.readline()
         for line in self._log:
@@ -65,8 +67,6 @@ class Notifier(pyinotify.Notifier):
 
     def __init__(self, callback):
         self._log = open(LOG_FILE, 'r')
-        # Seek to near the end of the file
-        self._log.seek(-4096, 2)
         handler = EventHandler(log=self._log, callback=callback)
         wm = pyinotify.WatchManager()
         wm.add_watch(LOG_FILE, pyinotify.IN_MODIFY)

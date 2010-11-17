@@ -21,6 +21,9 @@ import sys
 import gobject
 import gtk
 
+import pynotify
+pynotify.init('ufw-frontends')
+
 from ufw.common import UFWRule, UFWError
 
 import gfw.util
@@ -76,6 +79,8 @@ class GtkFrontend(Frontend):
         self._update_action_states()
         self._conn_timer = None
         def callback(data):
+            n = pynotify.Notification(_('Firewall'), _('Blocked incoming connection from %s') % (data[5], ), gtk.STOCK_INFO)
+            n.show()
             if len(self.ui.events_model) > self.MAX_EVENTS:
                 i = self.ui.events_model.get_iter_first()
                 self.ui.events_model.remove(i)
