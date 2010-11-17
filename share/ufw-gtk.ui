@@ -711,6 +711,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="model">events_model</property>
+                    <signal name="button_press_event" handler="on_events_view_button_press_event"/>
                     <child>
                       <object class="GtkTreeViewColumn" id="treeviewcolumn9">
                         <property name="resizable">True</property>
@@ -790,19 +791,6 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkTreeViewColumn" id="treeviewcolumn14">
-                        <property name="resizable">True</property>
-                        <property name="title">SPort</property>
-                        <property name="expand">True</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderertext23"/>
-                          <attributes>
-                            <attribute name="text">6</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
                       <object class="GtkTreeViewColumn" id="treeviewcolumn15">
                         <property name="resizable">True</property>
                         <property name="title">Destination</property>
@@ -818,7 +806,7 @@
                     <child>
                       <object class="GtkTreeViewColumn" id="treeviewcolumn16">
                         <property name="resizable">True</property>
-                        <property name="title">DPort</property>
+                        <property name="title">Port</property>
                         <property name="expand">True</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext25"/>
@@ -2488,5 +2476,23 @@ logo.png:
         <property name="use_stock">True</property>
       </object>
     </child>
+  </object>
+  <object class="GtkMenu" id="event_menu">
+    <property name="visible">True</property>
+    <property name="ubuntu_local">True</property>
+    <child>
+      <object class="GtkImageMenuItem" id="imagemenuitem5">
+        <property name="visible">True</property>
+        <property name="related_action">event_allow</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkAction" id="event_allow">
+    <property name="label">Allow this _connection</property>
+    <property name="short_label">Allow this _connection</property>
+    <property name="stock_id">gtk-add</property>
+    <signal name="activate" handler="on_event_allow_activate"/>
   </object>
 </interface>

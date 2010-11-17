@@ -588,6 +588,42 @@ class GtkFrontend(Frontend):
         self._update_rules_model()
         self._selection.select_path(new - 1)
 
+    # ------------------------- Event Actions --------------------------
+
+    def on_event_allow_activate(self, action):
+        if not self.backend._is_enabled():
+            return
+        model, itr = self.ui.events_view.get_selection().get_selected()
+        i = model.get_path(itr)[0]
+        data = tuple(self.ui.events_model[i])
+        proto, src = data[4:6]
+        dport = data[8]
+        self._restore_rule_dialog_defaults()
+        # position
+        self.ui.position_adjustment.set_value(self.ui.position_adjustment.get_upper())
+        # protocol
+        self._set_combobox_value('protocol_cbox', proto)
+        # dport
+        self.ui.dst_port_custom_entry.set_text(dport)
+        # src
+        self.ui.src_addr_custom_entry.set_text(src)
+        while True:
+            if self.ui.rule_dialog.run() == self.RESPONSE_OK:
+                try:
+                    rule = self._get_rule_from_dialog()
+                except UFWError as e:
+                    self._show_dialog(e.value, self.ui.rule_dialog)
+                    continue
+                try:
+                    res = self.set_rule(rule)
+                except UFWError as e:
+                    self._show_dialog(e.value, self.ui.rule_dialog)
+                    continue
+                self._set_statusbar_text(res)
+                self._update_rules_model()
+            break
+        self.ui.rule_dialog.hide()
+
     # --------------------- Main Window Callbacks ----------------------
 
     def on_main_window_destroy(self, widget):
@@ -600,6 +636,11 @@ class GtkFrontend(Frontend):
         # Show popup on right-click only
         if event.button == 3:
             self.ui.rule_menu.popup(None, None, None, event.button, event.time)
+
+    def on_events_view_button_press_event(self, widget, event):
+        # Show popup on right-click only
+        if event.button == 3:
+            self.ui.event_menu.popup(None, None, None, event.button, event.time)
 
     def on_view_switch_page(self, widget, page, page_num):
         if page_num == 2:
