@@ -31,8 +31,11 @@ class EventHandler(pyinotify.ProcessEvent):
     def my_init(self, log, callback):
         self._log = log
         self._callback = callback
-        # Seek to near the end of the file
-        self._log.seek(-4096, 2)
+        # Seek to near EOF if log file is big enough
+        try:
+            self._log.seek(-4096, 2)
+        except IOError:
+            pass
         # Get rid of a possibly incomplete line
         self._log.readline()
         for line in self._log:
