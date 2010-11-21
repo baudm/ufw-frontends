@@ -596,17 +596,22 @@ class GtkFrontend(Frontend):
         model, itr = self.ui.events_view.get_selection().get_selected()
         i = model.get_path(itr)[0]
         data = tuple(self.ui.events_model[i])
-        proto, src = data[4:6]
-        dport = data[8]
+        proto, src, sport = data[4:7]
+        dst, dport = data[7:]
         self._restore_rule_dialog_defaults()
         # position
         self.ui.position_adjustment.set_value(self.ui.position_adjustment.get_upper())
         # protocol
         self._set_combobox_value('protocol_cbox', proto)
-        # dport
-        self.ui.dst_port_custom_entry.set_text(dport)
         # src
         self.ui.src_addr_custom_entry.set_text(src)
+        # sport
+        self.ui.src_port_custom_entry.set_text(sport)
+        # dst
+        self.ui.dst_addr_custom_entry.set_text(dst)
+        self.ui.dst_addr_custom_rbutton.set_active(True)
+        # dport
+        self.ui.dst_port_custom_entry.set_text(dport)
         while True:
             if self.ui.rule_dialog.run() == self.RESPONSE_OK:
                 try:
