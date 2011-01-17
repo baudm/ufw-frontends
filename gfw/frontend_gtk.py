@@ -78,12 +78,16 @@ class GtkFrontend(Frontend):
         self.ui.connect_signals(self)
         self._update_action_states()
         self._conn_timer = None
-        def callback(data):
-            #n = pynotify.Notification(_('Firewall'), _('Blocked incoming connection from %s') % (data[5], ), gtk.STOCK_INFO)
-            #n.show()
+        def callback(data, notify=True):
+            timestamp, event, conn = data
+            #if notify:
+                #n = pynotify.Notification(_('Firewall'), _('Blocked incoming connection from %s') % (conn['SRC'], ), gtk.STOCK_INFO)
+                #n.show()
             if len(self.ui.events_model) > self.MAX_EVENTS:
                 i = self.ui.events_model.get_iter_first()
                 self.ui.events_model.remove(i)
+            data = (timestamp, event, conn['IN'], conn['OUT'], conn['PROTO'],
+                    conn['SRC'], conn['SPT'], conn['DST'], conn['DPT'])
             self.ui.events_model.append(data)
         self._notifier = Notifier(callback)
         self.ui.main_window.show_all()

@@ -41,23 +41,16 @@ class EventHandler(pyinotify.ProcessEvent):
         for line in self._log:
             data = self._parse(line)
             if data is not None:
-                self._callback(data)
+                self._callback(data, False)
 
     def _parse(self, data):
         event = _re_event.findall(data)[0]
         # Only show 'LIMIT BLOCK' and 'BLOCK' events
         if 'BLOCK' not in event:
             return
-        time = ' '.join(data.split()[:3])
-        data = dict(_re_keyval.findall(data))
-        iface_in = data['IN']
-        iface_out = data['OUT']
-        src = data['SRC']
-        dst = data['DST']
-        proto = data['PROTO']
-        sport = data['SPT']
-        dport = data['DPT']
-        return (time, event, iface_in, iface_out, proto, src, sport, dst, dport)
+        timestamp = ' '.join(data.split()[:3])
+        conn = dict(_re_keyval.findall(data))
+        return (timestamp, event, conn)
 
     def process_IN_MODIFY(self, event):
         line = self._log.readline()
