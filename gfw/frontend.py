@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import shlex
+
 import ufw.common
 import ufw.frontend
 from ufw.util import valid_address
@@ -116,16 +118,8 @@ class Frontend(ufw.frontend.UFWFrontend, object):
             for line in f:
                 if not line.startswith('ufw '):
                     continue
-                args = ['rule']
-                for arg in line.split()[1:]:
-                    # Check for start of multi-word app name
-                    if arg.startswith("'") and not arg.endswith("'"):
-                        tmp = arg
-                        continue
-                    # Check for end of multi-word app name
-                    elif not arg.startswith("'") and arg.endswith("'"):
-                        arg = ' '.join([tmp, arg])
-                    args.append(arg.strip("'"))
+                args = shlex.split(line)
+                args[0] = 'rule'
                 p = UFWCommandRule(args[1])
                 pr = p.parse(args)
                 self.set_rule(pr.data['rule'], pr.data['iptype'])
