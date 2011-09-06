@@ -107,17 +107,19 @@ class GtkFrontend(Frontend):
         # checkboxes
         self.ui.enable_ipv6.set_active(conf['ipv6'] == 'yes')
         # IPT modules
-        enable = ('nf_conntrack_ftp' in conf['ipt_modules'] and
-                  'nf_nat_ftp' in conf['ipt_modules'])
+        try:
+            modules = conf['ipt_modules']
+        except KeyError:
+            modules = ''
+        enable = ('nf_conntrack_ftp' in modules and 'nf_nat_ftp' in modules)
         self.ui.mod_ftp_chkbox.set_active(enable)
-        enable = ('nf_conntrack_irc' in conf['ipt_modules'] and
-                  'nf_nat_irc' in conf['ipt_modules'])
+        enable = ('nf_conntrack_irc' in modules and 'nf_nat_irc' in modules)
         self.ui.mod_irc_chkbox.set_active(enable)
-        enable = ('nf_conntrack_netbios_ns' in conf['ipt_modules'])
+        enable = ('nf_conntrack_netbios_ns' in modules)
         self.ui.mod_netbios_chkbox.set_active(enable)
-        enable = ('nf_conntrack_pptp' in conf['ipt_modules'])
+        enable = ('nf_conntrack_pptp' in modules)
         self.ui.mod_pptp_chkbox.set_active(enable)
-        enable = ('nf_conntrack_sane' in conf['ipt_modules'])
+        enable = ('nf_conntrack_sane' in modules)
         self.ui.mod_saned_chkbox.set_active(enable)
 
     def _init_action_groups(self):
