@@ -27,13 +27,12 @@ setup(
     scripts=['ufw-gtk'],
     packages=['gfw'],
     data_files=[
-        ('share/ufw-frontends', ['share/ufw-gtk.glade', 'share/icon.png', 'share/logo.png']),
+        ('share/ufw-frontends', ['share/ufw-gtk.ui', 'share/icon.png', 'share/logo.png']),
         ('share/applications', ['share/ufw-gtk.desktop'])
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: X11 Applications :: GTK',
-        'Environment :: X11 Applications :: Qt',
         'License :: OSI Approved :: GNU General Public License (GPL)',
         'Natural Language :: English',
         'Operating System :: POSIX :: Linux',

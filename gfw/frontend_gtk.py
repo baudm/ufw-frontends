@@ -17,19 +17,31 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-import gettext
 
 import gobject
 import gtk
 
+#import pynotify
+#pynotify.init('ufw-frontends')
+
 from ufw.common import UFWRule, UFWError
 
 import gfw.util
+import gfw.event
+from gfw.l10n import _
 from gfw.frontend import Frontend
 
-# module-wide localization
-t = gettext.translation('ufw-frontends', fallback=True)
-_ = t.gettext
+
+class Notifier(gfw.event.Notifier):
+
+    def __init__(self, callback):
+        gfw.event.Notifier.__init__(self, callback)
+        self._w = gobject.io_add_watch(self._fd, gobject.IO_IN | gobject.IO_PRI,
+                                       self._trigger)
+
+    def __del__(self):
+        gfw.event.Notifier.__del__(self)
+        gobject.source_remove(self._w)
 
 
 class Builder(gtk.Builder):
@@ -46,8 +58,9 @@ class Builder(gtk.Builder):
 
 class GtkFrontend(Frontend):
 
-    UI_FILE = 'ufw-gtk.glade'
+    UI_FILE = 'ufw-gtk.ui'
     RESPONSE_OK = -5
+    MAX_EVENTS = 100
 
     def __init__(self):
         super(GtkFrontend, self).__init__()
@@ -64,7 +77,25 @@ class GtkFrontend(Frontend):
         # connect signals
         self.ui.connect_signals(self)
         self._update_action_states()
+        self._conn_timer = None
+        def callback(data, notify=True):
+            timestamp, event, conn = data
+            #if notify:
+                #n = pynotify.Notification(_('Firewall'), _('Blocked incoming connection from %s') % (conn['SRC'], ), gtk.STOCK_INFO)
+                #n.show()
+            if len(self.ui.events_model) > self.MAX_EVENTS:
+                i = self.ui.events_model.get_iter_first()
+                self.ui.events_model.remove(i)
+            spt = conn.get('SPT', '')
+            dpt = conn.get('DPT', '')
+            data = (timestamp, event, conn['IN'], conn['OUT'], conn['PROTO'],
+                    conn['SRC'], spt, conn['DST'], dpt)
+            self.ui.events_model.append(data)
+        self._notifier = Notifier(callback)
         self.ui.main_window.show_all()
+        ## FIXME: for the 0.3.0 release, hide the tab for the connections view
+        page = self.ui.view.get_nth_page(2)
+        page.hide()
 
     def _init_prefs_dialog(self):
         conf = self.backend.defaults
@@ -85,8 +116,16 @@ class GtkFrontend(Frontend):
             modules = conf['ipt_modules']
         except KeyError:
             modules = ''
-        self.ui.pptp_chkbox.set_active('nf_conntrack_pptp' in modules)
-        self.ui.netbios_chkbox.set_active('nf_conntrack_netbios_ns' in modules)
+        enable = ('nf_conntrack_ftp' in modules and 'nf_nat_ftp' in modules)
+        self.ui.mod_ftp_chkbox.set_active(enable)
+        enable = ('nf_conntrack_irc' in modules and 'nf_nat_irc' in modules)
+        self.ui.mod_irc_chkbox.set_active(enable)
+        enable = ('nf_conntrack_netbios_ns' in modules)
+        self.ui.mod_netbios_chkbox.set_active(enable)
+        enable = ('nf_conntrack_pptp' in modules)
+        self.ui.mod_pptp_chkbox.set_active(enable)
+        enable = ('nf_conntrack_sane' in modules)
+        self.ui.mod_saned_chkbox.set_active(enable)
 
     def _init_action_groups(self):
         groups = {
@@ -130,9 +169,7 @@ class GtkFrontend(Frontend):
 
     def _get_combobox_values(self, name):
         model = self.ui.get_object(name).get_model()
-        values = []
-        for v in model:
-            values.append(v[0])
+        values = [v[0] for v in model]
         return values
 
     def _get_combobox_value(self, name):
@@ -144,7 +181,11 @@ class GtkFrontend(Frontend):
 
     def _set_combobox_value(self, name, value):
         values = map(str.lower, self._get_combobox_values(name))
-        i = values.index(value.lower())
+        try:
+            i = values.index(value.lower())
+        except ValueError:
+            # value is not an option; do nothing and just return.
+            return
         cbox = self.ui.get_object(name)
         cbox.set_active(i)
 
@@ -165,13 +206,18 @@ class GtkFrontend(Frontend):
         md.destroy()
         return res
 
+    def _update_conns_model(self):
+        self.ui.conns_model.clear()
+        gfw.util.get_connections(self.ui.conns_model.append)
+        return True
+
     def _update_rules_model(self):
         self.ui.rules_model.clear()
         for i, data in enumerate(self.get_rules()):
             idx, r = data
             r = gfw.util.get_formatted_rule(r)
-            row = [i + 1, r.action, r.direction, r.protocol, r.src, r.sport,
-                    r.dst, r.dport, idx]
+            row = (i + 1, r.action, r.direction, r.protocol, r.src, r.sport,
+                    r.dst, r.dport, idx)
             self.ui.rules_model.append(row)
 
     def _update_apps_model(self):
@@ -387,10 +433,25 @@ class GtkFrontend(Frontend):
             # enable IPv6?
             self.config_ipv6(self.ui.enable_ipv6.get_active())
             # Enable additional IPT modules?
-            self.config_ipt_module('nf_conntrack_pptp',
-                                   self.ui.pptp_chkbox.get_active())
+            # FTP
+            self.config_ipt_module('nf_conntrack_ftp',
+                                   self.ui.mod_ftp_chkbox.get_active())
+            self.config_ipt_module('nf_nat_ftp',
+                                   self.ui.mod_ftp_chkbox.get_active())
+            # IRC
+            self.config_ipt_module('nf_conntrack_irc',
+                                   self.ui.mod_irc_chkbox.get_active())
+            self.config_ipt_module('nf_nat_irc',
+                                   self.ui.mod_irc_chkbox.get_active())
+            # NetBIOS
             self.config_ipt_module('nf_conntrack_netbios_ns',
-                                   self.ui.netbios_chkbox.get_active())
+                                   self.ui.mod_netbios_chkbox.get_active())
+            # PPTP
+            self.config_ipt_module('nf_conntrack_pptp',
+                                   self.ui.mod_pptp_chkbox.get_active())
+            # saned
+            self.config_ipt_module('nf_conntrack_sane',
+                                   self.ui.mod_saned_chkbox.get_active())
             # reload firewall
             self.reload()
             self._set_statusbar_text(_('Preferences saved'))
@@ -542,6 +603,47 @@ class GtkFrontend(Frontend):
         self._update_rules_model()
         self._selection.select_path(new - 1)
 
+    # ------------------------- Event Actions --------------------------
+
+    def on_event_allow_activate(self, action):
+        if not self.backend._is_enabled():
+            return
+        model, itr = self.ui.events_view.get_selection().get_selected()
+        i = model.get_path(itr)[0]
+        data = tuple(self.ui.events_model[i])
+        proto, src, sport = data[4:7]
+        dst, dport = data[7:]
+        self._restore_rule_dialog_defaults()
+        # position
+        self.ui.position_adjustment.set_value(self.ui.position_adjustment.get_upper())
+        # protocol
+        self._set_combobox_value('protocol_cbox', proto)
+        # src
+        self.ui.src_addr_custom_entry.set_text(src)
+        # sport
+        self.ui.src_port_custom_entry.set_text(sport)
+        # dst
+        self.ui.dst_addr_custom_entry.set_text(dst)
+        self.ui.dst_addr_custom_rbutton.set_active(True)
+        # dport
+        self.ui.dst_port_custom_entry.set_text(dport)
+        while True:
+            if self.ui.rule_dialog.run() == self.RESPONSE_OK:
+                try:
+                    rule = self._get_rule_from_dialog()
+                except UFWError as e:
+                    self._show_dialog(e.value, self.ui.rule_dialog)
+                    continue
+                try:
+                    res = self.set_rule(rule)
+                except UFWError as e:
+                    self._show_dialog(e.value, self.ui.rule_dialog)
+                    continue
+                self._set_statusbar_text(res)
+                self._update_rules_model()
+            break
+        self.ui.rule_dialog.hide()
+
     # --------------------- Main Window Callbacks ----------------------
 
     def on_main_window_destroy(self, widget):
@@ -549,6 +651,23 @@ class GtkFrontend(Frontend):
 
     def on_rules_view_row_activated(self, widget, path, view_column):
         self.ui.rule_edit.activate()
+
+    def on_rules_view_button_press_event(self, widget, event):
+        # Show popup on right-click only
+        if event.button == 3:
+            self.ui.rule_menu.popup(None, None, None, event.button, event.time)
+
+    def on_events_view_button_press_event(self, widget, event):
+        # Show popup on right-click only
+        if event.button == 3:
+            self.ui.event_menu.popup(None, None, None, event.button, event.time)
+
+    def on_view_switch_page(self, widget, page, page_num):
+        if page_num == 2:
+            self._update_conns_model()
+            self._conn_timer = gobject.timeout_add_seconds(5, self._update_conns_model)
+        elif self._conn_timer is not None:
+            gobject.source_remove(self._conn_timer)
 
     # --------------------- Rule Dialog Callbacks ----------------------
 
