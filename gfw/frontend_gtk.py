@@ -91,6 +91,9 @@ class GtkFrontend(Frontend):
             self.ui.events_model.append(data)
         self._notifier = Notifier(callback)
         self.ui.main_window.show_all()
+        ## FIXME: for the 0.3.0 release, hide the tab for the connections view
+        page = self.ui.view.get_nth_page(2)
+        page.hide()
 
     def _init_prefs_dialog(self):
         conf = self.backend.defaults
