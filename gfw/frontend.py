@@ -73,7 +73,10 @@ class Frontend(ufw.frontend.UFWFrontend, object):
         self.backend.set_default(self.backend.files['defaults'], 'IPV6', conf)
 
     def config_ipt_module(self, name, enable):
-        modules = self.backend.defaults['ipt_modules'].split()
+        try:
+            modules = self.backend.defaults['ipt_modules'].split()
+        except KeyError:
+            modules = []
         if enable and name not in modules:
             modules.append(name)
         elif not enable and name in modules:
