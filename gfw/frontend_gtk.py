@@ -81,10 +81,14 @@ class GtkFrontend(Frontend):
         # checkboxes
         self.ui.enable_ipv6.set_active(conf['ipv6'] == 'yes')
         # IPT modules
-        enable = ('nf_conntrack_pptp' in conf['ipt_modules'])
-        self.ui.pptp_chkbox.set_active(enable)
-        enable = ('nf_conntrack_netbios_ns' in conf['ipt_modules'])
-        self.ui.netbios_chkbox.set_active(enable)
+        if 'ipt_modules' in conf:
+            enable = ('nf_conntrack_pptp' in conf['ipt_modules'])
+            self.ui.pptp_chkbox.set_active(enable)
+            enable = ('nf_conntrack_netbios_ns' in conf['ipt_modules'])
+            self.ui.netbios_chkbox.set_active(enable)
+        else:
+            self.ui.pptp_chkbox.set_active(False)
+            self.ui.netbios_chkbox.set_active(False)
 
     def _init_action_groups(self):
         groups = {
