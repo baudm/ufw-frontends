@@ -181,7 +181,11 @@ class GtkFrontend(Frontend):
 
     def _set_combobox_value(self, name, value):
         values = map(str.lower, self._get_combobox_values(name))
-        i = values.index(value.lower())
+        try:
+            i = values.index(value.lower())
+        except ValueError:
+            # value is not an option; do nothing and just return.
+            return
         cbox = self.ui.get_object(name)
         cbox.set_active(i)
 
