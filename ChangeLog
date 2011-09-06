@@ -1,30 +1,24 @@
 ufw-frontends
-Version 0.2.0
-09/01/2010
+Version 0.3.0
+09-06-2011
 
 
 New Features:
 
-* Add support for enabling/disabling additional IPT modules specifically
-  nf_conntrack_netbios_ns and nf_conntrack_pptp (cset 5e20eb96b633)
-* Add support for importing rules (cset 8488cc40686f)
-* Implement exporting of rules (cset 0b2d1bd23d14)
-* Add simple way of displaying app profile info (cset 6c965bc9d10a)
-* Add support for displaying reports (cset a209756b280b)
+* View ufw log entries from within ufw-frontends (Events tab).
+  The entries in the Events tab are parsed directly from the ufw log.
+  New events are shown as soon as they appear in the ufw log.
+  This feature requires Pyinotify.
+
+* Create rules based on the list of events in the event log.
+  You can use this feature to allow blocked connections.
+
+* Add support for more IPT modules specifically:
+  - nf_conntrack_ftp and nf_nat_ftp (for FTP)
+  - nf_conntrack_irc and nf_nat_irc (for IRC)
+  - nf_conntrack_sane (for saned)
 
 
-Bug fixes:
+Fixed bugs:
 
-* Fix setting of rule direction when loading a rule into
-  the Rule Editor (cset 34faa1f24870)
-* Make sure that all translatable strings are marked as such (cset 2b45cf04cac9)
-* Use per-module localization so that ufw translations could co-exist with
-  _future_ ufw-frontends translations. (cset 772bf80c57dc)
-* Fix PyGTK frontend hang when resetting rules (Issue 3, cset 43e6ba5c84fb)
-
-
-Changes:
-
-* Make rule action and direction uppercase to add emphasis (cset b2c69dc63107)
-* Move 'Update Rules' menu item from Edit -> Firewall to Tools (cset b6ab763282dd)
-* Change name in .desktop files to 'Firewall Manager' (cset 6685e308f9ab)
+* Issue 15: bug when ufw has no ipt_modules configured
