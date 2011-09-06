@@ -86,8 +86,10 @@ class GtkFrontend(Frontend):
             if len(self.ui.events_model) > self.MAX_EVENTS:
                 i = self.ui.events_model.get_iter_first()
                 self.ui.events_model.remove(i)
+            spt = conn.get('SPT', '')
+            dpt = conn.get('DPT', '')
             data = (timestamp, event, conn['IN'], conn['OUT'], conn['PROTO'],
-                    conn['SRC'], conn['SPT'], conn['DST'], conn['DPT'])
+                    conn['SRC'], spt, conn['DST'], dpt)
             self.ui.events_model.append(data)
         self._notifier = Notifier(callback)
         self.ui.main_window.show_all()
