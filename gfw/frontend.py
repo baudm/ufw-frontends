@@ -103,6 +103,73 @@ class Frontend(ufw.frontend.UFWFrontend, object):
                     app_rules.append(t)
             yield (i, r)
 
+    ## Modified version of UFWCommandRule.get_command()
+    ## It correctly exports the command string for DENY OUT rules
+    @staticmethod
+    def _get_command(r):
+        '''Get command string for rule'''
+        res = r.action
+
+        if (r.dst == "0.0.0.0/0" or r.dst == "::/0") and \
+           (r.src == "0.0.0.0/0" or r.src == "::/0") and \
+           r.sport == "any" and \
+           r.sapp == "" and \
+           r.interface_in == "" and \
+           r.interface_out == "" and \
+           r.dport != "any":
+            # Short syntax
+            if r.direction == "out":
+                res += " %s" % r.direction
+            if r.logtype != "":
+                res += " %s" % r.logtype
+            if r.dapp != "":
+                res += " %s" % r.dapp
+            else:
+                res += " %s" % r.dport
+                if r.protocol != "any":
+                    res += "/%s" % r.protocol
+        else:
+            # Full syntax
+            if r.interface_in != "":
+                res += " in on %s" % r.interface_in
+            if r.interface_out != "":
+                res += " out on %s" % r.interface_out
+            if r.logtype != "":
+                res += " %s" % r.logtype
+
+            for i in ['src', 'dst']:
+                if i == 'src':
+                    loc = r.src
+                    port = r.sport
+                    app = r.sapp
+                    dir = r.direction + " from"
+                else:
+                    loc = r.dst
+                    port = r.dport
+                    app = r.dapp
+                    dir = r.direction + " to"
+
+                if loc == "0.0.0.0/0" or loc == "::/0":
+                    loc = "any"
+                if loc == "any" and port == "any" and app == "":
+                    pass
+                else:
+                    res += " %s %s" % (dir, loc)
+                    if app != "":
+                        res += " app %s" % app
+                    elif port != "any":
+                        res += " port %s" % port
+
+            # If still haven't added more than action, then we have a very
+            # generic rule, so mark it as such.
+            if res == r.action:
+                res += " to any"
+
+            if r.protocol != "any" and r.dapp == "" and r.sapp == "":
+                res += " proto %s" % r.protocol
+
+        return res
+
     def export_rules(self, path):
         with open(path, 'w') as f:
             f.write('#!/bin/sh\n')
@@ -113,7 +180,7 @@ class Frontend(ufw.frontend.UFWFrontend, object):
                     rule.sapp = "'" + rule.sapp + "'"
                 if rule.dapp:
                     rule.dapp = "'" + rule.dapp + "'"
-                cmd = 'ufw ' + UFWCommandRule.get_command(rule) + '\n'
+                cmd = 'ufw ' + self._get_command(rule) + '\n'
                 f.write(cmd)
 
     def import_rules(self, path):
