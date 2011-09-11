@@ -1,4 +1,13 @@
 ufw-frontends
+Version 0.3.1
+
+
+Fixed bugs:
+
+* Issue 17: ufw-gtk fails to run if LOG_FILE not found
+
+
+ufw-frontends
 Version 0.3.0
 09-06-2011
 
