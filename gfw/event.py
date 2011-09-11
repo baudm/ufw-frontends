@@ -21,7 +21,6 @@ import re
 import pyinotify
 
 
-LOG_FILE = '/var/log/ufw.log'
 _re_keyval = re.compile(r'([A-Z]+)=([^ ]*)')
 _re_event = re.compile(r'\[UFW ([A-Z ]+)\]')
 
@@ -44,7 +43,10 @@ class EventHandler(pyinotify.ProcessEvent):
                 self._callback(data, False)
 
     def _parse(self, data):
-        event = _re_event.findall(data)[0]
+        try:
+            event = _re_event.findall(data)[0]
+        except IndexError:
+            return
         # Only show 'LIMIT BLOCK' and 'BLOCK' events
         if 'BLOCK' not in event:
             return
@@ -62,10 +64,13 @@ class EventHandler(pyinotify.ProcessEvent):
 class Notifier(pyinotify.Notifier):
 
     def __init__(self, callback):
-        self._log = open(LOG_FILE, 'r')
+        try:
+            self._log = open('/var/log/ufw.log', 'r')
+        except IOError:
+            self._log = open('/var/log/messages', 'r')
         handler = EventHandler(log=self._log, callback=callback)
         wm = pyinotify.WatchManager()
-        wm.add_watch(LOG_FILE, pyinotify.IN_MODIFY)
+        wm.add_watch(self._log.name, pyinotify.IN_MODIFY)
         pyinotify.Notifier.__init__(self, wm, handler)
 
     def __del__(self):
