@@ -37,6 +37,17 @@ class Frontend(ufw.frontend.UFWFrontend, object):
 
     def __init__(self):
         super(Frontend, self).__init__(False)
+        # Compatibility for ufw 0.31
+        # This is a better way of handling method renames instead of putting
+        # try/except blocks all over the whole application code
+        try:
+            self.backend.get_default_policy
+        except AttributeError:
+            self.backend.get_default_policy = self.backend._get_default_policy
+        try:
+            self.backend._is_enabled
+        except AttributeError:
+            self.backend._is_enabled = self.backend.is_enabled
 
     @staticmethod
     def _get_ip_version(rule):
