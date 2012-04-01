@@ -67,7 +67,10 @@ class Notifier(pyinotify.Notifier):
         try:
             self._log = open('/var/log/ufw.log', 'r')
         except IOError:
-            self._log = open('/var/log/messages', 'r')
+            try:
+                self._log = open('/var/log/messages', 'r')
+            except IOError:
+                self._log = open('/var/log/messages.log', 'r')
         handler = EventHandler(log=self._log, callback=callback)
         wm = pyinotify.WatchManager()
         wm.add_watch(self._log.name, pyinotify.IN_MODIFY)
