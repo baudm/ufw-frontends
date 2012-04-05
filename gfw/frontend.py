@@ -24,7 +24,6 @@ from ufw.util import valid_address
 from ufw.parser import UFWCommandRule
 
 from gfw.util import ANY_ADDR
-from gfw.l10n import _
 
 # Override the error function used by UFWFrontend
 def _error(msg, exit=True):
