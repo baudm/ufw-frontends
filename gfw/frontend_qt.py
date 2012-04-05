@@ -22,7 +22,6 @@ from PyQt4 import QtGui, uic
 
 from ufw.common import UFWRule, UFWError
 
-from gfw.l10n import _
 from gfw.frontend import Frontend
 
 

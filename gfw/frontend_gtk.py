@@ -28,7 +28,6 @@ from ufw.common import UFWRule, UFWError
 
 import gfw.util
 import gfw.event
-from gfw.l10n import _
 from gfw.frontend import Frontend
 
 

@@ -1869,8 +1869,8 @@
     <property name="skip_taskbar_hint">True</property>
     <property name="transient_for">main_window</property>
     <property name="program_name">ufw-gtk</property>
-    <property name="version">0.3.1</property>
-    <property name="copyright" translatable="yes">Copyright © 2010-2011 Darwin M. Bautista</property>
+    <property name="version">0.3.2</property>
+    <property name="copyright" translatable="yes">Copyright © 2010-2012 Darwin M. Bautista</property>
     <property name="comments" translatable="yes">GTK+ frontend for UFW</property>
     <property name="website">http://code.google.com/p/ufw-frontends/</property>
     <property name="license" translatable="yes">This program is free software: you can redistribute it and/or modify

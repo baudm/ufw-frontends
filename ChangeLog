@@ -1,16 +1,27 @@
 ufw-frontends
-Version 0.3.1
-
+Version 0.3.2
+04-06-2012
 
 Fixed bugs:
 
+* Issue 18: messages to messages.log
+* Issue 19: ufw-gtk broken with Turkish locale
+* Issue 20: add support for ufw 0.31
+
+
+ufw-frontends
+Version 0.3.1
+09-11-2011
+
+Fixed bugs:
+
+* Issue 16: "deny out" rules are not correctly exported
 * Issue 17: ufw-gtk fails to run if LOG_FILE not found
 
 
 ufw-frontends
 Version 0.3.0
 09-06-2011
-
 
 New Features:
 
@@ -26,7 +37,6 @@ New Features:
   - nf_conntrack_ftp and nf_nat_ftp (for FTP)
   - nf_conntrack_irc and nf_nat_irc (for IRC)
   - nf_conntrack_sane (for saned)
-
 
 Fixed bugs:
 
