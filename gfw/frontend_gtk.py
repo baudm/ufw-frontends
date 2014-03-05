@@ -33,14 +33,21 @@ from gfw.frontend import Frontend
 
 class Notifier(gfw.event.Notifier):
 
-    def __init__(self, callback):
-        gfw.event.Notifier.__init__(self, callback)
+    def __init__(self, callback, inactive_handler):
+        self._active = False
+        try:
+            gfw.event.Notifier.__init__(self, callback)
+        except IOError:
+            inactive_handler()
+            return
+        self._active = True
         self._w = gobject.io_add_watch(self._fd, gobject.IO_IN | gobject.IO_PRI,
                                        self._trigger)
 
     def __del__(self):
-        gfw.event.Notifier.__del__(self)
-        gobject.source_remove(self._w)
+        if self._active:
+            gfw.event.Notifier.__del__(self)
+            gobject.source_remove(self._w)
 
 
 class Builder(gtk.Builder):
@@ -90,7 +97,8 @@ class GtkFrontend(Frontend):
             data = (timestamp, event, conn['IN'], conn['OUT'], conn['PROTO'],
                     conn['SRC'], spt, conn['DST'], dpt)
             self.ui.events_model.append(data)
-        self._notifier = Notifier(callback)
+        self._notifier = Notifier(callback,
+                lambda: self.ui.events_view.set_sensitive(False))
         self.ui.main_window.show_all()
         ## FIXME: for the 0.3.0 release, hide the tab for the connections view
         page = self.ui.view.get_nth_page(2)
