@@ -1,4 +1,6 @@
-![http://i36.tinypic.com/9axrsz.png](http://i36.tinypic.com/9axrsz.png)
+![ufw Frontends](share/logo.png)
+![Main Window](images/Screenshot-Uncomplicated-Firewall.png)
+![Firewall Rule](images/Screenshot-Firewall-Rule.png)
 
 _Currently, UFW provides only a command-line interface (CLI) for user interaction--the ``ufw`` command. This project implements graphical frontends for UFW using PyGTK._
 
@@ -36,7 +38,7 @@ _Currently, UFW provides only a command-line interface (CLI) for user interactio
 **Fixed bugs:**
   * Issue 15 (on Google Code)
 
-# [Features](Screenshots.md)
+# Features
   * Feature parity with the CLI frontend (add/delete rules, enable/disable firewall, show reports, etc.)
   * Supports editing and reordering of existing rules
   * Ability to enable/disable IPv6 support
